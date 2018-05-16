@@ -1,2 +1,0 @@
-# mobileProjectFrontend
-mobileProjectFrontend
