@@ -14,7 +14,7 @@ import { ChartPage } from '../pages/chart/chart';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = EventsPage;
+  rootPage: any = PlanningPage;
 
   pages: Array<{title: string, component: any}>;
 
