@@ -14,6 +14,7 @@ import { CreateTeamPage } from '../pages/create-team/create-team';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { PlanningDriverProvider } from '../providers/planning-driver/planning-driver';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    PlanningDriverProvider
   ]
 })
 export class AppModule {}

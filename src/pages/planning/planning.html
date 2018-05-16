@@ -4,6 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Planung</ion-title>
+
+    <ion-buttons end>
+      <button  ion-button *ngIf="!reorderIsEnabled" (click)="toggleReorder()">Edit</button>
+      <button  ion-button *ngIf="reorderIsEnabled" (click)="toggleReorder()">Done</button>
+    </ion-buttons>
+
   </ion-navbar>
 </ion-header>
 
@@ -23,13 +29,23 @@
 
   <h3>Planung</h3>
 
-  <ion-list>
+  <ion-list [reorder]="reorderIsEnabled">
     <ion-item>
       <ion-avatar item-start>
         <img src="assets/imgs/manfred.png">
       </ion-avatar>
-      <h2>Jörg</h2>
-      <p>Sexy Lover Boy</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/imgs/björn.png">
+      </ion-avatar>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/imgs/ralf.png">
+      </ion-avatar>
     </ion-item>
   </ion-list>
 
