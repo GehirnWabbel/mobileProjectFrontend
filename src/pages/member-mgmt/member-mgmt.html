@@ -10,4 +10,72 @@
 
 <ion-content padding>
 
+  <ion-list>
+    <ion-item>
+      <ion-label fixed>Name</ion-label>
+      <ion-input type="text" value=""></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Farbe</ion-label>
+      <ion-select [(ngModel)]="colors" interface="action-sheet">
+        <ion-option value="color-01"><ion-item><ion-avatar item-start></ion-avatar>#f44336</ion-item></ion-option>
+        <ion-option value="color-02">#f06292</ion-option>
+        <ion-option value="color-03">#9c27b0</ion-option>
+        <ion-option value="color-04">#3f51b5</ion-option>
+        <ion-option value="color-05">#64b5f6</ion-option>
+        <ion-option value="color-06">#00796b</ion-option>
+        <ion-option value="color-07">#4caf50</ion-option>
+        <ion-option value="color-08">#689f38</ion-option>
+        <ion-option value="color-09">#827717</ion-option>
+        <ion-option value="color-10">#ffeb3b</ion-option>
+        <ion-option value="color-11">#ff8f00</ion-option>
+        <ion-option value="color-12">#ff8a65</ion-option>
+        <ion-option value="color-13">#795548</ion-option>
+        <ion-option value="color-14">#546e7a</ion-option>
+        <ion-option value="color-15" (colorSelect)="colorSelect($event)">#fafafa</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Avatar</ion-label>
+      <ion-select [(ngModel)]="avatars" interface="action-sheet">
+        <ion-option value="avatar-01"><ion-item><ion-avatar item-start></ion-avatar>#f44336</ion-item></ion-option>
+        <ion-option value="avatar-02">#f06292</ion-option>
+        <ion-option value="avatar-03">#9c27b0</ion-option>
+        <ion-option value="avatar-04">#3f51b5</ion-option>
+        <ion-option value="avatar-05">#64b5f6</ion-option>
+        <ion-option value="avatar-06">#00796b</ion-option>
+        <ion-option value="avatar-07">#4caf50</ion-option>
+        <ion-option value="avatar-08">#689f38</ion-option>
+        <ion-option value="avatar-09">#827717</ion-option>
+        <ion-option value="avatar-10">#ffeb3b</ion-option>
+        <ion-option value="avatar-11">#ff8f00</ion-option>
+        <ion-option value="avatar-12">#ff8a65</ion-option>
+        <ion-option value="avatar-13">#795548</ion-option>
+        <ion-option value="avatar-14">#546e7a</ion-option>
+        <ion-option value="avatar-15" (avatarSelect)="avatarSelect($event)">#fafafa</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Info-Zeitpunkt</ion-label>
+      <ion-select [(ngModel)]="notificationTime" interface="action-sheet">
+        <ion-option value="time-30" selected="true">+ 30 min</ion-option>
+        <ion-option value="time-40">+ 40 min</ion-option>
+        <ion-option value="time-50">+ 50 min</ion-option>
+        <ion-option value="time-60">+ 60 min</ion-option>
+        <ion-option value="time-70">+ 70 min</ion-option>
+        <ion-option value="time-80">+ 80 min</ion-option>
+        <ion-option value="time-90" (avatarSelect)="notificationTimeSelect($event)">+ 90 min</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Fahrer</ion-label>
+      <ion-checkbox></ion-checkbox>
+    </ion-item>
+
+  </ion-list>
+
 </ion-content>
