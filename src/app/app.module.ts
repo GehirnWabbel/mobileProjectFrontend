@@ -3,13 +3,14 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { NewDriverPage } from '../pages/new-driver/new-driver';
+
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
+import { JoinTeamPage } from '../pages/join-team/join-team';
+import { MemberMgmtPage } from '../pages/member-mgmt/member-mgmt';
+import { CreateTeamPage } from '../pages/create-team/create-team';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,12 +18,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
-    NewDriverPage,
     PlanningPage,
     TeamMgmtPage,
-    EventsPage
+    EventsPage,
+    ChartPage,
+    JoinTeamPage,
+    MemberMgmtPage,
+    CreateTeamPage
   ],
   imports: [
     BrowserModule,
@@ -31,12 +33,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
-    NewDriverPage,
     PlanningPage,
     TeamMgmtPage,
-    EventsPage
+    EventsPage,
+    ChartPage,
+    JoinTeamPage,
+    MemberMgmtPage,
+    CreateTeamPage
   ],
   providers: [
     StatusBar,

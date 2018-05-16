@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { NewDriverPage } from './new-driver';
+import { JoinTeamPage } from './join-team';
 
 @NgModule({
   declarations: [
-    NewDriverPage,
+    JoinTeamPage,
   ],
   imports: [
-    IonicPageModule.forChild(NewDriverPage),
+    IonicPageModule.forChild(JoinTeamPage),
   ],
 })
-export class NewDriverPageModule {}
+export class JoinTeamPageModule {}

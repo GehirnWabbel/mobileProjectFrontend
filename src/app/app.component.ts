@@ -3,9 +3,6 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { NewDriverPage } from '../pages/new-driver/new-driver';
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
@@ -17,7 +14,7 @@ import { ChartPage } from '../pages/chart/chart';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = EventsPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -26,13 +23,10 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage },
       { title: 'Events', component: EventsPage },
-      { title: 'Neuer Fahrer', component: NewDriverPage },
-      { title: 'Teamverwaltung', component: TeamMgmtPage },
-      { title: 'Diagramm', component: ChartPage },
-      { title: 'Planung', component: PlanningPage }
+      { title: 'Planung', component: PlanningPage },
+      { title: 'Statistik', component: ChartPage },
+      { title: 'Teamverwaltung', component: TeamMgmtPage }
     ];
 
   }
