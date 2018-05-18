@@ -1,14 +1,14 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Planung</ion-title>
 
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button  ion-button *ngIf="!reorderIsEnabled" (click)="toggleReorder()">Bearbeiten</button>
       <button  ion-button *ngIf="reorderIsEnabled" (click)="toggleReorder()">Fertig</button>
-    </ion-buttons>
+    </ion-buttons> -->
 
   </ion-navbar>
 </ion-header>
@@ -18,56 +18,56 @@
 
     <ion-list>
         <ion-list-header>Protokoll</ion-list-header>
-        <ion-item-group reorder="true">
-          <ion-item *ngFor="let item of items">{{ item }}</ion-item>
+        <ion-item-group reorder="false" (ionItemReorder)="$event.applyTo(protocolItems)">
+            <ion-item *ngFor="let item of protocolItems"> 
+                <ion-item>
+                    <ion-avatar item-start>
+                      <img src="assets/imgs/rasta.png">
+                    </ion-avatar>
+                    <h2>{{ item.name }}</h2>
+                    <p>
+                      <ion-row>
+                        <ion-col>{{ item.timestamp }} Uhr</ion-col>
+                        <ion-col>{{ item.duration }}h</ion-col>
+                      </ion-row> 
+                    </p>
+                  </ion-item>
+
+              <!-- <ion-row>
+
+                <ion-col>
+                  <ion-avatar item-start>
+                    <img src="assets/imgs/rasta.png">
+                  </ion-avatar>
+                </ion-col>
+
+                <ion-col> 
+                   <ion-icon [name]="item.icon"></ion-icon>
+                  {{ item.name }}
+                </ion-col> 
+                
+                 <ion-col> 
+                  {{ item.timestamp }} Uhr
+                </ion-col>
+
+                  <ion-col>
+                    {{ item.duration }}h
+                  </ion-col>
+
+                </ion-row> -->
+
+            </ion-item>
         </ion-item-group>
       </ion-list>
 
-    <ion-list [reorder]="reorderIsEnabled">
+    <ion-list>
         <ion-list-header>Planung</ion-list-header>
-        <ion-item-group reorder="true">
-          <ion-item *ngFor="let driver of drivers">{{ driver }}</ion-item>
+        <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
+          <ion-item *ngFor="let driver of drivers"> 
+              <ion-icon [name]="driver.icon"></ion-icon>
+              {{ driver.name }}
+            </ion-item>
         </ion-item-group>
       </ion-list>
-
-
-  <!-- <h3>Protokoll</h3>
-
-  <ion-list>
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="assets/imgs/rasta.png">
-      </ion-avatar>
-      <h2>Manfred</h2>
-      <p>Uh, I am gay</p>
-    </ion-item>
-  </ion-list>
-
-  <h3>Planung</h3>
-
-  <ion-list [reorder]="reorderIsEnabled">
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="assets/imgs/rasta.png">
-      </ion-avatar>
-      Guten Tag, ich bin Jörg
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="assets/imgs/girl.png">
-      </ion-avatar>
-      Hallo, ich bin Sarah!
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="assets/imgs/blacky.png">
-      </ion-avatar>
-      Servus, I bims 1 nicer driver!
-    </ion-item>
-  </ion-list> -->
-
-
 
 </ion-content>
