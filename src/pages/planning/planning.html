@@ -16,6 +16,8 @@
 
 <ion-content padding>
 
+    <!-- Protokoll -->
+
     <ion-list>
         <ion-list-header>Protokoll</ion-list-header>
         <ion-item-group reorder="false" (ionItemReorder)="$event.applyTo(protocolItems)">
@@ -26,45 +28,25 @@
                     </ion-avatar>
                     <h2>{{ item.name }}</h2>
                     <p>
-                      <ion-row>
-                        <ion-col>{{ item.timestamp }} Uhr</ion-col>
-                        <ion-col>{{ item.duration }}h</ion-col>
-                      </ion-row> 
+                      Startzeit: {{ item.timestamp }} Uhr
+                    </p>
+                    <p>
+                     Fahrdauer: {{ item.duration }}h
                     </p>
                   </ion-item>
-
-              <!-- <ion-row>
-
-                <ion-col>
-                  <ion-avatar item-start>
-                    <img src="assets/imgs/rasta.png">
-                  </ion-avatar>
-                </ion-col>
-
-                <ion-col> 
-                   <ion-icon [name]="item.icon"></ion-icon>
-                  {{ item.name }}
-                </ion-col> 
-                
-                 <ion-col> 
-                  {{ item.timestamp }} Uhr
-                </ion-col>
-
-                  <ion-col>
-                    {{ item.duration }}h
-                  </ion-col>
-
-                </ion-row> -->
-
             </ion-item>
         </ion-item-group>
       </ion-list>
+
+    <!-- Planung -->
 
     <ion-list>
         <ion-list-header>Planung</ion-list-header>
         <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
           <ion-item *ngFor="let driver of drivers"> 
-              <ion-icon [name]="driver.icon"></ion-icon>
+            <ion-avatar item-start>
+              <img src="assets/imgs/blacky.png">
+            </ion-avatar>
               {{ driver.name }}
             </ion-item>
         </ion-item-group>
