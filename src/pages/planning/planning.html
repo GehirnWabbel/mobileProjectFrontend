@@ -16,7 +16,6 @@
         <ion-list-header>Protokoll</ion-list-header>
         <ion-item-group>
             <ion-item *ngFor="let item of protocolItems"> 
-                <ion-item>
                     <ion-avatar item-start>
                       <img src="assets/imgs/rasta.png">
                     </ion-avatar>
@@ -27,7 +26,6 @@
                     <p>
                      Fahrdauer: {{ item.duration }} h
                     </p>
-                  </ion-item>
             </ion-item>
         </ion-item-group>
       </ion-list>
