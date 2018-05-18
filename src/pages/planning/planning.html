@@ -3,24 +3,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Planung</ion-title>
-
-    <!-- <ion-buttons end>
-      <button  ion-button *ngIf="!reorderIsEnabled" (click)="toggleReorder()">Bearbeiten</button>
-      <button  ion-button *ngIf="reorderIsEnabled" (click)="toggleReorder()">Fertig</button>
-    </ion-buttons> -->
-
+    <ion-title>Protokoll & Planung</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
     <!-- Protokoll -->
 
     <ion-list>
         <ion-list-header>Protokoll</ion-list-header>
-        <ion-item-group reorder="false" (ionItemReorder)="$event.applyTo(protocolItems)">
+        <ion-item-group>
             <ion-item *ngFor="let item of protocolItems"> 
                 <ion-item>
                     <ion-avatar item-start>
@@ -40,15 +34,46 @@
 
     <!-- Planung -->
 
-    <ion-list>
+    <!-- <ion-list>
         <ion-list-header>Planung</ion-list-header>
         <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
           <ion-item *ngFor="let driver of drivers"> 
             <ion-avatar item-start>
-              <img src="assets/imgs/blacky.png">
+              <img src="assets/imgs/girl.png">
             </ion-avatar>
               {{ driver.name }}
             </ion-item>
+        </ion-item-group>
+      </ion-list> -->
+
+
+      <ion-list>
+          <ion-list-header>Planung</ion-list-header>
+          <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
+            <ion-item *ngFor="let driver of drivers"> 
+
+            <ion-avatar item-start>
+              <img src="assets/imgs/blacky.png">
+            </ion-avatar>
+
+            <h2>{{ driver.name }}</h2>
+            <p>Startzeit: {{driver.timestamp}} Uhr</p>
+            <p>Fahrdauer: {{driver.duration}}h</p>
+
+            <ion-row>
+                <ion-col>
+                  <button ion-button icon-left clear small>
+                    <ion-icon name="thumbs-up"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col>
+                  <button ion-button icon-left clear small>
+                    <ion-icon name="text"></ion-icon>
+                  </button>
+                </ion-col>
+              </ion-row>
+          </ion-item>
+        
         </ion-item-group>
       </ion-list>
 

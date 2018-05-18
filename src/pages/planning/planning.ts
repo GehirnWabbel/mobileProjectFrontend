@@ -9,7 +9,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class PlanningPage {
 
   public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}>; // Protokoll items
-  public drivers: Array<{name: string, icon: string}>;
+  public drivers: Array<{name: string, icon: string,  timestamp: any, duration: any}>;
   public reorderIsEnabled = false; // Ordnen der Fahrerplanung Button
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -22,10 +22,10 @@ export class PlanningPage {
     ];
 
     this.drivers = [
-      { name: 'Alice', icon: 'person' },
-      { name: 'Bob', icon: 'person' },
-      { name: 'James', icon: 'person' },
-      { name: 'Frank', icon: 'person' }
+      { name: 'Alice', icon: 'person', timestamp: '13:37', duration: '0:32' },
+      { name: 'Bob', icon: 'person', timestamp: '13:37', duration: '0:32' },
+      { name: 'James', icon: 'person', timestamp: '13:37', duration: '0:32' },
+      { name: 'Frank', icon: 'person', timestamp: '13:37', duration: '0:32' }
     ];
 
   }
