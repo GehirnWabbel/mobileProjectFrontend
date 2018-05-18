@@ -6,8 +6,8 @@
     <ion-title>Planung</ion-title>
 
     <ion-buttons end>
-      <button  ion-button *ngIf="!reorderIsEnabled" (click)="toggleReorder()">Edit</button>
-      <button  ion-button *ngIf="reorderIsEnabled" (click)="toggleReorder()">Done</button>
+      <button  ion-button *ngIf="!reorderIsEnabled" (click)="toggleReorder()">Bearbeiten</button>
+      <button  ion-button *ngIf="reorderIsEnabled" (click)="toggleReorder()">Fertig</button>
     </ion-buttons>
 
   </ion-navbar>
@@ -34,21 +34,22 @@
       <ion-avatar item-start>
         <img src="assets/imgs/rasta.png">
       </ion-avatar>
+      Guten Tag, ich bin Jörg
     </ion-item>
 
     <ion-item>
       <ion-avatar item-start>
         <img src="assets/imgs/girl.png">
       </ion-avatar>
+      Hallo, ich bin Sarah!
     </ion-item>
 
     <ion-item>
       <ion-avatar item-start>
         <img src="assets/imgs/blacky.png">
       </ion-avatar>
+      Servus, I bims 1 nicer driver!
     </ion-item>
   </ion-list>
-
-  ...
 
 </ion-content>
