@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar color="dark-grey">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -85,19 +85,24 @@
 
             <h2>{{ driver.members[0].name }}</h2>
             <p>Startzeit: {{driver.name}} Uhr</p>
-            <p>Fahrdauer: {{driver.name}}h</p>
+            <p>Fahrdauer: {{driver.name}} h</p>
 
             <ion-row>
                 <ion-col>
                   <button ion-button icon-left clear small>
-                    <ion-icon name="thumbs-up"></ion-icon>
+                    <ion-icon name="car"></ion-icon>
                   </button>
                 </ion-col>
                 <ion-col>
                   <button ion-button icon-left clear small>
-                    <ion-icon name="text"></ion-icon>
+                    <ion-icon name="partly-sunny"></ion-icon>
                   </button>
                 </ion-col>
+                <ion-col>
+                    <button ion-button icon-left clear small>
+                      <ion-icon name="flag"></ion-icon>
+                    </button>
+                  </ion-col>
               </ion-row>
           </ion-item>
         </ion-item-group>

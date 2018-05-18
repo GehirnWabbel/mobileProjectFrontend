@@ -16,5 +16,19 @@
 // automatically applied to the <body> element in the app.
 
 $colors: (
-	primary: #0092cf,
+	primary: #585858,
 );
+
+.my-container {
+    background-image:  url('../../assets/imgs/sidemenu.png');
+    background-repeat: repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    height: 100%;
+    position: absolute;
+}
+.transp {
+    background-color: transparent !important;
+    color: #fff;
+}
