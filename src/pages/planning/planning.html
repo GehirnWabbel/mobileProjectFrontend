@@ -25,7 +25,7 @@
                       Startzeit: {{ item.timestamp }} Uhr
                     </p>
                     <p>
-                     Fahrdauer: {{ item.duration }}h
+                     Fahrdauer: {{ item.duration }} h
                     </p>
                   </ion-item>
             </ion-item>
@@ -47,7 +47,7 @@
       </ion-list> -->
 
 
-      <ion-list>
+      <!-- <ion-list>
           <ion-list-header>Planung</ion-list-header>
           <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
             <ion-item *ngFor="let driver of drivers"> 
@@ -73,7 +73,35 @@
                 </ion-col>
               </ion-row>
           </ion-item>
-        
+        </ion-item-group>
+      </ion-list> -->
+
+      <ion-list>
+          <ion-list-header>Planung</ion-list-header>
+          <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
+            <ion-item *ngFor="let driver of allDrivers"> 
+
+            <ion-avatar item-start>
+              <img src="assets/imgs/blacky.png">
+            </ion-avatar>
+
+            <h2>{{ driver.members[0].name }}</h2>
+            <p>Startzeit: {{driver.name}} Uhr</p>
+            <p>Fahrdauer: {{driver.name}}h</p>
+
+            <ion-row>
+                <ion-col>
+                  <button ion-button icon-left clear small>
+                    <ion-icon name="thumbs-up"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col>
+                  <button ion-button icon-left clear small>
+                    <ion-icon name="text"></ion-icon>
+                  </button>
+                </ion-col>
+              </ion-row>
+          </ion-item>
         </ion-item-group>
       </ion-list>
 
