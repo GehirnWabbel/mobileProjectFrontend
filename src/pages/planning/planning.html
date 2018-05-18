@@ -15,7 +15,23 @@
 
 
 <ion-content padding>
-  <h3>Protokoll</h3>
+
+    <ion-list>
+        <ion-list-header>Protokoll</ion-list-header>
+        <ion-item-group reorder="true">
+          <ion-item *ngFor="let item of items">{{ item }}</ion-item>
+        </ion-item-group>
+      </ion-list>
+
+    <ion-list [reorder]="reorderIsEnabled">
+        <ion-list-header>Planung</ion-list-header>
+        <ion-item-group reorder="true">
+          <ion-item *ngFor="let driver of drivers">{{ driver }}</ion-item>
+        </ion-item-group>
+      </ion-list>
+
+
+  <!-- <h3>Protokoll</h3>
 
   <ion-list>
     <ion-item>
@@ -50,6 +66,8 @@
       </ion-avatar>
       Servus, I bims 1 nicer driver!
     </ion-item>
-  </ion-list>
+  </ion-list> -->
+
+
 
 </ion-content>

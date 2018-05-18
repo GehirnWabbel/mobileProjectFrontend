@@ -8,11 +8,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PlanningPage {
 
-  public drivers = [];
-  public reorderIsEnabled = false;
+  public items = []; // Protokoll items
+  public drivers = []; // Fahrerplanung
+
+  public reorderIsEnabled = false; // Ordnen der Fahrerplanung Button
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
+
+  
 
   toggleReorder() {
     this.reorderIsEnabled = !this.reorderIsEnabled;

@@ -23,8 +23,8 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Events', component: EventsPage, icon: 'speedometer' },
-      { title: 'Protokoll & Planung', component: PlanningPage, icon: 'car' },
+      { title: 'Events', component: EventsPage, icon: 'trophy' },
+      { title: 'Protokoll & Planung', component: PlanningPage, icon: 'clipboard' },
       { title: 'Statistiken', component: ChartPage, icon: 'stats' },
       { title: 'Team verwalten', component: TeamMgmtPage, icon: 'people' }
     ];
