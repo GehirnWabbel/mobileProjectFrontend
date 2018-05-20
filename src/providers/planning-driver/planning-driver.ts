@@ -17,4 +17,14 @@ export class PlanningDriverProvider {
     return this.http.get(API).map(response => response.json());
   }
 
+  // add driver to plan
+  addDriverToPlan() {
+    console.log("Driver added to plan");
+  }
+
+  //set Stint to 'done' and add to protocol
+  setStintToDone() {
+    console.log("Stint is now set to done and added to protocol");
+  }
+
 }

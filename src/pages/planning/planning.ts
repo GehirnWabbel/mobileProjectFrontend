@@ -17,7 +17,7 @@ export class PlanningPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    private driverProvider: PlanningDriverProvider) {
+    private driverProvider: PlanningDriverProvider ) {
 
     // examples
     this.protocolItems = [
@@ -34,11 +34,26 @@ export class PlanningPage {
       { name: 'James', icon: 'person', timestamp: '13:37', duration: '0:32' },
       { name: 'Frank', icon: 'person', timestamp: '13:37', duration: '0:32' }
     ];
+
+    // get drivers from driverProdiver
+    this.driverProvider.getDriver().subscribe(driverList => this.allDrivers = driverList);
   }
 
   ionViewDidLoad() {
-    // get drivers from driverProdiver
-    this.driverProvider.getDriver().subscribe(driverList => this.allDrivers = driverList);
+    console.log("Planning Page loaded");
+  }
+  
+  setStintToDone() {
+    this.driverProvider.setStintToDone();
+  }
+
+  addDriverToPlan() {
+    this.driverProvider.addDriverToPlan();
+    console.dir(this.allDrivers);
+  }
+
+  editNextDriver() {
+    console.log("Pop up for editing driver");
   }
 
 }
