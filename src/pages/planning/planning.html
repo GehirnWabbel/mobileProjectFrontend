@@ -10,29 +10,79 @@
 
 <ion-content>
 
-    <!-- Protokoll -->
+  <!-- Protokoll -->
 
-    <ion-list>
-        <ion-list-header>Protokoll</ion-list-header>
-        <ion-item-group>
-            <ion-item *ngFor="let item of protocolItems"> 
-                    <ion-avatar item-start>
-                      <img src="assets/imgs/rasta.png">
-                    </ion-avatar>
-                    <h2>{{ item.name }}</h2>
-                    <p>
-                      Startzeit: {{ item.timestamp }} Uhr
-                    </p>
-                    <p>
-                     Fahrdauer: {{ item.duration }} h
-                    </p>
-            </ion-item>
-        </ion-item-group>
-      </ion-list>
+  <ion-list>
+    <ion-list-header>Protokoll</ion-list-header>
+    <ion-item-group>
+      <ion-item *ngFor="let item of protocolItems">
+        <ion-avatar item-start>
+          <img src="assets/imgs/rasta.png">
+        </ion-avatar>
+        <h2>{{ item.name }}</h2>
+        <p>
+          Startzeit: {{ item.timestamp }} Uhr
+        </p>
+        <p>
+          Fahrdauer: {{ item.duration }} h
+        </p>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
 
-    <!-- Planung -->
+  <!-- Planung -->
 
-    <!-- <ion-list>
+  <ion-list>
+    <ion-list-header>Planung</ion-list-header>
+    <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
+      <ion-item-sliding>
+        <ion-item *ngFor="let driver of allDrivers">
+
+          <ion-avatar item-start>
+            <img src="assets/imgs/blacky.png">
+          </ion-avatar>
+
+          <!-- To be specified2 -->
+          <h2>{{ driver.members[0].name }}</h2>
+          <p>Startzeit: {{driver.name}} Uhr</p>
+          <p>Fahrdauer: {{driver.name}} h</p>
+
+          <p>
+            <ion-badge item-end (click)="openKartTag()">
+              <ion-icon name="car"></ion-icon>
+            </ion-badge>
+            <ion-badge item-end (click)="openWeatherTag()">
+              <ion-icon name="partly-sunny"></ion-icon>
+            </ion-badge>
+            <ion-badge item-end (click)="openFlagTag()">
+              <ion-icon name="flag"></ion-icon>
+            </ion-badge>
+          </p>
+        </ion-item>
+
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="setStintToDone()">
+            <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
+            Fertig
+          </button>
+          <button ion-button color="editable" (click)="editNextDriver()">
+            <ion-icon name="md-create" id="iconEdit"></ion-icon>
+            Bearbeiten
+          </button>
+        </ion-item-options>
+
+      </ion-item-sliding>
+    </ion-item-group>
+  </ion-list>
+
+  <!-- FAB for adding new driver -->
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="openAddModal()">
+      <ion-icon name="add" id="iconAdd"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <!-- <ion-list>
         <ion-list-header>Planung</ion-list-header>
         <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
           <ion-item *ngFor="let driver of drivers"> 
@@ -45,7 +95,7 @@
       </ion-list> -->
 
 
-      <!-- <ion-list>
+  <!-- <ion-list>
           <ion-list-header>Planung</ion-list-header>
           <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
             <ion-item *ngFor="let driver of drivers"> 
@@ -73,84 +123,4 @@
           </ion-item>
         </ion-item-group>
       </ion-list> -->
-
-      
-
-      <ion-list>
-        <ion-list-header>Planung</ion-list-header>
-        <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
-              <ion-item-sliding>
-            <ion-item *ngFor="let driver of allDrivers"> 
-
-            <ion-avatar item-start>
-              <img src="assets/imgs/blacky.png">
-            </ion-avatar>
-
-            <!-- To be specified2 -->
-            <h2>{{ driver.members[0].name }}</h2>
-            <p>Startzeit: {{driver.name}} Uhr</p>
-            <p>Fahrdauer: {{driver.name}} h</p>
-
-            <!-- <p>
-              <ion-chip item-content>
-                <ion-icon name="car"></ion-icon>
-                <ion-label>Kart</ion-label>
-              </ion-chip>
-            </p> -->
-
-            <!-- <ion-chip item-content>
-                <ion-icon name="partly-sunny"></ion-icon>
-                <ion-label>Wetter</ion-label>
-            </ion-chip>
-      
-            <ion-chip item-content>
-                <ion-icon name="flag"></ion-icon>
-                <ion-label>Ereignis</ion-label>
-            </ion-chip>  -->
-
-            
-
-            <ion-row>
-                <ion-col>
-                  <button ion-button icon-left clear small class="tag">
-                    <ion-icon name="car"></ion-icon>
-                  </button>
-                </ion-col>
-
-                <ion-col>
-                  <button ion-button icon-left clear small class="tag">
-                    <ion-icon name="partly-sunny"></ion-icon>
-                  </button>
-                </ion-col>
-
-                <ion-col>
-                    <button ion-button icon-left clear small class="tag">
-                      <ion-icon name="flag"></ion-icon>
-                    </button>
-                  </ion-col>
-              </ion-row>
-          </ion-item>
-          
-          <ion-item-options side="right">
-            <button ion-button color="secondary" (click)="setStintToDone()">
-                <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
-                Fertig
-            </button>
-            <button ion-button color="editable" (click)="editNextDriver()">
-                <ion-icon name="md-create" id="iconEdit"></ion-icon>
-                Bearbeiten
-            </button>
-          </ion-item-options>
-          
-        </ion-item-sliding>
-      </ion-item-group>
-      </ion-list>
-
-      <!-- FAB for adding new driver -->
-      <ion-fab bottom right>
-        <button ion-fab color="primary" (click)="addDriverToPlan()">
-            <ion-icon name="add" id="iconAdd"></ion-icon>
-        </button>
-      </ion-fab>
-
 </ion-content>

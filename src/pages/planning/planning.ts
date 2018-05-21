@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { PlanningDriverProvider} from '../../providers/planning-driver/planning-driver';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { PlanningDriverProvider } from '../../providers/planning-driver/planning-driver';
 
 @IonicPage()
 @Component({
@@ -17,7 +17,8 @@ export class PlanningPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    private driverProvider: PlanningDriverProvider ) {
+    private driverProvider: PlanningDriverProvider,
+    private modal: ModalController ) {
 
     // examples
     this.protocolItems = [
@@ -47,13 +48,31 @@ export class PlanningPage {
     this.driverProvider.setStintToDone();
   }
 
-  addDriverToPlan() {
-    this.driverProvider.addDriverToPlan();
-    console.dir(this.allDrivers);
+  // addDriverToPlan() {
+  //   this.driverProvider.addDriverToPlan();
+  //   console.dir(this.allDrivers);
+  // }
+
+  openAddModal() {
+    const addModal = this.modal.create('PlanningModalAddPage', {'protocolItems' : this.protocolItems});
+    // this.navCtrl.push(PlanningModalAddPage, {'protocolItems' : this.protocolItems});
+    addModal.present();
   }
 
   editNextDriver() {
     console.log("Pop up for editing driver");
+  }
+
+  openKartTag() {
+    console.log("Kart Tag options open");
+  }
+
+  openWeatherTag() {
+    console.log("Weather Tag options open");
+  }
+
+  openFlagTag() {
+    console.log("Flag Tag options open");
   }
 
 }
