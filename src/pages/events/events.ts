@@ -16,15 +16,28 @@ import { EventServiceProvider } from '../../providers/event-service/event-servic
 })
 export class EventsPage {
 
-  allEvents: any;
+  private allEvents: Array<any>;;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventProvider: EventServiceProvider) {
 
-    this.eventProvider.getEvents().then(data => {this.allEvents = data});
+    this.eventProvider.getEvents().then(data => {this.allEvents = this.convertData(data)});
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EventsPage');
+  private convertData(data: any) {
+    this.allEvents = data as Array<any>;
+    this.formatDate(this.allEvents);
+    return this.allEvents;
   }
+
+  private formatDate(data: any) {
+    for(let i = 0; i < data.length; i++){
+      console.log(data[i].name);
+    }
+  }
+
+/*  ionViewDidLoad() {
+    console.log('ionViewDidLoad EventsPage');
+
+  }*/
 
 }
