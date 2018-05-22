@@ -39,9 +39,9 @@ export class EventsPage {
     console.log(data);
   }
 
-  navToEvent(id: string){
+  navToEvent(event: any){
     //TODO: nav to Planning Page
-    console.log(id);
+    console.log(event._id);
   }
 
 }
