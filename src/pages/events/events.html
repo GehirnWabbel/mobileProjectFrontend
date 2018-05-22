@@ -7,12 +7,11 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Race Manager</h3>
+<ion-content class="card-background-page">
+  <ion-card *ngFor="let event of allEvents">
+    <img src="assets//imgs/{{event.picturePath}}"/>
+    <div class="card-title">{{event.name}}</div>
+    <div class="card-subtitle">{{event.startdate}}</div>
+  </ion-card>
 
-  <p>
-    This will be huge!
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>
