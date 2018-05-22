@@ -39,9 +39,9 @@ export class EventsPage {
     console.log(data);
   }
 
-/*  ionViewDidLoad() {
-    console.log('ionViewDidLoad EventsPage');
-
-  }*/
+  navToEvent(id: string){
+    //TODO: nav to Planning Page
+    console.log(id);
+  }
 
 }
