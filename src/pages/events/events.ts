@@ -16,7 +16,7 @@ import { EventServiceProvider } from '../../providers/event-service/event-servic
 })
 export class EventsPage {
 
-  private allEvents: Array<any>;;
+  private allEvents: Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventProvider: EventServiceProvider) {
 
@@ -25,14 +25,18 @@ export class EventsPage {
 
   private convertData(data: any) {
     this.allEvents = data as Array<any>;
-    this.formatDate(this.allEvents);
+    EventsPage.formatDate(this.allEvents);
     return this.allEvents;
   }
 
-  private formatDate(data: any) {
+  private static formatDate(data: any) {
     for(let i = 0; i < data.length; i++){
-      console.log(data[i].name);
+      // console.log(data[i].startdate);
+      let fullDate = new Date(data[i].startdate);
+      data[i].date = fullDate.getDate() + '.' + (fullDate.getMonth() + 1) + '.' + fullDate.getFullYear();
+      // data[i].time = fullDate.getHours() + ':' + fullDate.getMinutes();
     }
+    console.log(data);
   }
 
 /*  ionViewDidLoad() {

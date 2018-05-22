@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+    <!--<button ion-button menuToggle>-->
+      <!--<ion-icon name="menu"></ion-icon>-->
+    <!--</button>-->
     <ion-title>Events</ion-title>
   </ion-navbar>
 </ion-header>
@@ -11,7 +11,7 @@
   <ion-card *ngFor="let event of allEvents">
     <img src="assets//imgs/{{event.picturePath}}"/>
     <div class="card-title">{{event.name}}</div>
-    <div class="card-subtitle">{{event.startdate}}</div>
+    <div class="card-subtitle">{{event.date}}</div>
   </ion-card>
 
 </ion-content>
