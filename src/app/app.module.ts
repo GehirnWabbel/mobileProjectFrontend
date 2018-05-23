@@ -15,9 +15,7 @@ import { CreateTeamPage } from '../pages/create-team/create-team';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { PlanningDriverProvider } from '../providers/planning-driver/planning-driver';
-import { EventServiceProvider } from '../providers/event-service/event-service';
-import { ChartServiceProvider} from "../providers/chart-service/chart-service";
+import { ApiServiceProvider } from '../providers/api-service/api-service';
 
 @NgModule({
   declarations: [
@@ -51,10 +49,8 @@ import { ChartServiceProvider} from "../providers/chart-service/chart-service";
   providers: [
     StatusBar,
     SplashScreen,
-    PlanningDriverProvider,
-    EventServiceProvider,
-    ChartServiceProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ApiServiceProvider
   ]
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { PlanningDriverProvider } from '../../providers/planning-driver/planning-driver';
+import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { ApiServiceProvider } from '../../providers/api-service/api-service';
 
 @IonicPage()
 @Component({
@@ -12,14 +12,15 @@ export class PlanningPage {
 
   public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}>;
 
-  allStints: Array<any>; // complete Stints 
+  allStints: Array<any>; // complete Stints
   allDrivers = []; // subset of Stints (only driver objects)
 
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
-    private stintProvider: PlanningDriverProvider,
-    private modal: ModalController ) {
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private apiProvider: ApiServiceProvider,
+    private modal: ModalController,
+    private viewCtrl: ViewController) {
 
     // examples for protocol items
     this.protocolItems = [
@@ -30,11 +31,11 @@ export class PlanningPage {
     ];
 
     // Get complete stints
-    this.stintProvider.getStints().then(data => {this.allStints = this.formatStints(data)});
+    this.apiProvider.getStints().then(data => {this.allStints = this.formatStints(data)});
   }
 
-  ionViewDidLoad() {
-    console.log("Planning Page Loaded");
+  ionViewWillEnter() {
+    this.viewCtrl.showBackButton(false);
   }
 
   formatStints(data: any) {
@@ -51,7 +52,7 @@ export class PlanningPage {
   }
 
   setStintToDone() {
-    this.stintProvider.setStintToDone();
+    this.apiProvider.setStintToDone();
   }
 
   openAddStintModal() {
