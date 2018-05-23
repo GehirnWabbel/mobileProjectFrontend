@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 
@@ -51,6 +50,8 @@ import { EventServiceProvider } from '../providers/event-service/event-service';
   providers: [
     StatusBar,
     SplashScreen,
+    PlanningDriverProvider,
+    EventServiceProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
