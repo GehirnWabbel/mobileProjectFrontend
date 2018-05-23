@@ -1,19 +1,81 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="dark-grey">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Planung</ion-title>
+    <ion-title>Protokoll & Planung</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-  <h3>Race Manager</h3>
+<ion-content>
 
-  <p>
-    This will be huge!
-  </p>
+  <!-- Protokoll -->
+  <h3 padding>Protokoll</h3>
+  <ion-list>
+    <ion-item-group>
+      <ion-item *ngFor="let item of protocolItems">
+        <ion-avatar item-start>
+          <img src="assets/imgs/rasta.png">
+        </ion-avatar>
+        <h2>{{ item.name }}</h2>
+        <p>
+          Startzeit: {{ item.timestamp }} Uhr
+        </p>
+        <p>
+          Fahrdauer: {{ item.duration }} h
+        </p>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <!-- Planung -->
+  <h3 padding>Planung</h3>
+  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allDrivers)">
+      <ion-item-sliding *ngFor="let driver of allDrivers">
+        <ion-item>
+
+          <ion-avatar item-start>
+            <img src="assets/imgs/blacky.png">
+          </ion-avatar>
+
+          <!-- To be specified2 -->
+          <h2>{{ driver.name }}</h2>
+          <p>Startzeit: {{driver.name }} Uhr</p>
+          <p>Fahrdauer: {{driver.name }} h</p>
+
+          <p>
+            <ion-badge item-end (click)="openKartTag()">
+              <ion-icon name="car"></ion-icon>
+            </ion-badge>
+            <ion-badge item-end (click)="openWeatherTag()">
+              <ion-icon name="partly-sunny"></ion-icon>
+            </ion-badge>
+            <ion-badge item-end (click)="openFlagTag()">
+              <ion-icon name="flag"></ion-icon>
+            </ion-badge>
+          </p>
+        </ion-item>
+
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="setStintToDone()">
+            <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
+            Fertig
+          </button>
+          <button ion-button color="editable" (click)="editStint()">
+            <ion-icon name="md-create" id="iconEdit"></ion-icon>
+            Bearbeiten
+          </button>
+        </ion-item-options>
+
+      </ion-item-sliding>
+  </ion-list>
+
+  <!-- FAB for adding new driver -->
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="openAddStintModal()">
+      <ion-icon name="add" id="iconAdd"></ion-icon>
+    </button>
+  </ion-fab>
+
 </ion-content>

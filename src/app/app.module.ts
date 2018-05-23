@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +16,7 @@ import { CreateTeamPage } from '../pages/create-team/create-team';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { PlanningDriverProvider } from '../providers/planning-driver/planning-driver';
 import { EventServiceProvider } from '../providers/event-service/event-service';
 
 @NgModule({
@@ -30,6 +32,7 @@ import { EventServiceProvider } from '../providers/event-service/event-service';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     IonicStorageModule.forRoot()
@@ -48,8 +51,7 @@ import { EventServiceProvider } from '../providers/event-service/event-service';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    EventServiceProvider
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}
