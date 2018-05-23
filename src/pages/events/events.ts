@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EventServiceProvider } from '../../providers/event-service/event-service';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the EventsPage page.
@@ -18,7 +19,11 @@ export class EventsPage {
 
   private allEvents: Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private eventProvider: EventServiceProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private eventProvider: EventServiceProvider,
+    private storage: Storage) {
 
     this.eventProvider.getEvents().then(data => {this.allEvents = this.convertData(data)});
   }
@@ -41,7 +46,8 @@ export class EventsPage {
 
   navToEvent(event: any){
     //TODO: nav to Planning Page
-    console.log(event._id);
+    this.storage.set('eventId', event._id);
+    console.log("Event Id: " + event._id + " saved in local storage.")
   }
 
 }
