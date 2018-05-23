@@ -47,4 +47,14 @@ export class TeamMgmtPage {
     this.navCtrl.push(MemberMgmtPage, person);
   }
 
+
+  addTeamMember() {
+    this.navToPersonMgmt({
+      name: "",
+      driver: false,
+      color: "#f54321",
+      avatarNo: 1
+    });
+  }
+
 }

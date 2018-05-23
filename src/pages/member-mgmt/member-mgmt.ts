@@ -15,15 +15,39 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MemberMgmtPage {
 
-  member;
+  member; //data of person to be edited
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.member = this.navParams.data;
-    console.log(this.member);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MemberMgmtPage');
+  }
+
+  colorForward() {
+
+  }
+
+  colorBackward() {
+
+  }
+
+  avatarForward() {
+    this.member.avatarNo++;
+    if(this.member.avatarNo > 18)
+      this.member.avatarNo -= 18;
+  }
+
+  avatarBackward() {
+    this.member.avatarNo--;
+    if(this.member.avatarNo < 1)
+      this.member.avatarNo += 18;
+  }
+
+  isDriverChanged() {
+    this.member.driver = !this.member.driver;
+    console.log(this.member.driver);
   }
 
 }

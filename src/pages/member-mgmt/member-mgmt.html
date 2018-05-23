@@ -13,7 +13,7 @@
   <ion-list>
     <ion-item>
       <ion-label fixed>Name</ion-label>
-      <ion-input type="text" value="{{member.name}}"></ion-input>
+      <ion-input type="text" [(ngModel)]="member.name"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -31,14 +31,19 @@
       <ion-grid class="grid-carousel">
         <ion-row>
           <ion-col class="grid-carousel-label">Avatar</ion-col>
-          <ion-col col-1><ion-icon name="arrow-back"></ion-icon></ion-col>
+          <ion-col col-1><ion-icon name="arrow-back" (click)="avatarBackward()"></ion-icon></ion-col>
           <ion-col><img src="../../assets/imgs/ava-{{member.avatarNo}}.png" /> </ion-col>
-          <ion-col col-1 class="grid-carousel-forward"><ion-icon name="arrow-forward"></ion-icon></ion-col>
+          <ion-col col-1 class="grid-carousel-forward"><ion-icon name="arrow-forward" (click)="avatarForward()"></ion-icon></ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
 
     <ion-item>
+      <ion-label>Fahrer</ion-label>
+      <ion-checkbox [ngModel]="member.driver" (ionChange)="isDriverChanged()"></ion-checkbox>
+    </ion-item>
+
+    <ion-item *ngIf="member.driver === true">
       <ion-label fixed>Info-Zeitpunkt</ion-label>
       <ion-select [(ngModel)]="notificationTime" interface="action-sheet">
         <ion-option value="time-30" selected="true">+ 30 min</ion-option>
@@ -49,11 +54,6 @@
         <ion-option value="time-80">+ 80 min</ion-option>
         <ion-option value="time-90" (avatarSelect)="notificationTimeSelect($event)">+ 90 min</ion-option>
       </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Fahrer</ion-label>
-      <ion-checkbox></ion-checkbox>
     </ion-item>
 
   </ion-list>
