@@ -34,7 +34,7 @@ export class PlanningPage {
   }
 
   ionViewDidLoad() {
-    
+    console.log("Planning Page Loaded");
   }
 
   formatStints(data: any) {
@@ -54,12 +54,12 @@ export class PlanningPage {
     this.stintProvider.setStintToDone();
   }
 
-  openAddModal() {
+  openAddStintModal() {
     const addModal = this.modal.create('PlanningModalAddPage', {'protocolItems' : this.protocolItems});
     addModal.present();
   }
 
-  editNextDriver() {
+  editStint() {
     console.log("Pop up for editing driver");
   }
 
