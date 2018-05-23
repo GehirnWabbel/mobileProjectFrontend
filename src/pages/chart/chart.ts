@@ -2,11 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
+import { ChartServiceProvider } from '../../providers/chart-service/chart-service';
 
 @IonicPage()
 @Component({
   selector: 'page-chart',
   templateUrl: 'chart.html',
+
 })
 export class ChartPage {
 
@@ -18,11 +20,19 @@ export class ChartPage {
     doughnutChart: any;
     lineChart: any;
  
-    constructor(public navCtrl: NavController) {
+    private driverStats = [];
+
+    constructor(
+        public navCtrl: NavController, 
+        private chartProvider: ChartServiceProvider) {
  
+        // GET driver stat data and save in driverStats Array
+        this.chartProvider.getDriverStats().subscribe(driverStatData => this.driverStats = driverStatData);
     }
  
     ionViewDidLoad() {
+
+        console.dir(this.driverStats);
  
         this.barChart = new Chart(this.barCanvas.nativeElement, {
  
