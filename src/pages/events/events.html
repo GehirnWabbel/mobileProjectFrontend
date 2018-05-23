@@ -1,18 +1,17 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+    <!--<button ion-button menuToggle>-->
+      <!--<ion-icon name="menu"></ion-icon>-->
+    <!--</button>-->
     <ion-title>Events</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Race Manager</h3>
+<ion-content class="card-background-page">
+  <ion-card (click)="navToEvent(event)" *ngFor="let event of allEvents">
+    <img src="assets//imgs/{{event.picturePath}}"/>
+    <div class="card-title">{{event.name}}</div>
+    <div class="card-subtitle">{{event.date}}</div>
+  </ion-card>
 
-  <p>
-    This will be huge!
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>
