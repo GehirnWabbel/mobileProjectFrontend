@@ -13,7 +13,7 @@
   <ion-list>
     <ion-item>
       <ion-label fixed>Name</ion-label>
-      <ion-input type="text" value=""></ion-input>
+      <ion-input type="text" value="{{member.name}}"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -32,7 +32,7 @@
         <ion-row>
           <ion-col class="grid-carousel-label">Avatar</ion-col>
           <ion-col col-1><ion-icon name="arrow-back"></ion-icon></ion-col>
-          <ion-col><img src="../../assets/imgs/CartoonMan15.png" /> </ion-col>
+          <ion-col><img src="../../assets/imgs/ava-{{member.avatarNo}}.png" /> </ion-col>
           <ion-col col-1 class="grid-carousel-forward"><ion-icon name="arrow-forward"></ion-icon></ion-col>
         </ion-row>
       </ion-grid>

@@ -15,7 +15,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MemberMgmtPage {
 
+  member;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.member = this.navParams.data;
+    console.log(this.member);
   }
 
   ionViewDidLoad() {

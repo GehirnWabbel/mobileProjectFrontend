@@ -9,10 +9,10 @@
 
 
 <ion-content padding>
-  <ion-list *ngFor="let driver of allDrivers">
+  <ion-list>
     <ion-list-header>Fahrer</ion-list-header>
 
-    <ion-item>
+    <ion-item *ngFor="let driver of allDrivers" (click)="navToPersonMgmt(driver)">
       <ion-avatar item-start>
         <img src="../../assets/imgs/avatar/ava-{{driver.avatarNo}}.png" >
       </ion-avatar>
@@ -21,17 +21,17 @@
   </ion-list>
 
   <ion-list>
-
     <ion-list-header>Management</ion-list-header>
 
-    <ion-item>
+    <ion-item *ngFor="let manager of allManagements" (click)="navToPersonMgmt(manager)">
       <ion-avatar item-start>
-        <img src="../../assets/imgs/avatar/ava-10.png">
+        <img src="../../assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
       </ion-avatar>
-      <h2>Woody</h2>
-      <p>This town ain't big enough for the two of us!</p>
-      <ion-note item-end>3:43 pm</ion-note>
+      <h1>{{manager.name}}</h1>
     </ion-item>
-
   </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab color="red"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 </ion-content>

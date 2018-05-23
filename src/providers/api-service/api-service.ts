@@ -41,4 +41,14 @@ export class ApiServiceProvider {
     return null;
   }
 
+  getTeamMember() {
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl + '/person').subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    })
+  }
+
 }
