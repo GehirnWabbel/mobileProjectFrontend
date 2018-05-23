@@ -8,13 +8,16 @@ import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
 
+import { MemberMgmtPage } from '../pages/member-mgmt/member-mgmt';
+
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = PlanningPage;
+  rootPage: any = MemberMgmtPage;
 
   pages: Array<{title: string, component: any, icon: string}>;
 
