@@ -8,8 +8,6 @@ import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
 
-import { MemberMgmtPage } from '../pages/member-mgmt/member-mgmt';
-
 
 @Component({
   templateUrl: 'app.html'
@@ -17,11 +15,15 @@ import { MemberMgmtPage } from '../pages/member-mgmt/member-mgmt';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = MemberMgmtPage;
+  rootPage: any = EventsPage;
 
   pages: Array<{title: string, component: any, icon: string}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen) {
+
     this.initializeApp();
 
     // used for an example of ngFor and navigation

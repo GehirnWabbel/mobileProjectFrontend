@@ -17,6 +17,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { PlanningDriverProvider } from '../providers/planning-driver/planning-driver';
 import { EventServiceProvider } from '../providers/event-service/event-service';
+import { ChartServiceProvider} from "../providers/chart-service/chart-service";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { EventServiceProvider } from '../providers/event-service/event-service';
     SplashScreen,
     PlanningDriverProvider,
     EventServiceProvider,
+    ChartServiceProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
