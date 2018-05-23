@@ -7,20 +7,21 @@ import { PlanningDriverProvider } from '../../providers/planning-driver/planning
   selector: 'page-planning',
   templateUrl: 'planning.html',
 })
+
 export class PlanningPage {
 
-  public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}>; // Protokoll items
-  public drivers: Array<{name: string, icon: string,  timestamp: any, duration: any}>;
+  public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}>;
 
-  public allDrivers = [];
+  allStints: Array<any>; // complete Stints 
+  allDrivers = []; // subset of Stints (only driver objects)
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    private driverProvider: PlanningDriverProvider,
+    private stintProvider: PlanningDriverProvider,
     private modal: ModalController ) {
 
-    // examples
+    // examples for protocol items
     this.protocolItems = [
       { name: 'Johannes', icon: 'person', timestamp: '13:37', duration: '0:32'},
       { name: 'Marcus', icon: 'person', timestamp: '14:24', duration: '0:53' },
@@ -28,34 +29,33 @@ export class PlanningPage {
       { name: 'Marie', icon: 'person', timestamp: '3:15', duration: '1:16' }
     ];
 
-    // examples
-    this.drivers = [
-      { name: 'Alice', icon: 'person', timestamp: '13:37', duration: '0:32' },
-      { name: 'Bob', icon: 'person', timestamp: '13:37', duration: '0:32' },
-      { name: 'James', icon: 'person', timestamp: '13:37', duration: '0:32' },
-      { name: 'Frank', icon: 'person', timestamp: '13:37', duration: '0:32' }
-    ];
-
-    // get drivers from driverProdiver
-    this.driverProvider.getDriver().subscribe(driverList => this.allDrivers = driverList);
+    // Get complete stints
+    this.stintProvider.getStints().then(data => {this.allStints = this.formatStints(data)});
   }
 
   ionViewDidLoad() {
-    console.log("Planning Page loaded");
-  }
-  
-  setStintToDone() {
-    this.driverProvider.setStintToDone();
+    
   }
 
-  // addDriverToPlan() {
-  //   this.driverProvider.addDriverToPlan();
-  //   console.dir(this.allDrivers);
-  // }
+  formatStints(data: any) {
+     this.allStints = data as Array<any>;
+     this.getDriversOfStint(this.allStints);
+     return this.allStints;
+  }
+
+  getDriversOfStint(allStints) {
+    for (let i=0; i<allStints.length; i++){
+      let driver = allStints[i].driver;
+      this.allDrivers.push(driver);
+    }
+  }
+
+  setStintToDone() {
+    this.stintProvider.setStintToDone();
+  }
 
   openAddModal() {
     const addModal = this.modal.create('PlanningModalAddPage', {'protocolItems' : this.protocolItems});
-    // this.navCtrl.push(PlanningModalAddPage, {'protocolItems' : this.protocolItems});
     addModal.present();
   }
 

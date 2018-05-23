@@ -11,9 +11,8 @@
 <ion-content>
 
   <!-- Protokoll -->
-
+  <h3 padding>Protokoll</h3>
   <ion-list>
-    <ion-list-header>Protokoll</ion-list-header>
     <ion-item-group>
       <ion-item *ngFor="let item of protocolItems">
         <ion-avatar item-start>
@@ -31,21 +30,19 @@
   </ion-list>
 
   <!-- Planung -->
-
-  <ion-list>
-    <ion-list-header>Planung</ion-list-header>
-    <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
-      <ion-item-sliding>
-        <ion-item *ngFor="let driver of allDrivers">
+  <h3 padding>Planung</h3>
+  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allDrivers)">
+      <ion-item-sliding *ngFor="let driver of allDrivers">
+        <ion-item>
 
           <ion-avatar item-start>
             <img src="assets/imgs/blacky.png">
           </ion-avatar>
 
           <!-- To be specified2 -->
-          <h2>{{ driver.members[0].name }}</h2>
-          <p>Startzeit: {{driver.name}} Uhr</p>
-          <p>Fahrdauer: {{driver.name}} h</p>
+          <h2>{{ driver.name }}</h2>
+          <p>Startzeit: {{driver.name }} Uhr</p>
+          <p>Fahrdauer: {{driver.name }} h</p>
 
           <p>
             <ion-badge item-end (click)="openKartTag()">
@@ -72,7 +69,6 @@
         </ion-item-options>
 
       </ion-item-sliding>
-    </ion-item-group>
   </ion-list>
 
   <!-- FAB for adding new driver -->
@@ -82,45 +78,4 @@
     </button>
   </ion-fab>
 
-  <!-- <ion-list>
-        <ion-list-header>Planung</ion-list-header>
-        <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
-          <ion-item *ngFor="let driver of drivers"> 
-            <ion-avatar item-start>
-              <img src="assets/imgs/girl.png">
-            </ion-avatar>
-              {{ driver.name }}
-            </ion-item>
-        </ion-item-group>
-      </ion-list> -->
-
-
-  <!-- <ion-list>
-          <ion-list-header>Planung</ion-list-header>
-          <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(drivers)">
-            <ion-item *ngFor="let driver of drivers"> 
-
-            <ion-avatar item-start>
-              <img src="assets/imgs/blacky.png">
-            </ion-avatar>
-
-            <h2>{{ driver.name }}</h2>
-            <p>Startzeit: {{driver.timestamp}} Uhr</p>
-            <p>Fahrdauer: {{driver.duration}}h</p>
-
-            <ion-row>
-                <ion-col>
-                  <button ion-button icon-left clear small>
-                    <ion-icon name="thumbs-up"></ion-icon>
-                  </button>
-                </ion-col>
-                <ion-col>
-                  <button ion-button icon-left clear small>
-                    <ion-icon name="text"></ion-icon>
-                  </button>
-                </ion-col>
-              </ion-row>
-          </ion-item>
-        </ion-item-group>
-      </ion-list> -->
 </ion-content>

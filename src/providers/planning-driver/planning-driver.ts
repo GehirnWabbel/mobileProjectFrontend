@@ -1,21 +1,45 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
-// To be specified
-const API: string = "https://racemanager-mobile-project.herokuapp.com/team";
+
+export interface Stint { 
+    finished: boolean;
+    isBreak: boolean;
+    raceDay: number;
+    _id: String;
+    orderNo: number;
+    startdate: String;
+    enddate: String;
+    driver: {
+      _id: String;
+      name: String;
+      connectedViaDevice: boolean;
+      avatarNo: number;
+      color: String;
+    }
+}
 
 @Injectable()
 export class PlanningDriverProvider {
 
-  constructor(public http: Http) {
+  // To be specified
+private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/5afd8827e9eb7d0014b71e25/event/5b03dbcf1dbbfe00142fc27a/stint";
+
+  constructor(public http: HttpClient) {
     console.log('Hello PlanningDriverProvider Provider');
   }
 
-  // get drivers from backend
-  getDriver() {
-    return this.http.get(API).map(response => response.json());
-  }
+// get drivers from backend
+  getStints() {
+      return new Promise(resolve => {
+        this.http.get(this.apiUrl).subscribe(data => {
+          resolve(data);
+        }, err => {
+          console.log(err);
+        });
+      });
+    }
 
   // add driver to plan
   addDriverToPlan() {
