@@ -19,11 +19,10 @@ export class JoinTeamPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    alert(navParams.get("teamName"));
-    alert(navParams.get("teamId"));
-
+    //For testing on android emulator
+    //alert(navParams.get("teamName"));
+    //alert(navParams.get("teamId"));
     this.teamName = "Team: " + navParams.get("teamName");
-
   }
 
   ionViewDidLoad() {
