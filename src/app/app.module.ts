@@ -4,6 +4,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
+import { Deeplinks } from '@ionic-native/deeplinks';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
@@ -62,7 +63,8 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiServiceProvider
+    ApiServiceProvider,
+    Deeplinks
   ]
 })
 export class AppModule {}

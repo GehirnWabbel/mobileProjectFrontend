@@ -15,7 +15,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class JoinTeamPage {
 
+  public teamName: string = 'Teamname';
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+    alert(navParams.get("teamName"));
+    alert(navParams.get("teamId"));
+
+    this.teamName = "Team: " + navParams.get("teamName");
+
   }
 
   ionViewDidLoad() {
