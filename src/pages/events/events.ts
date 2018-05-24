@@ -37,17 +37,15 @@ export class EventsPage {
 
   private static formatDate(data: any) {
     for(let i = 0; i < data.length; i++){
-      // console.log(data[i].startdate);
       let fullDate = new Date(data[i].startdate);
       data[i].date = fullDate.getDate() + '.' + (fullDate.getMonth() + 1) + '.' + fullDate.getFullYear();
       // data[i].time = fullDate.getHours() + ':' + fullDate.getMinutes();
     }
-    console.log(data);
   }
 
   navToEvent(event: any){
     this.storage.set('eventId', event._id);
-    console.log("Event Id: " + event._id + " saved in local storage.")
+    //console.log("Event Id: " + event._id + " saved in local storage.")
     this.navCtrl.push(PlanningPage);
   }
 
