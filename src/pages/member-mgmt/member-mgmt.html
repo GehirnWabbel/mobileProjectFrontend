@@ -4,6 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Mitgliederverwaltung</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="toggleMode()">
+        <ion-icon name="create" *ngIf="changeMode === false"></ion-icon>
+        <ion-icon name="checkmark" *ngIf="changeMode === true"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -13,16 +19,25 @@
   <ion-list>
     <ion-item>
       <ion-label fixed>Name</ion-label>
-      <ion-input type="text" [(ngModel)]="member.name"></ion-input>
+      <ion-input type="text" [(ngModel)]="member.name" *ngIf="changeMode === true"></ion-input>
+      <ion-label item-end *ngIf="changeMode === false">{{member.name}}</ion-label>
     </ion-item>
 
     <ion-item>
       <ion-grid class="grid-carousel">
         <ion-row>
           <ion-col class="grid-carousel-label">Farbe</ion-col>
-          <ion-col col-1><ion-icon name="arrow-back"></ion-icon></ion-col>
-          <ion-col id="driver-color-col"></ion-col>
-          <ion-col col-1 class="grid-carousel-forward"><ion-icon name="arrow-forward"></ion-icon></ion-col>
+          <ion-col col-2>
+            <button ion-button clear small icon-only (click)="colorBackward()" *ngIf="changeMode === true">
+              <ion-icon name="arrow-back" ></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col [style.background-color]="colorDefinitions[member.color]"></ion-col>
+          <ion-col col-2 class="grid-carousel-forward" >
+            <button ion-button clear small icon-only (click)="colorForward()" *ngIf="changeMode === true">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
@@ -31,28 +46,37 @@
       <ion-grid class="grid-carousel">
         <ion-row>
           <ion-col class="grid-carousel-label">Avatar</ion-col>
-          <ion-col col-1><ion-icon name="arrow-back" (click)="avatarBackward()"></ion-icon></ion-col>
-          <ion-col><img src="../../assets/imgs/ava-{{member.avatarNo}}.png" /> </ion-col>
-          <ion-col col-1 class="grid-carousel-forward"><ion-icon name="arrow-forward" (click)="avatarForward()"></ion-icon></ion-col>
+          <ion-col col-2>
+            <button ion-button icon-only clear small (click)="avatarBackward()" *ngIf="changeMode === true">
+              <ion-icon name="arrow-back" ></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col><img src="../../assets/imgs/ava-{{member.avatarNo}}.png" /></ion-col>
+          <ion-col col-2 class="grid-carousel-forward">
+            <button ion-button icon-only clear small (click)="avatarForward()" *ngIf="changeMode === true">
+              <ion-icon name="arrow-forward" ></ion-icon>
+            </button>
+          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
 
     <ion-item>
       <ion-label>Fahrer</ion-label>
-      <ion-checkbox [ngModel]="member.driver" (ionChange)="isDriverChanged()"></ion-checkbox>
+      <ion-checkbox *ngIf="changeMode === false" disabled="true" [ngModel]="member.driver"></ion-checkbox>
+      <ion-checkbox *ngIf="changeMode === true" [ngModel]="member.driver" (ionChange)="isDriverChanged()"></ion-checkbox>
     </ion-item>
 
-    <ion-item *ngIf="member.driver === true">
+    <ion-item *ngIf="member.driver === true && member.connectedViaDevice === true">
       <ion-label fixed>Info-Zeitpunkt</ion-label>
-      <ion-select [(ngModel)]="notificationTime" interface="action-sheet">
-        <ion-option value="time-30" selected="true">+ 30 min</ion-option>
-        <ion-option value="time-40">+ 40 min</ion-option>
-        <ion-option value="time-50">+ 50 min</ion-option>
-        <ion-option value="time-60">+ 60 min</ion-option>
-        <ion-option value="time-70">+ 70 min</ion-option>
-        <ion-option value="time-80">+ 80 min</ion-option>
-        <ion-option value="time-90" (avatarSelect)="notificationTimeSelect($event)">+ 90 min</ion-option>
+      <ion-select [ngModel]="member.minutesBeforeNotification" interface="action-sheet">
+        <ion-option value="30">+ 30 min</ion-option>
+        <ion-option value="40">+ 40 min</ion-option>
+        <ion-option value="50">+ 50 min</ion-option>
+        <ion-option value="60">+ 60 min</ion-option>
+        <ion-option value="70">+ 70 min</ion-option>
+        <ion-option value="80">+ 80 min</ion-option>
+        <ion-option value="90">+ 90 min</ion-option>
       </ion-select>
     </ion-item>
 

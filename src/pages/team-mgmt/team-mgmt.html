@@ -17,6 +17,7 @@
         <img src="../../assets/imgs/avatar/ava-{{driver.avatarNo}}.png" >
       </ion-avatar>
       <h1>{{driver.name}}</h1>
+      <ion-icon name="phone-portrait" item-end *ngIf="driver.connectedViaDevice === true"></ion-icon>
     </ion-item>
   </ion-list>
 
@@ -28,6 +29,7 @@
         <img src="../../assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
       </ion-avatar>
       <h1>{{manager.name}}</h1>
+      <ion-icon name="phone-portrait" item-end *ngIf="manager.connectedViaDevice === true"></ion-icon>
     </ion-item>
   </ion-list>
 

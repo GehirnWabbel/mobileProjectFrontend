@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the MemberMgmtPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { colorDefinitions } from "../../app/colordefinitions";
 
 @IonicPage()
 @Component({
@@ -15,22 +9,42 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MemberMgmtPage {
 
+  changeMode: boolean = false;
+
   member; //data of person to be edited
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  colorDefinitions;
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+  ) {
     this.member = this.navParams.data;
+    this.colorDefinitions = colorDefinitions;
   }
 
-  ionViewDidLoad() {
+  static ionViewDidLoad() {
     console.log('ionViewDidLoad MemberMgmtPage');
   }
 
-  colorForward() {
+  ionViewCanLeave() {
+    if(this.changeMode)
+      return this.confirmLeaveWhenInChangeMode();
+    else
+      return true;
+  }
 
+  colorForward() {
+      this.member.color++;
+      if(this.member.color > 17)
+        this.member.color -= 17;
   }
 
   colorBackward() {
-
+    this.member.color--;
+    if(this.member.color < 0)
+      this.member.color += 17;
   }
 
   avatarForward() {
@@ -48,6 +62,38 @@ export class MemberMgmtPage {
   isDriverChanged() {
     this.member.driver = !this.member.driver;
     console.log(this.member.driver);
+  }
+
+  toggleMode() {
+    if(this.changeMode)
+      this.savePerson();
+    this.changeMode = !this.changeMode;
+  }
+
+  savePerson(){
+    console.log('saved');
+  }
+
+  confirmLeaveWhenInChangeMode() : Promise<boolean> {
+    let confirm = this.alertCtrl.create({
+      title: 'Änderungen verwerfen?',
+      // message: '',
+      buttons: [
+        {
+          text: 'Ja',
+          handler: () => {
+            console.log('Ja clicked, discarding changes');
+          }
+        },
+        {
+          text: 'Nein',
+          handler: () => {
+            console.log('Nein clicked');
+          }
+        }
+      ]
+    });
+    return confirm.present();
   }
 
 }

@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiServiceProvider {
 
-  private apiUrl: string = 'https://racemanager-mobile-project.herokuapp.com/team/5afd8827e9eb7d0014b71e25';
+  private apiUrl: string = 'https://racemanager-mobile-project.herokuapp.com/team/5b06a79fef9f5500141336d2';
 
   constructor(public http: HttpClient) {
     console.log('Hello ApiServiceProvider Provider');
