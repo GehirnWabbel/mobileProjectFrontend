@@ -48,7 +48,7 @@ export class EventsPage {
   navToEvent(event: any){
     this.storage.set('eventId', event._id);
     console.log("Event Id: " + event._id + " saved in local storage.")
-    this.navCtrl.push(PlanningPage);
+    this.navCtrl.setRoot(PlanningPage);
   }
 
 }

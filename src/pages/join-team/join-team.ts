@@ -22,4 +22,8 @@ export class JoinTeamPage {
     console.log('ionViewDidLoad JoinTeamPage');
   }
 
+  updateCheckbox() {
+    return null;
+  }
+
 }
