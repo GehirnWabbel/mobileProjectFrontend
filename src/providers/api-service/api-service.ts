@@ -1,12 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-/*
-  Generated class for the ApiServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ApiServiceProvider {
 
@@ -53,11 +47,25 @@ export class ApiServiceProvider {
     });
   }
 
-  createStint(eventId: any, driver: any){
-    console.log("Trying to POST to : " + eventId);
-    console.log("Trying to POST Driver: " + driver);
+  createStint(eventId: any, stintOfDriver: any){
+    // console.log("Transfered Event ID : " + eventId);
+    // console.log("Transfered Stint of Driver: " + stintOfDriver);
+
+    // Clone old stint and create new one in correct Stint format
+    // (only driver reference instead of complete driver object)
+
+    const newStint = JSON.parse(JSON.stringify(stintOfDriver));
+    delete newStint.driver;
+    newStint.driverId = stintOfDriver.driver._id;
+    newStint.finished = false;
+
+    // TODO: get correct orderNo
+    newStint.orderNo = 32;
+    JSON.stringify(newStint);
+    console.log(newStint);
+
     return new Promise(resolve => {
-      this.http.post(this.apiUrl+'/event/'+ eventId + '/stint/' + driver._id, JSON.stringify(driver))
+      this.http.post(this.apiUrl+'/event/'+ eventId + '/stint', newStint)
         .subscribe(data => {
           resolve(data);
           console.log("STINT CREATED");
@@ -65,6 +73,7 @@ export class ApiServiceProvider {
           console.log(err);
         });
     });
+
   }
 
 }

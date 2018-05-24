@@ -13,7 +13,7 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let driver of allDrivers" (click)="newStint(driver)">
+    <button ion-item *ngFor="let driver of allDrivers" (click)="newStint(driver._id)">
       <ion-avatar item-start>
         <img src="assets/imgs/girl.png">
       </ion-avatar>

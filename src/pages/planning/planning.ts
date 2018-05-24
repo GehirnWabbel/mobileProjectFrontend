@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
 import { ApiServiceProvider } from '../../providers/api-service/api-service';
-import {Storage} from "@ionic/storage";
+import { Storage } from "@ionic/storage";
 
 @IonicPage()
 @Component({
@@ -45,6 +45,7 @@ export class PlanningPage {
 
   formatStints(data: any) {
      this.allStints = data as Array<any>;
+     console.log('All Stints: ', this.allStints);
      this.getDriversOfStint(this.allStints);
      this.getProtocolItemsOfStint(this.allStints);
      return this.allStints;
@@ -84,23 +85,21 @@ export class PlanningPage {
     for (let i=0; i<this.allStints.length; i++) {
       // search stint of driver
       if (this.allStints[i].driver._id == driver._id) {
-        let stintId = this.allStints[i];
-        return stintId;
+        let stint = this.allStints[i];
+        return stint;
       }
     }
   }
 
   openAddStintModal() {
-    const addModal = this.modal.create('PlanningModalAddPage', {'protocolItems' : this.protocolItems});
+    const addModal = this.modal.create('PlanningModalAddPage', { allStints: this.allStints});
     addModal.present();
   }
 
-
-
   /*
-
-    Tag functionality
-
+   *
+   * TODO: Tag functionality
+   *
    */
 
   editStint() {
