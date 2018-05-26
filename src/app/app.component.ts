@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { timer } from 'rxjs/observable/timer';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
@@ -33,9 +34,9 @@ export class MyApp {
       { title: 'Statistiken', component: ChartPage, icon: 'stats' },
       { title: 'Team verwalten', component: TeamMgmtPage, icon: 'people' }
     ];
-
-
   }
+
+  showSplash = true;
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -44,7 +45,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      
+      timer(3000).subscribe(() => this.showSplash = false) // <-- hide animation after 3s
     });
   }
 
