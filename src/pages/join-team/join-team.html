@@ -7,10 +7,10 @@
   </ion-navbar>
 </ion-header>
 
-
+<!--TODO: Color picker-->
 <ion-content padding>
   <ion-item>
-    <ion-input placeholder="Dein Name"></ion-input>
+    <ion-input [(ngModel)]="driverName" placeholder="Dein Name"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>Fahrer</ion-label>
@@ -31,6 +31,6 @@
   <ion-item>
     <ion-input readonly type="text" value="" [(ngModel)]="teamName"></ion-input>
   </ion-item>
-  <button ion-button full>Team beitreten!</button>
+  <button (click)="joinTeam()" ion-button full>Team beitreten!</button>
 </ion-content>
 
