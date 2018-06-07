@@ -3,16 +3,16 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class ApiServiceProvider {
-  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/";
+  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
     //"team/5b06a79fef9f5500141336d2";
 
   constructor(
     public http: HttpClient) {}
 
   // get events from API
-  getEvents() {
+  getEvents(teamId: string) {
     return new Promise(resolve => {
-      this.http.get(this.apiUrl + "/event").subscribe(
+      this.http.get(this.apiUrl +  teamId + "/event").subscribe(
         data => {
           resolve(data);
         },
@@ -24,9 +24,9 @@ export class ApiServiceProvider {
   }
 
   // get stints from API
-  getStints(eventId: any) {
+  getStints(teamId: string, eventId: any) {
     return new Promise(resolve => {
-      this.http.get(this.apiUrl + "/event/" + eventId + "/stint/").subscribe(
+      this.http.get(this.apiUrl + teamId + "/event/" + eventId + "/stint/").subscribe(
         data => {
           resolve(data);
         },
@@ -50,7 +50,7 @@ export class ApiServiceProvider {
 
   // update Stint to API
   // Sets a stint to finished -> stint will be a protocol item
-  setStintToDone(eventId: any, finishedStint: any) {
+  setStintToDoneAPI(eventId: any, finishedStint: any) {
     console.log("Finished: " + finishedStint.finished);
     return new Promise(resolve => {
       this.http

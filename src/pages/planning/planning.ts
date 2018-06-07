@@ -42,7 +42,7 @@ export class PlanningPage {
       this.eventId = val;
 
       // Get complete stints
-      this.apiProvider.getStints(this.eventId).then(data => {
+      this.apiProvider.getStints('5b06a79fef9f5500141336d2', this.eventId).then(data => {
         this.allStints = this.formatStints(data);
       });
     });
@@ -95,11 +95,13 @@ export class PlanningPage {
   }
 
   setStintToDone(driver: any) {
+    console.log("Übergebener Fahrer: " + driver.name);
     let finishedStint = this.getStintOfDriver(driver);
-    console.log("Stint not updated: " + finishedStint.finished);
+    console.log("Stint not yet updated: " + finishedStint.finished);
     finishedStint.finished = true;
     console.log("Stint updated: " + finishedStint.finished);
-    this.apiProvider.setStintToDone(this.eventId, finishedStint);
+    console.log("complete updated Stint: " + finishedStint);
+    this.apiProvider.setStintToDoneAPI(this.eventId, finishedStint);
   }
 
   getStintOfDriver(driver: any) {
