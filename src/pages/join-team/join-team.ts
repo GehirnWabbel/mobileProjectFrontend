@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApiServiceProvider } from '../../providers/api-service/api-service';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the JoinTeamPage page.
@@ -19,15 +20,25 @@ export class JoinTeamPage {
   isDriver: boolean;
   driverName: string;
   notification: number;
+  teamName: string;
+  teamId: string;
+  teamNameUI: string;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private apiProvider: ApiServiceProvider) {
+              private apiProvider: ApiServiceProvider,
+              private storage: Storage) {
 
-    //For testing on android emulator
-    //alert(navParams.get("teamName"));
-    //alert(navParams.get("teamId"));
-    //this.teamName = "Team: " + navParams.get("teamName");
+    //TODO: Remove Mock to use real Team ID
+    //this.teamNameUI = "Team: " + navParams.get("teamName");
+    //this.teamName = navParams.get("teamName");
+    this.teamNameUI = "Team: needracing.com";
+    this.teamName = "needracing.com";
+    //this.teamId = navParams.get("teamId");
+    this.teamId = "5b06a79fef9f5500141336d2";
+    this.storage.set('teamId', this.teamId );
+    console.log("Team Id: " + this.teamId + " saved in local storage." )
+
   }
 
   ionViewDidLoad() {
@@ -40,20 +51,37 @@ export class JoinTeamPage {
 
   joinTeam(){
 
-    console.log(this.driverName);
-
     if(this.isDriver != true){
-      console.log("is kein Fahrer");
-      //TODO: add User to team, using teamid from deeplink
+      if(typeof this.driverName != 'undefined' && typeof this.notification != 'undefined' ){
+        console.log("Anmeldung als User, nicht als Fahrer!");
+        let color = Math.floor(Math.random() * 17) + 1;
+        let colorNumber = Math.round(color);
+        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
+
+        if(this.teamId != undefined ){
+          this.apiProvider.registerNewDriver(this.navParams.get("teamId"), newUser);
+        }
+        else{
+          this.apiProvider.registerNewDriver("5b06a79fef9f5500141336d2", newUser);
+        }
+
+      }
     }
     else {
       //New Driver is connected with device
-      //mock teamid
       if(typeof this.driverName != 'undefined' && typeof this.notification != 'undefined' ){
-        //TODO: COLOR PICKER AND USAGE OF COLOR RESULT IN REQUEST
-        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": 1, \"minutesBeforeNotification\": " + this.notification + " }"
-        //this.apiProvider.registerNewDriver(this.navParams.get("teamId"), newDriver);
-        this.apiProvider.registerNewDriver("5b06a79fef9f5500141336d2", newDriver);
+        console.log("Anmeldung als Fahrer!");
+        let color = Math.floor(Math.random() * 17) + 1;
+        let colorNumber = Math.round(color);
+        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
+
+        if(this.teamId != undefined ){
+          this.apiProvider.registerNewDriver(this.navParams.get("teamId"), newDriver);
+        }
+        else{
+          this.apiProvider.registerNewDriver("5b06a79fef9f5500141336d2", newDriver);
+        }
+
       }
 
 
