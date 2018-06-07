@@ -6,6 +6,7 @@ export class ApiServiceProvider {
   private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
     //"team/5b06a79fef9f5500141336d2";
 
+  private apiUrl: string = 'https://racemanager-mobile-project.herokuapp.com/team/';
   constructor(
     public http: HttpClient) {}
 
@@ -66,6 +67,17 @@ export class ApiServiceProvider {
             console.log(err);
           }
         );
+    });
+  }
+
+  registerNewDriver(teamId: string, newDriver: any){
+
+    return new Promise(resolve => {
+      this.http.post(this.apiUrl+ teamId + '/person', newDriver,{headers: {'Content-Type': 'application/json'}}).subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
     });
   }
 

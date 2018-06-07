@@ -2,12 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Deeplinks } from '@ionic-native/deeplinks';
 import { timer } from 'rxjs/observable/timer';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
+import { JoinTeamPage } from '../pages/join-team/join-team';
 
 
 @Component({
@@ -23,7 +25,8 @@ export class MyApp {
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen) {
+    public splashScreen: SplashScreen,
+    private deeplinks: Deeplinks) {
 
     this.initializeApp();
 
@@ -46,6 +49,16 @@ export class MyApp {
       this.splashScreen.hide();
 
       timer(3500).subscribe(() => this.showSplash = false) // <-- hide animation after 3.5s
+
+      this.deeplinks.route({
+        '/join': {"join": true}
+      } ).subscribe((match) => {
+        //alert(JSON.stringify(match.$args.teamname));
+        this.nav.setRoot(JoinTeamPage, {"teamId": match.$args.teamid, "teamName": match.$args.teamname});
+      }, (noMatch) => {
+        alert(JSON.stringify(noMatch));
+      } )
+
     });
   }
 
