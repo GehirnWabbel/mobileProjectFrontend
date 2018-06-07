@@ -19,6 +19,7 @@ import { PlanningPage } from '../planning/planning';
 export class EventsPage {
 
   private allEvents: Array<any>;
+  teamId: string;
 
   constructor(
     public navCtrl: NavController,
@@ -26,7 +27,12 @@ export class EventsPage {
     private apiProvider: ApiServiceProvider,
     private storage: Storage) {
 
-    this.apiProvider.getEvents('5b06a79fef9f5500141336d2').then(data => {this.allEvents = this.convertData(data)});
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+      this.apiProvider.getEvents(this.teamId).then(data => {this.allEvents = this.convertData(data)});
+    });
+
+
   }
 
   private convertData(data: any) {
@@ -43,7 +49,7 @@ export class EventsPage {
     }
   }
 
-  navToEvent(event: any){
+  navToPlanningPage(event: any){
     this.storage.set('eventId', event._id);
     console.log("Event Id: " + event._id + " saved in local storage.")
     this.navCtrl.setRoot(PlanningPage);

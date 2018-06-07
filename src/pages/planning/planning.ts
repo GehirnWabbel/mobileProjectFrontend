@@ -24,10 +24,12 @@ export class PlanningPage {
 
   allStints: Array<any>; // complete Stints
   allDrivers: Array<any>; // subset of Stints (only driver objects)
-  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
-  // allPlanningItems = [];    // Planning Items = Stints with attribute 'finished' false
 
-  eventId: any;
+  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
+  allPlanningItems = [];    // Planning Items = Stints with attribute 'finished' false
+
+  teamId: string;
+  eventId: string;
 
   constructor(
     public navCtrl: NavController,
@@ -37,16 +39,18 @@ export class PlanningPage {
     private viewCtrl: ViewController,
     private storage: Storage
   ) {
-    this.storage.get("eventId").then(val => {
-      // Get current event out of storage
-      this.eventId = val;
 
-      // Get complete stints
-      this.apiProvider.getStints('5b06a79fef9f5500141336d2', this.eventId).then(data => {
-        this.allStints = this.formatStints(data);
+      this.storage.get("teamId").then(val => {
+        this.teamId = val;
       });
-    });
 
+      this.storage.get("eventId").then(val => {
+        this.eventId = val;
+        this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
+          this.allStints = this.formatStints(data);
+      });
+
+    });
     this.getDriversFromAPI();
   }
 
@@ -57,28 +61,27 @@ export class PlanningPage {
   formatStints(data: any) {
     this.allStints = data as Array<any>;
     console.log("All Stints: ", this.allStints);
-    //this.getDriversOfStint(this.allStints);
+    this.getDriversOfStint(this.allStints);
     this.getProtocolItemsOfStint(this.allStints);
     return this.allStints;
   }
 
-  // getDriversOfStint(allStints) {
-  //   for (let i = 0; i < allStints.length; i++) {
-  //     // add to allDrivers if a member is a driver and Stint is NOT finished
-  //     if (
-  //       allStints[i].finished == false &&
-  //       allStints[i].driver.driver == true
-  //     ) {
-  //       let driver = allStints[i].driver;
-  //       this.allDrivers.push(driver);
-  //     }
-  //   }
-  //   //this.storage.set("allDrivers", this.allDrivers);
-  // }
+  getDriversOfStint(allStints) {
+     for (let i = 0; i < allStints.length; i++) {
+       // add to allDrivers if a member is a driver and Stint is NOT finished
+       if (
+         allStints[i].finished == false &&
+         allStints[i].driver.driver == true
+       ) {
+         let driver = allStints[i].driver;
+         this.allPlanningItems.push(driver);
+       }
+     }
+   }
 
   getDriversFromAPI() {
-    this.apiProvider.getDrivers('5b06a79fef9f5500141336d2').then(data => {
-      this.allDrivers = data as Array<any>;;
+    this.apiProvider.getDrivers(this.teamId).then(data => {
+      this.allDrivers = data as Array<any>;
     });
     this.storage.set("allDrivers", this.allDrivers);
   }

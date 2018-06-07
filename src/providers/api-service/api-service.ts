@@ -7,7 +7,8 @@ export class ApiServiceProvider {
     //"team/5b06a79fef9f5500141336d2";
 
   constructor(
-    public http: HttpClient) {}
+    public http: HttpClient) {
+  }
 
   // get events from API
   getEvents(teamId: string) {

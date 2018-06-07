@@ -32,7 +32,7 @@
   <!-- Planung -->
   <h3 padding>Planung</h3>
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allStints)">
-      <ion-item-sliding *ngFor="let driver of allDrivers">
+      <ion-item-sliding *ngFor="let planningItem of allPlanningItems">
         <ion-item>
 
           <ion-avatar item-start>
@@ -40,9 +40,9 @@
           </ion-avatar>
 
           <!-- To be specified2 -->
-          <h2>{{ driver.name }}</h2>
-          <p>Startzeit: {{driver.name }} Uhr</p>
-          <p>Fahrdauer: {{driver.name }} h</p>
+          <h2>{{ planningItem.name }}</h2>
+          <p>Startzeit: {{planningItem.name }} Uhr</p>
+          <p>Fahrdauer: {{planningItem.name }} h</p>
 
           <p>
             <ion-badge item-end (click)="openKartTag()">
