@@ -1,37 +1,53 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
-import { ApiServiceProvider } from '../../providers/api-service/api-service';
+import { Component } from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ModalController,
+  ViewController
+} from "ionic-angular";
+import { ApiServiceProvider } from "../../providers/api-service/api-service";
+import { Storage } from "@ionic/storage";
 
 @IonicPage()
 @Component({
-  selector: 'page-planning',
-  templateUrl: 'planning.html',
+  selector: "page-planning",
+  templateUrl: "planning.html"
 })
-
 export class PlanningPage {
-
-  public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}>;
+  public protocolItems: Array<{
+    name: string;
+    icon: string;
+    timestamp: any;
+    duration: any;
+  }>;
 
   allStints: Array<any>; // complete Stints
-  allDrivers = []; // subset of Stints (only driver objects)
+  allDrivers: Array<any>; // subset of Stints (only driver objects)
+  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
+  // allPlanningItems = [];    // Planning Items = Stints with attribute 'finished' false
+
+  eventId: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
     private modal: ModalController,
-    private viewCtrl: ViewController) {
+    private viewCtrl: ViewController,
+    private storage: Storage
+  ) {
+    this.storage.get("eventId").then(val => {
+      // Get current event out of storage
+      this.eventId = val;
 
-    // examples for protocol items
-    this.protocolItems = [
-      { name: 'Johannes', icon: 'person', timestamp: '13:37', duration: '0:32'},
-      { name: 'Marcus', icon: 'person', timestamp: '14:24', duration: '0:53' },
-      { name: 'Alex', icon: 'person', timestamp: '15:34', duration: '2:12' },
-      { name: 'Marie', icon: 'person', timestamp: '3:15', duration: '1:16' }
-    ];
+      // Get complete stints
+      this.apiProvider.getStints('5b06a79fef9f5500141336d2', this.eventId).then(data => {
+        this.allStints = this.formatStints(data);
+      });
+    });
 
-    // Get complete stints
-    this.apiProvider.getStints().then(data => {this.allStints = this.formatStints(data)});
+    this.getDriversFromAPI();
   }
 
   ionViewWillEnter() {
@@ -39,26 +55,77 @@ export class PlanningPage {
   }
 
   formatStints(data: any) {
-     this.allStints = data as Array<any>;
-     this.getDriversOfStint(this.allStints);
-     return this.allStints;
+    this.allStints = data as Array<any>;
+    console.log("All Stints: ", this.allStints);
+    //this.getDriversOfStint(this.allStints);
+    this.getProtocolItemsOfStint(this.allStints);
+    return this.allStints;
   }
 
-  getDriversOfStint(allStints) {
-    for (let i=0; i<allStints.length; i++){
-      let driver = allStints[i].driver;
-      this.allDrivers.push(driver);
+  // getDriversOfStint(allStints) {
+  //   for (let i = 0; i < allStints.length; i++) {
+  //     // add to allDrivers if a member is a driver and Stint is NOT finished
+  //     if (
+  //       allStints[i].finished == false &&
+  //       allStints[i].driver.driver == true
+  //     ) {
+  //       let driver = allStints[i].driver;
+  //       this.allDrivers.push(driver);
+  //     }
+  //   }
+  //   //this.storage.set("allDrivers", this.allDrivers);
+  // }
+
+  getDriversFromAPI() {
+    this.apiProvider.getDrivers('5b06a79fef9f5500141336d2').then(data => {
+      this.allDrivers = data as Array<any>;;
+    });
+    this.storage.set("allDrivers", this.allDrivers);
+  }
+
+  getProtocolItemsOfStint(allStints) {
+    for (let i = 0; i < allStints.length; i++) {
+      // add to allProtocolItems if stint is finished
+      if (allStints[i].finished == true) {
+        let protocolItem = allStints[i].driver;
+        this.allProtocolItems.push(protocolItem);
+      }
+    }
+    //console.log(this.allProtocolItems);
+  }
+
+  setStintToDone(driver: any) {
+    console.log("Übergebener Fahrer: " + driver.name);
+    let finishedStint = this.getStintOfDriver(driver);
+    console.log("Stint not yet updated: " + finishedStint.finished);
+    finishedStint.finished = true;
+    console.log("Stint updated: " + finishedStint.finished);
+    console.log("complete updated Stint: " + finishedStint);
+    this.apiProvider.setStintToDoneAPI(this.eventId, finishedStint);
+  }
+
+  getStintOfDriver(driver: any) {
+    for (let i = 0; i < this.allStints.length; i++) {
+      // search stint of driver
+      if (this.allStints[i].driver._id == driver._id) {
+        let stint = this.allStints[i];
+        return stint;
+      }
     }
   }
 
-  setStintToDone() {
-    this.apiProvider.setStintToDone();
-  }
-
   openAddStintModal() {
-    const addModal = this.modal.create('PlanningModalAddPage', {'protocolItems' : this.protocolItems});
+    const addModal = this.modal.create("PlanningModalAddPage", {
+      allStints: this.allStints
+    });
     addModal.present();
   }
+
+  /*
+   *
+   * TODO: Tag functionality
+   *
+   */
 
   editStint() {
     console.log("Pop up for editing driver");
@@ -75,5 +142,4 @@ export class PlanningPage {
   openFlagTag() {
     console.log("Flag Tag options open");
   }
-
 }

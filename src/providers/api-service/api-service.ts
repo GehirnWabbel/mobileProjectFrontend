@@ -1,24 +1,46 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 
-/*
-  Generated class for the ApiServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ApiServiceProvider {
+  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
+    //"team/5b06a79fef9f5500141336d2";
 
-  private apiUrl: string = 'https://racemanager-mobile-project.herokuapp.com/team/5afd8827e9eb7d0014b71e25';
+  constructor(
+    public http: HttpClient) {}
 
-  constructor(public http: HttpClient) {
-    console.log('Hello ApiServiceProvider Provider');
+  // get events from API
+  getEvents(teamId: string) {
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl +  teamId + "/event").subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
   }
 
-  getEvents() {
+  // get stints from API
+  getStints(teamId: string, eventId: any) {
     return new Promise(resolve => {
-      this.http.get(this.apiUrl+'/event').subscribe(data => {
+      this.http.get(this.apiUrl + teamId + "/event/" + eventId + "/stint/").subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  // get drivers from API
+  getDrivers(teamId: string){
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl+ teamId + '/person?driver=true').subscribe(data => {
         resolve(data);
       }, err => {
         console.log(err);
@@ -26,19 +48,56 @@ export class ApiServiceProvider {
     });
   }
 
-  // get drivers from backend
-  getStints() {
+  // update Stint to API
+  // Sets a stint to finished -> stint will be a protocol item
+  setStintToDoneAPI(eventId: any, finishedStint: any) {
+    console.log("Finished: " + finishedStint.finished);
     return new Promise(resolve => {
-      this.http.get(this.apiUrl+'/event/5b03dbcf1dbbfe00142fc27a/stint').subscribe(data => {
-        resolve(data);
-      }, err => {
-        console.log(err);
-      });
+      this.http
+        .put(
+          this.apiUrl + "/event/" + eventId + "/stint/" + finishedStint._id,
+          JSON.stringify(finishedStint)
+        )
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
     });
   }
 
-  setStintToDone(){
-    return null;
-  }
+  createStint(eventId: any, stintOfDriver: any) {
+    // console.log("Transfered Event ID : " + eventId);
+    // console.log("Transfered Stint of Driver: " + stintOfDriver);
 
+    // Clone old stint and create new one in correct Stint format
+    // (only driver reference instead of complete driver object)
+
+    const newStint = JSON.parse(JSON.stringify(stintOfDriver));
+    delete newStint.driver;
+    delete newStint.orderNo;
+    newStint.driverId = stintOfDriver.driver._id;
+    newStint.finished = false;
+
+    JSON.stringify(newStint);
+    console.log('Object to be posted: ', newStint);
+
+    return new Promise(resolve => {
+      this.http
+        .post(this.apiUrl + "/event/" + eventId + "/stint", newStint)
+        .subscribe(
+          data => {
+            resolve(data);
+            console.log("NEW STINT CREATED");
+            // TODO: refresh planning page
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
 }
