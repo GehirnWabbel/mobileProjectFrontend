@@ -6,7 +6,6 @@ export class ApiServiceProvider {
   private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
     //"team/5b06a79fef9f5500141336d2";
 
-  private apiUrl: string = 'https://racemanager-mobile-project.herokuapp.com/team/';
   constructor(
     public http: HttpClient) {}
 
