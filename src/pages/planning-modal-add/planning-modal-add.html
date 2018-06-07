@@ -14,11 +14,13 @@
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let driver of allDrivers" (click)="newStint(driver._id)">
-      <ion-avatar item-start>
-        <img src="assets/imgs/girl.png">
-      </ion-avatar>
-      <h2>{{ driver.name }}</h2>
-      <p>ID: {{driver._id }}</p>
+
+        <ion-avatar item-start>
+          <img src="assets/imgs/girl.png">
+        </ion-avatar>
+        <h2>{{ driver.name }}</h2>
+        <!--<p>ID: {{driver._id }}</p>-->
+
     </button>
   </ion-list>
 </ion-content>

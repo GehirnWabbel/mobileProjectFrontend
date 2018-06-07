@@ -3,7 +3,8 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class ApiServiceProvider {
-  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/5b06a79fef9f5500141336d2";
+  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/";
+    //"team/5b06a79fef9f5500141336d2";
 
   constructor(
     public http: HttpClient) {}
@@ -33,6 +34,17 @@ export class ApiServiceProvider {
           console.log(err);
         }
       );
+    });
+  }
+
+  // get drivers from API
+  getDrivers(teamId: string){
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl+ teamId + '/person?driver=true').subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
     });
   }
 

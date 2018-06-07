@@ -26,6 +26,7 @@ export class PlanningModalAddPage {
     public navParams: NavParams,
     private storage: Storage
   ) {
+
     this.allStints = navParams.get("allStints");
 
     this.storage.get("allDrivers").then(val => {
@@ -69,4 +70,5 @@ export class PlanningModalAddPage {
     this.navCtrl.setRoot(PlanningPage);
     //this.view.dismiss();
   }
+
 }
