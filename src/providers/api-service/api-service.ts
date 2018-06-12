@@ -51,12 +51,11 @@ export class ApiServiceProvider {
 
   // update Stint to API
   // Sets a stint to finished -> stint will be a protocol item
-  setStintToDoneAPI(eventId: any, finishedStint: any) {
-    console.log("Finished: " + finishedStint.finished);
+  setStintToDoneAPI(teamId: any, eventId: any, finishedStint: any) {
     return new Promise(resolve => {
       this.http
         .put(
-          this.apiUrl + "/event/" + eventId + "/stint/" + finishedStint._id,
+          this.apiUrl + teamId + "/event/" + eventId + "/stint/" + finishedStint._id,
           JSON.stringify(finishedStint)
         )
         .subscribe(
@@ -71,7 +70,6 @@ export class ApiServiceProvider {
   }
 
   registerNewDriver(teamId: string, newDriver: any){
-
     return new Promise(resolve => {
       this.http.post(this.apiUrl+ teamId + '/person', newDriver,{headers: {'Content-Type': 'application/json'}}).subscribe(data => {
         resolve(data);
@@ -81,7 +79,7 @@ export class ApiServiceProvider {
     });
   }
 
-  createStint(eventId: any, stintOfDriver: any) {
+  createStint(teamId: any, eventId: any, stintOfDriver: any) {
     // console.log("Transfered Event ID : " + eventId);
     // console.log("Transfered Stint of Driver: " + stintOfDriver);
 
@@ -99,7 +97,7 @@ export class ApiServiceProvider {
 
     return new Promise(resolve => {
       this.http
-        .post(this.apiUrl + "/event/" + eventId + "/stint", newStint)
+        .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint)
         .subscribe(
           data => {
             resolve(data);

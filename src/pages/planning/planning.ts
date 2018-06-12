@@ -1,13 +1,8 @@
 import { Component } from "@angular/core";
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ModalController,
-  ViewController
-} from "ionic-angular";
+import { IonicPage, NavController, NavParams, ModalController, ViewController } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
+import { PlanningModalAddPage} from "../planning-modal-add/planning-modal-add";
 
 @IonicPage()
 @Component({
@@ -15,18 +10,11 @@ import { Storage } from "@ionic/storage";
   templateUrl: "planning.html"
 })
 export class PlanningPage {
-  public protocolItems: Array<{
-    name: string;
-    icon: string;
-    timestamp: any;
-    duration: any;
-  }>;
 
-  allStints: Array<any>; // complete Stints
-  allDrivers: Array<any>; // subset of Stints (only driver objects)
-
-  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
-  allPlanningItems = [];    // Planning Items = Stints with attribute 'finished' false
+  allStints = [];             // complete Stints
+  allDrivers = [];           // subset of Stints (only driver objects)
+  allProtocolItems = [];     // Protocol Items = Stints with attribute 'finished' true
+  allPlanningItems = [];     // Planning Items = Stints with attribute 'finished' false
 
   teamId: string;
   eventId: string;
@@ -47,11 +35,10 @@ export class PlanningPage {
       this.storage.get("eventId").then(val => {
         this.eventId = val;
         this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
-          this.allStints = this.formatStints(data);
+          this.formatStints(data);
+          this.getDriversFromAPI();
       });
-
     });
-    this.getDriversFromAPI();
   }
 
   ionViewWillEnter() {
@@ -61,20 +48,21 @@ export class PlanningPage {
   formatStints(data: any) {
     this.allStints = data as Array<any>;
     console.log("All Stints: ", this.allStints);
-    this.getDriversOfStint(this.allStints);
-    this.getProtocolItemsOfStint(this.allStints);
-    return this.allStints;
+    let arrayWithStints = this.allStints;
+    this.getDriversOfStint(arrayWithStints);
+    this.getProtocolItemsOfStint(arrayWithStints);
   }
 
   getDriversOfStint(allStints) {
-     for (let i = 0; i < allStints.length; i++) {
+     for (let i = 0; i <= allStints.length-1; i++) {
        // add to allDrivers if a member is a driver and Stint is NOT finished
-       if (
-         allStints[i].finished == false &&
-         allStints[i].driver.driver == true
-       ) {
-         let driver = allStints[i].driver;
-         this.allPlanningItems.push(driver);
+       // Some stints do not even have a driver subArray!
+
+       if (allStints[i].driver != null && allStints[i].driver != 'undefined') {
+         if (allStints[i].finished == false && allStints[i].driver.driver == true) {
+           let driver = allStints[i].driver;
+           this.allPlanningItems.push(driver);
+         }
        }
      }
    }
@@ -83,28 +71,35 @@ export class PlanningPage {
     this.apiProvider.getDrivers(this.teamId).then(data => {
       this.allDrivers = data as Array<any>;
     });
-    this.storage.set("allDrivers", this.allDrivers);
   }
 
   getProtocolItemsOfStint(allStints) {
+
     for (let i = 0; i < allStints.length; i++) {
       // add to allProtocolItems if stint is finished
+      if (allStints[i].driver != null && allStints[i].driver != 'undefined') {
       if (allStints[i].finished == true) {
         let protocolItem = allStints[i].driver;
         this.allProtocolItems.push(protocolItem);
-      }
+      }}
     }
     //console.log(this.allProtocolItems);
   }
 
   setStintToDone(driver: any) {
-    console.log("Übergebener Fahrer: " + driver.name);
     let finishedStint = this.getStintOfDriver(driver);
-    console.log("Stint not yet updated: " + finishedStint.finished);
+
+    // console.log("complete stint before update: " + finishedStint);
+    // console.log("Stint finished: " + finishedStint.finished);
+
     finishedStint.finished = true;
-    console.log("Stint updated: " + finishedStint.finished);
+    finishedStint.driverId = driver._id;
+    delete finishedStint.driver;
+    delete  finishedStint._id;
+
+    console.log("Stint finished: " + finishedStint.finished);
     console.log("complete updated Stint: " + finishedStint);
-    this.apiProvider.setStintToDoneAPI(this.eventId, finishedStint);
+    this.apiProvider.setStintToDoneAPI(this.teamId, this.eventId, finishedStint);
   }
 
   getStintOfDriver(driver: any) {
@@ -118,8 +113,11 @@ export class PlanningPage {
   }
 
   openAddStintModal() {
-    const addModal = this.modal.create("PlanningModalAddPage", {
-      allStints: this.allStints
+    const addModal = this.modal.create(PlanningModalAddPage, {
+      allStints: this.allStints,
+      allDrivers: this.allDrivers,
+      teamId: this.teamId,
+      eventId: this.eventId
     });
     addModal.present();
   }
