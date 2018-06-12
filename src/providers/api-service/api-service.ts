@@ -51,23 +51,23 @@ export class ApiServiceProvider {
 
   // update Stint to API
   // Sets a stint to finished -> stint will be a protocol item
-  setStintToDoneAPI(teamId: any, eventId: any, finishedStint: any) {
+  setStintToDoneAPI(teamId: any, eventId: any, finishedStint: any, finishedStintId: any) {
+    let toBePuttedStint = JSON.stringify(finishedStint);
+
+    console.log("FINISHED STINT READY TO PUT: " + toBePuttedStint);
     return new Promise(resolve => {
+
       this.http
-        .put(
-          this.apiUrl + teamId + "/event/" + eventId + "/stint/" + finishedStint._id,
-          JSON.stringify(finishedStint)
-        )
-        .subscribe(
-          data => {
+        .put(this.apiUrl + teamId + "/event/" + eventId + "/stint/" + finishedStintId, toBePuttedStint,
+          {headers: {'Content-Type': 'application/json'}}).subscribe(data => {
             resolve(data);
-          },
-          err => {
+          }, err => {
             console.log(err);
           }
         );
     });
   }
+
 
   registerNewDriver(teamId: string, newDriver: any){
     return new Promise(resolve => {
@@ -91,15 +91,12 @@ export class ApiServiceProvider {
     delete newStint.orderNo;
     newStint.driverId = stintOfDriver.driver._id;
     newStint.finished = false;
-
     JSON.stringify(newStint);
     console.log('Object to be posted: ', newStint);
 
     return new Promise(resolve => {
       this.http
-        .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint)
-        .subscribe(
-          data => {
+        .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {headers: {'Content-Type': 'application/json'}}).subscribe(data => {
             resolve(data);
             console.log("NEW STINT CREATED");
             // TODO: refresh planning page

@@ -95,11 +95,12 @@ export class PlanningPage {
     finishedStint.finished = true;
     finishedStint.driverId = driver._id;
     delete finishedStint.driver;
-    delete  finishedStint._id;
+    let finishedStintId = finishedStint._id;
+    delete finishedStint._id;
 
-    console.log("Stint finished: " + finishedStint.finished);
-    console.log("complete updated Stint: " + finishedStint);
-    this.apiProvider.setStintToDoneAPI(this.teamId, this.eventId, finishedStint);
+    // console.log("Stint finished: " + finishedStint.finished);
+    // console.log("complete updated Stint: " + finishedStint);
+    this.apiProvider.setStintToDoneAPI(this.teamId, this.eventId, finishedStint, finishedStintId);
   }
 
   getStintOfDriver(driver: any) {
