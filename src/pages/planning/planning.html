@@ -43,8 +43,8 @@
           </ion-avatar>
 
           <h2>{{ item.name }}</h2>
-          <p>Start: {{ item.starttime }} Uhr</p>
-          <p>Dauer: {{ item.duration }} min</p>
+          <p>Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
+          <p>Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
 
           <p>
             <ion-badge item-end (click)="openKartTag()">

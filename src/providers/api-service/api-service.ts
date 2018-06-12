@@ -14,7 +14,7 @@ export class ApiServiceProvider {
       spinner: "ios",
       content: "Lädt..."
     });
-    
+
     this.loading.present();
   }
 
