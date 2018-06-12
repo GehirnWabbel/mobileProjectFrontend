@@ -20,10 +20,13 @@
         </ion-avatar>
         <h2>{{ item.name }}</h2>
         <p>
-          Startzeit: {{ item.name }} Uhr
+          Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
         </p>
         <p>
-          Fahrdauer: {{ item.name }} h
+          Ende: <span style="display:inline-block; width: 29px;"></span> {{ item.endtime }} Uhr
+        </p>
+        <p>
+          Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min
         </p>
       </ion-item>
     </ion-item-group>
@@ -32,17 +35,16 @@
   <!-- Planung -->
   <h3 padding>Planung</h3>
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allStints)">
-      <ion-item-sliding *ngFor="let planningItem of allPlanningItems">
-        <ion-item>
+    <ion-item-sliding *ngFor="let item of allPlanningItems">
 
+        <ion-item>
           <ion-avatar item-start>
             <img src="assets/imgs/blacky.png">
           </ion-avatar>
 
-          <!-- To be specified2 -->
-          <h2>{{ planningItem.name }}</h2>
-          <p>Startzeit: {{planningItem.name }} Uhr</p>
-          <p>Fahrdauer: {{planningItem.name }} h</p>
+          <h2>{{ item.name }}</h2>
+          <p>Start: {{ item.starttime }} Uhr</p>
+          <p>Dauer: {{ item.duration }} min</p>
 
           <p>
             <ion-badge item-end (click)="openKartTag()">
@@ -57,18 +59,17 @@
           </p>
         </ion-item>
 
-        <ion-item-options side="right">
-          <button ion-button color="secondary" (click)="setStintToDone(planningItem)">
-            <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
-            Fertig
-          </button>
-          <button ion-button color="editable" (click)="editStint()">
-            <ion-icon name="md-create" id="iconEdit"></ion-icon>
-            Bearbeiten
-          </button>
-        </ion-item-options>
-
-      </ion-item-sliding>
+      <ion-item-options side="right">
+        <button ion-button color="secondary" (click)="setStintToDone(planningItem)">
+          <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
+          Fertig
+        </button>
+        <button ion-button color="editable" (click)="editStint()">
+          <ion-icon name="md-create" id="iconEdit"></ion-icon>
+          Bearbeiten
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
   <!-- FAB for adding new driver -->

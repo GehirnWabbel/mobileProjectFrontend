@@ -1,8 +1,14 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, ModalController, ViewController } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ModalController,
+  ViewController
+} from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
-import { PlanningModalAddPage} from "../planning-modal-add/planning-modal-add";
+import { PlanningModalAddPage } from "../planning-modal-add/planning-modal-add";
 
 @IonicPage()
 @Component({
@@ -10,11 +16,20 @@ import { PlanningModalAddPage} from "../planning-modal-add/planning-modal-add";
   templateUrl: "planning.html"
 })
 export class PlanningPage {
+  allStints = []; // complete Stints
+  allDrivers = []; // subset of Stints (only driver objects)
+  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
+  allPlanningItems = []; // Planning Items = Stints with attribute 'finished' false
 
-  allStints = [];             // complete Stints
-  allDrivers = [];           // subset of Stints (only driver objects)
-  allProtocolItems = [];     // Protocol Items = Stints with attribute 'finished' true
-  allPlanningItems = [];     // Planning Items = Stints with attribute 'finished' false
+  weekdays: Array<string> = [
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag"
+  ];
 
   teamId: string;
   eventId: string;
@@ -27,16 +42,15 @@ export class PlanningPage {
     private viewCtrl: ViewController,
     private storage: Storage
   ) {
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+    });
 
-      this.storage.get("teamId").then(val => {
-        this.teamId = val;
-      });
-
-      this.storage.get("eventId").then(val => {
-        this.eventId = val;
-        this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
-          this.formatStints(data);
-          this.getDriversFromAPI();
+    this.storage.get("eventId").then(val => {
+      this.eventId = val;
+      this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
+        this.formatStints(data);
+        this.getDriversFromAPI();
       });
     });
   }
@@ -54,18 +68,36 @@ export class PlanningPage {
   }
 
   getDriversOfStint(allStints) {
-     for (let i = 0; i <= allStints.length-1; i++) {
-       // add to allDrivers if a member is a driver and Stint is NOT finished
-       // Some stints do not even have a driver subArray!
+    for (let i = 0; i <= allStints.length - 1; i++) {
+      // add to allDrivers if a member is a driver and Stint is NOT finished
+      // Some stints do not even have a driver subArray
 
-       if (allStints[i].driver != null && allStints[i].driver != 'undefined') {
-         if (allStints[i].finished == false && allStints[i].driver.driver == true) {
-           let driver = allStints[i].driver;
-           this.allPlanningItems.push(driver);
-         }
-       }
-     }
-   }
+      if (allStints[i].driver != null && allStints[i].driver != "undefined") {
+        if (
+          allStints[i].finished == false &&
+          allStints[i].driver.driver == true
+        ) {
+          let planningItem = allStints[i].driver;
+
+          // calculate duration of stint
+          let endtimeFormatted = new Date(allStints[i].enddate);
+          let starttimeFormatted = new Date(allStints[i].startdate);
+          let duration =
+            endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
+          planningItem.duration = duration / 60000;
+
+          // startdate of stint
+          planningItem.starttime =
+            starttimeFormatted.getHours() +
+            ":" +
+            starttimeFormatted.getMinutes();
+
+          this.allPlanningItems.push(planningItem);
+        }
+      }
+    }
+    // console.log(this.allPlanningItems);
+  }
 
   getDriversFromAPI() {
     this.apiProvider.getDrivers(this.teamId).then(data => {
@@ -74,16 +106,42 @@ export class PlanningPage {
   }
 
   getProtocolItemsOfStint(allStints) {
-
     for (let i = 0; i < allStints.length; i++) {
       // add to allProtocolItems if stint is finished
-      if (allStints[i].driver != null && allStints[i].driver != 'undefined') {
-      if (allStints[i].finished == true) {
-        let protocolItem = allStints[i].driver;
-        this.allProtocolItems.push(protocolItem);
-      }}
+      if (allStints[i].driver != null && allStints[i].driver != "undefined") {
+        if (allStints[i].finished == true) {
+          let protocolItem = allStints[i].driver;
+
+          // calculate duration of stint
+          // TODO: Formatierung der Dauer bzw. Einheit
+          let endtimeFormatted = new Date(allStints[i].enddate);
+          let starttimeFormatted = new Date(allStints[i].startdate);
+          let duration =
+            endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
+          protocolItem.duration = duration / 60000;
+
+          // starttime of stint
+          protocolItem.starttime =
+            this.weekdays[starttimeFormatted.getDay()] +
+            ", " +
+            starttimeFormatted.getHours() +
+            ":" +
+            starttimeFormatted.getMinutes();
+
+          // endtime of stint
+          protocolItem.endtime =
+            this.weekdays[endtimeFormatted.getDay()] +
+            ", " +
+            endtimeFormatted.getHours() +
+            ":" +
+            endtimeFormatted.getMinutes();
+
+          // Add to array
+          this.allProtocolItems.push(protocolItem);
+        }
+      }
     }
-    //console.log(this.allProtocolItems);
+    // console.log(this.allProtocolItems);
   }
 
   setStintToDone(driver: any) {
@@ -100,7 +158,12 @@ export class PlanningPage {
 
     // console.log("Stint finished: " + finishedStint.finished);
     // console.log("complete updated Stint: " + finishedStint);
-    this.apiProvider.setStintToDoneAPI(this.teamId, this.eventId, finishedStint, finishedStintId);
+    this.apiProvider.setStintToDoneAPI(
+      this.teamId,
+      this.eventId,
+      finishedStint,
+      finishedStintId
+    );
   }
 
   getStintOfDriver(driver: any) {
