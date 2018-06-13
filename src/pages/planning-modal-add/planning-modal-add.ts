@@ -12,6 +12,8 @@ export class PlanningModalAddPage {
   teamId: string;
   allStints: Array<any>;
   allDrivers: Array<any>;
+  starttime: any;
+  duration: any;
 
   constructor(
     public view: ViewController,
@@ -23,6 +25,10 @@ export class PlanningModalAddPage {
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
     this.eventId = navParams.get("eventId");
+
+    // edit stint params
+    this.starttime = this.navParams.get('starttime');
+    this.duration = this.navParams.get('duration');
   }
 
   closeAddModal() {
