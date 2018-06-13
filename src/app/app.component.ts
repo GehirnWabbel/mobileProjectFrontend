@@ -10,6 +10,7 @@ import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
 import { JoinTeamPage } from '../pages/join-team/join-team';
+import { CreateTeamPage } from '../pages/create-team/create-team';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { JoinTeamPage } from '../pages/join-team/join-team';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = JoinTeamPage;
+  rootPage: any = CreateTeamPage;
 
   pages: Array<{title: string, component: any, icon: string}>;
 
