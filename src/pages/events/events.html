@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="card-background-page">
-  <ion-card (click)="navToEvent(event)" *ngFor="let event of allEvents">
+  <ion-card (click)="navToPlanningPage(event)" *ngFor="let event of allEvents">
     <img src="assets//imgs/{{event.picturePath}}"/>
     <div class="card-title">{{event.name}}</div>
     <div class="card-subtitle">{{event.date}}</div>

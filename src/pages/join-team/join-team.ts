@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApiServiceProvider } from '../../providers/api-service/api-service';
 import { Storage } from '@ionic/storage';
+import {EventsPage} from "../events/events";
 
 /**
  * Generated class for the JoinTeamPage page.
@@ -75,18 +76,19 @@ export class JoinTeamPage {
         let colorNumber = Math.round(color);
         let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
 
-        if(this.teamId != undefined ){
-          this.apiProvider.registerNewDriver(this.navParams.get("teamId"), newDriver);
-        }
-        else{
-          this.apiProvider.registerNewDriver("5b06a79fef9f5500141336d2", newDriver);
-        }
-
+        this.apiProvider.registerNewDriver(this.teamId, newDriver);
       }
 
 
 
     }
+
+    this.navCtrl.setRoot(EventsPage);
   }
+
+  jumpDirectlyToEvents(){
+    this.navCtrl.setRoot(EventsPage);
+  }
+
 
 }
