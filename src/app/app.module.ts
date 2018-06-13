@@ -7,6 +7,7 @@ import { MyApp } from './app.component';
 import { Deeplinks } from '@ionic-native/deeplinks';
 
 import { PlanningPage } from '../pages/planning/planning';
+import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
@@ -27,7 +28,8 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     ChartPage,
     JoinTeamPage,
     MemberMgmtPage,
-    CreateTeamPage
+    CreateTeamPage,
+    PlanningModalAddPage
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,8 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     ChartPage,
     JoinTeamPage,
     MemberMgmtPage,
-    CreateTeamPage
+    CreateTeamPage,
+    PlanningModalAddPage
   ],
   providers: [
     StatusBar,

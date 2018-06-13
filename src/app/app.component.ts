@@ -18,7 +18,7 @@ import { JoinTeamPage } from '../pages/join-team/join-team';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = EventsPage;
+  rootPage: any = JoinTeamPage;
 
   pages: Array<{title: string, component: any, icon: string}>;
 
@@ -48,7 +48,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      timer(3500).subscribe(() => this.showSplash = false) // <-- hide animation after 3.5s
+      timer(2500).subscribe(() => this.showSplash = false) // <-- hide animation after 3.5s
 
       this.deeplinks.route({
         '/join': {"join": true}
