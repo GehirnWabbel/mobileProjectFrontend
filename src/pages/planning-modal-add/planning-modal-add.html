@@ -13,22 +13,22 @@
 
 <ion-content>
 
-  <ion-item>
-    <ion-label>{{ starttime }}</ion-label>
-    <ion-label>{{ duration }}</ion-label>
-  </ion-item>
+  <!--<ion-item>-->
+    <!--<ion-label>{{ starttime }}</ion-label>-->
+    <!--<ion-label>{{ duration }}</ion-label>-->
+  <!--</ion-item>-->
 
 
   <!--<h3 padding>Wann?</h3>-->
   <ion-item>
     <ion-label>Zeitpunkt: </ion-label>
-    <ion-datetime displayFormat="DD. MMM, HH:mm"> </ion-datetime>
+    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" name="myDate" [(ngModel)]="myDate"> </ion-datetime>
   </ion-item>
 
   <!--<h3 padding>Wie lange?</h3>-->
   <ion-item>
-    <ion-label>Fahrdauer (Minuten): </ion-label>
-    <ion-datetime displayFormat="mm"> </ion-datetime>
+    <ion-label>Fahrdauer: </ion-label>
+    <ion-datetime hourValues="0,1" placeholder="{{ duration }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="h:mm"> </ion-datetime>
   </ion-item>
 
   <!--<h3 padding>Wer?</h3>-->

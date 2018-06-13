@@ -15,6 +15,8 @@ export class PlanningModalAddPage {
   starttime: any;
   duration: any;
 
+  public myDate:string=new Date().toISOString();
+
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
@@ -25,6 +27,8 @@ export class PlanningModalAddPage {
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
     this.eventId = navParams.get("eventId");
+
+
 
     // edit stint params
     this.starttime = this.navParams.get('starttime');

@@ -187,6 +187,7 @@ export class PlanningPage {
   }
 
   editStint(stintItem: any) {
+    console.log(stintItem);
     const addModal = this.modal.create(PlanningModalAddPage, {
       allStints: this.allStints,
       allDrivers: this.allDrivers,
