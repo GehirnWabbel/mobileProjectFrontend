@@ -16,7 +16,13 @@
   <h3 padding>Wann?</h3>
   <ion-item>
     <ion-label>Zeitpunkt: </ion-label>
-    <ion-datetime displayFormat="MMM DD, HH:mm" [(ngModel)]="myDate"> </ion-datetime>
+    <ion-datetime displayFormat="DD. MMM, HH:mm" [(ngModel)]="newStintStartTime"> </ion-datetime>
+  </ion-item>
+
+  <h3 padding>Wie lange?</h3>
+  <ion-item>
+    <ion-label>Fahrdauer: </ion-label>
+    <ion-datetime displayFormat="mm" [(ngModel)]="newStintDuration"> </ion-datetime> Minuten
   </ion-item>
 
   <h3 padding>Wer?</h3>
