@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import {IonicPage, ModalController, NavController, NavParams} from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningPage } from "../planning/planning";
+import { EventModalAddPage } from "../event-modal-add/event-modal-add";
 
 /**
  * Generated class for the EventsPage page.
@@ -24,7 +25,8 @@ export class EventsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
-    private storage: Storage
+    private storage: Storage,
+    private modal: ModalController
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -57,5 +59,11 @@ export class EventsPage {
     this.storage.set("eventId", event._id);
     console.log("Event Id: " + event._id + " saved in local storage.");
     this.navCtrl.setRoot(PlanningPage);
+  }
+
+  openAddEventModal(){
+    const addModal = this.modal.create(EventModalAddPage, {
+    });
+    addModal.present();
   }
 }
