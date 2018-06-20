@@ -4,15 +4,44 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+<!-- Header -->
+
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>eventModalAdd</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Event erstellen</ion-title>
+    <ion-buttons end>
+      <button ion-button color="light" (click)="closeAddModal()">Abbrechen</button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content>
 
-<ion-content padding>
+  <ion-item>
+    <ion-label color="primary" stacked>Titel des Events</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Datum</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Adresse</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Anzahl Renntage</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Gewicht Kart voll</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Gewicht Kart leer</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+
+  <button (click)="addEvent()" ion-button full>Speichern</button>
 
 </ion-content>
