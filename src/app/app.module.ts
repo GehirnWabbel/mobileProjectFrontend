@@ -4,8 +4,10 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
+import { Deeplinks } from '@ionic-native/deeplinks';
 
 import { PlanningPage } from '../pages/planning/planning';
+import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
@@ -26,12 +28,25 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     ChartPage,
     JoinTeamPage,
     MemberMgmtPage,
-    CreateTeamPage
+    CreateTeamPage,
+    PlanningModalAddPage
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(
+      MyApp,
+      {},
+      {
+        links: [
+          { component: PlanningPage, name: 'planning', segment: 'planning' },
+          { component: TeamMgmtPage, name: 'teammgmt', segment: 'teammgmt' },
+          { component: EventsPage, name: 'event', segment: 'event' },
+          { component: ChartPage, name: 'chart', segment: 'chart' },
+          { component: JoinTeamPage, name: 'join', segment: 'join' },
+          { component: MemberMgmtPage, name: 'membermgmt', segment: 'membermgmt' },
+          { component: CreateTeamPage, name: 'create', segment: 'create' }
+          ]}),
     HttpClientModule,
     IonicStorageModule.forRoot()
   ],
@@ -44,13 +59,15 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     ChartPage,
     JoinTeamPage,
     MemberMgmtPage,
-    CreateTeamPage
+    CreateTeamPage,
+    PlanningModalAddPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiServiceProvider
+    ApiServiceProvider,
+    Deeplinks
   ]
 })
 export class AppModule {}

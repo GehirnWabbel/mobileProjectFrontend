@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ApiServiceProvider } from '../../providers/api-service/api-service';
-import { Storage } from '@ionic/storage';
-import { PlanningPage } from '../planning/planning';
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { ApiServiceProvider } from "../../providers/api-service/api-service";
+import { Storage } from "@ionic/storage";
+import { PlanningPage } from "../planning/planning";
 
 /**
  * Generated class for the EventsPage page.
@@ -13,20 +13,25 @@ import { PlanningPage } from '../planning/planning';
 
 @IonicPage()
 @Component({
-  selector: 'page-events',
-  templateUrl: 'events.html',
+  selector: "page-events",
+  templateUrl: "events.html"
 })
 export class EventsPage {
-
   private allEvents: Array<any>;
+  teamId: string;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
-    private storage: Storage) {
-
-    this.apiProvider.getEvents().then(data => {this.allEvents = this.convertData(data)});
+    private storage: Storage
+  ) {
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+      this.apiProvider.getEvents(this.teamId).then(data => {
+        this.allEvents = this.convertData(data);
+      });
+    });
   }
 
   private convertData(data: any) {
@@ -36,19 +41,21 @@ export class EventsPage {
   }
 
   private static formatDate(data: any) {
-    for(let i = 0; i < data.length; i++){
-      // console.log(data[i].startdate);
+    for (let i = 0; i < data.length; i++) {
       let fullDate = new Date(data[i].startdate);
-      data[i].date = fullDate.getDate() + '.' + (fullDate.getMonth() + 1) + '.' + fullDate.getFullYear();
+      data[i].date =
+        fullDate.getDate() +
+        "." +
+        (fullDate.getMonth() + 1) +
+        "." +
+        fullDate.getFullYear();
       // data[i].time = fullDate.getHours() + ':' + fullDate.getMinutes();
     }
-    console.log(data);
   }
 
-  navToEvent(event: any){
-    this.storage.set('eventId', event._id);
-    console.log("Event Id: " + event._id + " saved in local storage.")
-    this.navCtrl.push(PlanningPage);
+  navToPlanningPage(event: any) {
+    this.storage.set("eventId", event._id);
+    console.log("Event Id: " + event._id + " saved in local storage.");
+    this.navCtrl.setRoot(PlanningPage);
   }
-
 }

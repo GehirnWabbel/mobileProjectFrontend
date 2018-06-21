@@ -2,7 +2,7 @@
 
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Fahrer hinzufügen</ion-title>
+    <ion-title>Stint planen</ion-title>
     <ion-buttons end>
       <button ion-button color="light" (click)="closeAddModal()">Abbrechen</button>
     </ion-buttons>
@@ -12,12 +12,26 @@
 <!-- Content -->
 
 <ion-content>
+
+  <h3 padding>Wann?</h3>
+  <ion-item>
+    <ion-label>Zeitpunkt: </ion-label>
+    <ion-datetime displayFormat="DD. MMM, HH:mm" [(ngModel)]="newStintStartTime"> </ion-datetime>
+  </ion-item>
+
+  <h3 padding>Wie lange?</h3>
+  <ion-item>
+    <ion-label>Fahrdauer: </ion-label>
+    <ion-datetime displayFormat="mm" [(ngModel)]="newStintDuration"> </ion-datetime> Minuten
+  </ion-item>
+
+  <h3 padding>Wer?</h3>
   <ion-list>
-    <button ion-item *ngFor="let item of protocolItems" (click)="closeAddModal()">
+    <button ion-item *ngFor="let driver of allDrivers" (click)="newStint(driver._id)">
       <ion-avatar item-start>
         <img src="assets/imgs/girl.png">
       </ion-avatar>
-      <h2>{{ item.name }}</h2>
+      <h2>{{ driver.name }}</h2>
     </button>
   </ion-list>
 </ion-content>

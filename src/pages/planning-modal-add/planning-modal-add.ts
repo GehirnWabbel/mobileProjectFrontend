@@ -1,26 +1,60 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavParams, ViewController } from 'ionic-angular';
+import { Component } from "@angular/core";
+import { ViewController, NavParams, NavController } from "ionic-angular";
+import { ApiServiceProvider } from "../../providers/api-service/api-service";
+import { PlanningPage } from "../planning/planning";
 
-
-@IonicPage()
 @Component({
-  selector: 'page-planning-modal-add',
-  templateUrl: 'planning-modal-add.html',
+  selector: "page-planning-modal-add",
+  templateUrl: "planning-modal-add.html"
 })
 export class PlanningModalAddPage {
+  eventId: string;
+  teamId: string;
+  allStints: Array<any>;
+  allDrivers: Array<any>;
 
-  public protocolItems: Array<{name: string, icon: string, timestamp: any, duration: any}> = this.navParams.get('protocolItems');
-  
   constructor(
-    private navParams: NavParams,
-    public view: ViewController ) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PlanningModalAddPage');
+    public view: ViewController,
+    public apiProvider: ApiServiceProvider,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) {
+    this.allStints = navParams.get("allStints");
+    this.allDrivers = navParams.get("allDrivers");
+    this.teamId = navParams.get("teamId");
+    this.eventId = navParams.get("eventId");
   }
 
   closeAddModal() {
     this.view.dismiss();
+  }
+
+  getStintOfDriver(driver: any) {
+    for (let i = 0; i < this.allStints.length; i++) {
+      if (
+        this.allStints[i].driver != null &&
+        this.allStints[i].driver != "undefined"
+      ) {
+        // get stint of driver
+        if (this.allStints[i].driver._id == driver._id) {
+          let stint = this.allStints[i];
+          return stint;
+        }
+      }
+    }
+  }
+
+  newStint(driverId: any) {
+    let selectedDriver;
+    for (let i = 0; i <= this.allDrivers.length; i++) {
+      if (this.allDrivers[i]._id == driverId) {
+        selectedDriver = this.allDrivers[i];
+        break;
+      }
+    }
+
+    let stintOfDriver = this.getStintOfDriver(selectedDriver);
+    this.apiProvider.createStint(this.teamId, this.eventId, stintOfDriver);
+    this.navCtrl.setRoot(PlanningPage);
   }
 }
