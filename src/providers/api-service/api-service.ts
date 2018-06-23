@@ -146,17 +146,21 @@ export class ApiServiceProvider {
     });
   }
 
-  getTeamMember(teamId: String) {
+  getAllTeamMember(teamId: string) {
+    this.presentLoading();
     return new Promise(resolve => {
       this.http.get(this.apiUrl + teamId + '/person').subscribe(data => {
         resolve(data);
       }, err => {
         console.log(err);
+      },
+      () => {
+        this.loading.dismiss();
       });
     })
   }
 
-  updateTeamMember(teamId : String, member : any) {
+  updateTeamMember(teamId : string, member : any) {
     this.presentLoading();
     return new Promise(resolve => {
       this.http.put(this.apiUrl + teamId + '/person/' + member._id, member, {
@@ -170,6 +174,20 @@ export class ApiServiceProvider {
         },
         () => {
           this.loading.dismiss();
+        }
+      )
+    })
+  }
+
+  removeTeamMember(teamId : string, member: any) {
+    return new Promise(resolve => {
+      this.http.delete(this.apiUrl + teamId + '/person/' + member._id)
+      .subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
         }
       )
     })

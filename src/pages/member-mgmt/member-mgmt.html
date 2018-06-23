@@ -19,8 +19,8 @@
   <ion-list>
     <ion-item>
       <ion-label fixed class="text-color">Name</ion-label>
-      <ion-input type="text" [(ngModel)]="member.name" *ngIf="changeMode === true"></ion-input>
-      <ion-label item-end *ngIf="changeMode === false" class="text-color">{{member.name}}</ion-label>
+      <ion-input type="text" [(ngModel)]="editMember.name" *ngIf="changeMode === true"></ion-input>
+      <ion-label item-end *ngIf="changeMode === false" class="text-color">{{editMember.name}}</ion-label>
     </ion-item>
 
     <ion-item>
@@ -32,7 +32,7 @@
               <ion-icon name="arrow-back" ></ion-icon>
             </button>
           </ion-col>
-          <ion-col [style.background-color]="colorDefinitions[member.color]"></ion-col>
+          <ion-col [style.background-color]="colorDefinitions[editMember.color]"></ion-col>
           <ion-col col-2 class="grid-carousel-forward" >
             <button ion-button clear small icon-only (click)="colorForward()" *ngIf="changeMode === true">
               <ion-icon name="arrow-forward"></ion-icon>
@@ -51,7 +51,7 @@
               <ion-icon name="arrow-back" ></ion-icon>
             </button>
           </ion-col>
-          <ion-col><img src="../../assets/imgs/ava-{{member.avatarNo}}.png" /></ion-col>
+          <ion-col><img src="../../assets/imgs/ava-{{editMember.avatarNo}}.png" /></ion-col>
           <ion-col col-2 class="grid-carousel-forward">
             <button ion-button icon-only clear small (click)="avatarForward()" *ngIf="changeMode === true">
               <ion-icon name="arrow-forward" ></ion-icon>
@@ -63,13 +63,13 @@
 
     <ion-item>
       <ion-label>Fahrer</ion-label>
-      <ion-checkbox *ngIf="changeMode === false" disabled="true" [ngModel]="member.driver"></ion-checkbox>
-      <ion-checkbox *ngIf="changeMode === true" [ngModel]="member.driver" (ionChange)="isDriverChanged()"></ion-checkbox>
+      <ion-checkbox *ngIf="changeMode === false" disabled="true" [ngModel]="editMember.driver"></ion-checkbox>
+      <ion-checkbox *ngIf="changeMode === true" [ngModel]="editMember.driver" (ionChange)="isDriverChanged()"></ion-checkbox>
     </ion-item>
 
-    <ion-item *ngIf="member.driver === true && member.connectedViaDevice === true">
+    <ion-item *ngIf="editMember.driver === true && editMember.connectedViaDevice === true">
       <ion-label fixed>Info-Zeitpunkt</ion-label>
-      <ion-select [ngModel]="member.minutesBeforeNotification" [disabled]="changeMode === false" interface="action-sheet">
+      <ion-select [ngModel]="editMember.minutesBeforeNotification" [disabled]="changeMode === false" interface="action-sheet">
         <ion-option value="30">+ 30 min</ion-option>
         <ion-option value="40">+ 40 min</ion-option>
         <ion-option value="50">+ 50 min</ion-option>
@@ -78,6 +78,10 @@
         <ion-option value="80">+ 80 min</ion-option>
         <ion-option value="90">+ 90 min</ion-option>
       </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="editMember.driver === true && editMember.connectedViaDevice === false">
+      <p id="unconnectedDriverNote" text-wrap>Fahrer nicht mit Telefon verbunden. Keine Fahrer Benachrichtigung möglich.</p>
     </ion-item>
 
   </ion-list>

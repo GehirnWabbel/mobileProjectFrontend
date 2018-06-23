@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ToastController
+} from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
@@ -25,18 +30,28 @@ export class TeamMgmtPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public toastCtrl: ToastController,
               private apiProvider: ApiServiceProvider,
               private storage: Storage) {
+    console.log('constructor')
     this.storage.get("teamId").then(val => {
       this.teamId = val;
-      this.apiProvider.getTeamMember(this.teamId).then(data => {
-        this.parseTeamMember(data);
-      });
+      this.reloadTeamData();
     });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TeamMgmtPage');
+  }
+
+  ionViewWillEnter() {
+    console.log('will enter');
+  }
+
+  ionViewDidEnter(){
+    console.log('did enter');
+    if(this.teamId != null)
+      this.reloadTeamData();
   }
 
   parseTeamMember(data: any){
@@ -50,18 +65,54 @@ export class TeamMgmtPage {
     }
   }
 
-  navToPersonMgmt(person: any) {
-    this.navCtrl.push(MemberMgmtPage, person);
+  navToPersonMgmtEditMode(person: any) {
+    this.navCtrl.push(MemberMgmtPage, {
+      person: person,
+      mode: 'edit'
+    })
+      .catch(() => {})//catch error occuring when dismissing changes
+  }
+
+  navToPersonMgmtNewMode(person: any) {
+    this.navCtrl.push(MemberMgmtPage, {
+      person: person,
+      mode: 'new'
+    })
   }
 
 
   addTeamMember() {
-    this.navToPersonMgmt({
+    this.navToPersonMgmtNewMode({
       name: "",
-      driver: false,
-      color: "#f54321",
-      avatarNo: 1
+      driver: true,
+      connectedViaDevice: false,
+      color: 1,
+      avatarNo: 1,
+      minutesBeforeNotification: 30
     });
+  }
+
+  removeTeamMember(person: any) {
+    this.apiProvider.removeTeamMember(this.teamId, person).then(data => {
+      this.reloadTeamData();
+      this.showToast('Teammitglied \"' + person.name + '\" gelöscht.');
+    });
+  }
+
+  reloadTeamData() {
+    this.allDrivers = [];
+    this.allManagements = [];
+    this.apiProvider.getAllTeamMember(this.teamId).then(data => {
+      this.parseTeamMember(data);
+    });
+  }
+
+  showToast(msg :string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 2500
+    });
+    toast.present();
   }
 
 }

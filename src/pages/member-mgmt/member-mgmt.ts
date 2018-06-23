@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  AlertController,
+  ToastController
+} from 'ionic-angular';
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { colorDefinitions } from "../../app/colordefinitions";
 import { Storage } from "@ionic/storage";
@@ -13,8 +19,9 @@ import { Storage } from "@ionic/storage";
 export class MemberMgmtPage {
 
   changeMode: boolean = false;
+  mode: string = 'edit';
 
-  member; //data of person to be edited
+  editMember;
 
   colorDefinitions;
 
@@ -24,13 +31,17 @@ export class MemberMgmtPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
     private apiProvider : ApiServiceProvider,
     private storage : Storage
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
     });
-    this.member = this.navParams.data;
+    this.mode = this.navParams.data.mode;
+    if(this.mode === 'new')
+      this.changeMode = true;
+    this.editMember = Object.assign({}, this.navParams.data.person); //copy member object for editing to not have changed original reference when leaving with discarding changes
     this.colorDefinitions = colorDefinitions;
   }
 
@@ -39,39 +50,65 @@ export class MemberMgmtPage {
   }
 
   ionViewCanLeave() {
-    if(this.changeMode)
-      return this.confirmLeaveWhenInChangeMode();
-    else
+    if (this.changeMode) {
+      let confirm = this.alertCtrl.create({
+        title: 'Änderungen speichern?',
+        // message: '',
+        buttons: [
+          {
+            text: 'Verwerfen',
+            handler: () => {
+              console.log('Ja clicked, discarding changes');
+              this.changeMode = false;
+              let transition = confirm.dismiss();
+              transition.then(() => {
+                this.navCtrl.pop();
+              });
+              return false; //prevent automatic dismiss
+            }
+          },
+          {
+            text: 'Abbrechen',
+            handler: () => {
+              console.log('Nein clicked');
+            },
+            role: 'cancle'
+          }
+        ]
+      });
+      confirm.present();
+      return false;
+    }else {
       return true;
+    }
   }
-
   colorForward() {
-      this.member.color++;
-      if(this.member.color > 17)
-        this.member.color -= 17;
+      this.editMember.color++;
+      if(this.editMember.color > 17)
+        this.editMember.color -= 17;
   }
 
   colorBackward() {
-    this.member.color--;
-    if(this.member.color < 0)
-      this.member.color += 17;
+    this.editMember.color--;
+    if(this.editMember.color < 0)
+      this.editMember.color += 17;
   }
 
   avatarForward() {
-    this.member.avatarNo++;
-    if(this.member.avatarNo > 18)
-      this.member.avatarNo -= 18;
+    this.editMember.avatarNo++;
+    if(this.editMember.avatarNo > 18)
+      this.editMember.avatarNo -= 18;
   }
 
   avatarBackward() {
-    this.member.avatarNo--;
-    if(this.member.avatarNo < 1)
-      this.member.avatarNo += 18;
+    this.editMember.avatarNo--;
+    if(this.editMember.avatarNo < 1)
+      this.editMember.avatarNo += 18;
   }
 
   isDriverChanged() {
-    this.member.driver = !this.member.driver;
-    console.log(this.member.driver);
+    this.editMember.driver = !this.editMember.driver;
+    console.log(this.editMember.driver);
   }
 
   toggleMode() {
@@ -81,30 +118,27 @@ export class MemberMgmtPage {
   }
 
   savePerson(){
-    this.apiProvider.updateTeamMember(this.teamId, this.member);
+    if(this.mode === 'edit') {
+      this.apiProvider.updateTeamMember(this.teamId, this.editMember);
+      this.aToastOnASuccessfulSave('Änderungen gespeichert.');
+    } else {
+      console.log(this.editMember.avatarNo);
+      this.apiProvider.registerNewDriver(this.teamId, this.editMember).then(data => {
+        console.log(data['avatarNo']);
+        Object.assign(this.editMember, data);
+        this.aToastOnASuccessfulSave('Neues Teammitglied angelegt.')
+      });
+      this.mode = 'edit';
+    }
     console.log('saved');
   }
 
-  confirmLeaveWhenInChangeMode() : Promise<boolean> {
-    let confirm = this.alertCtrl.create({
-      title: 'Änderungen verwerfen?',
-      // message: '',
-      buttons: [
-        {
-          text: 'Ja',
-          handler: () => {
-            console.log('Ja clicked, discarding changes');
-          }
-        },
-        {
-          text: 'Nein',
-          handler: () => {
-            console.log('Nein clicked');
-          }
-        }
-      ]
+  aToastOnASuccessfulSave(msg: string) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 2500
     });
-    return confirm.present();
+    toast.present();
   }
 
 }

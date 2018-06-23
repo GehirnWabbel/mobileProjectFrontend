@@ -9,28 +9,44 @@
 
 
 <ion-content padding>
+  <h3 padding>Fahrer</h3>
   <ion-list>
-    <ion-list-header>Fahrer</ion-list-header>
-
-    <ion-item *ngFor="let driver of allDrivers" (click)="navToPersonMgmt(driver)">
-      <ion-avatar item-start>
-        <img src="../../assets/imgs/avatar/ava-{{driver.avatarNo}}.png" >
-      </ion-avatar>
-      <h1>{{driver.name}}</h1>
-      <ion-icon name="phone-portrait" item-end *ngIf="driver.connectedViaDevice === true"></ion-icon>
-    </ion-item>
+    <ion-item-sliding *ngFor="let driver of allDrivers" >
+      <ion-item (click)="navToPersonMgmtEditMode(driver)">
+        <ion-avatar item-start>
+          <img src="../../assets/imgs/avatar/ava-{{driver.avatarNo}}.png">
+        </ion-avatar>
+        <h1>{{driver.name}}</h1>
+        <ion-icon name="phone-portrait" item-end
+                  *ngIf="driver.connectedViaDevice === true"></ion-icon>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="primary" (click)="removeTeamMember(driver)">
+          <ion-icon name="md-trash"></ion-icon>
+          Löschen
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
+  <h3 padding>Management</h3>
   <ion-list>
-    <ion-list-header>Management</ion-list-header>
-
-    <ion-item *ngFor="let manager of allManagements" (click)="navToPersonMgmt(manager)">
-      <ion-avatar item-start>
-        <img src="../../assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
-      </ion-avatar>
-      <h1>{{manager.name}}</h1>
-      <ion-icon name="phone-portrait" item-end *ngIf="manager.connectedViaDevice === true"></ion-icon>
-    </ion-item>
+    <ion-item-sliding *ngFor="let manager of allManagements">
+      <ion-item (click)="navToPersonMgmtEditMode(manager)">
+        <ion-avatar item-start>
+          <img src="../../assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
+        </ion-avatar>
+        <h1>{{manager.name}}</h1>
+        <ion-icon name="phone-portrait" item-end
+                  *ngIf="manager.connectedViaDevice === true"></ion-icon>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="primary" (click)="removeTeamMember(manager)">
+          <ion-icon name="md-trash"></ion-icon>
+          Löschen
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
   <ion-fab right bottom>
