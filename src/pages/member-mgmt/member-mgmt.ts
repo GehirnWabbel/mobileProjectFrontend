@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { colorDefinitions } from "../../app/colordefinitions";
+import { Storage } from "@ionic/storage";
+
 
 @IonicPage()
 @Component({
@@ -15,11 +18,18 @@ export class MemberMgmtPage {
 
   colorDefinitions;
 
+  teamId;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
+    private apiProvider : ApiServiceProvider,
+    private storage : Storage
   ) {
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+    });
     this.member = this.navParams.data;
     this.colorDefinitions = colorDefinitions;
   }
@@ -71,6 +81,7 @@ export class MemberMgmtPage {
   }
 
   savePerson(){
+    this.apiProvider.updateTeamMember(this.teamId, this.member);
     console.log('saved');
   }
 

@@ -146,13 +146,32 @@ export class ApiServiceProvider {
     });
   }
 
-  getTeamMember() {
+  getTeamMember(teamId: String) {
     return new Promise(resolve => {
-      this.http.get(this.apiUrl + '5b06a79fef9f5500141336d2/person').subscribe(data => {
+      this.http.get(this.apiUrl + teamId + '/person').subscribe(data => {
         resolve(data);
       }, err => {
         console.log(err);
       });
+    })
+  }
+
+  updateTeamMember(teamId : String, member : any) {
+    this.presentLoading();
+    return new Promise(resolve => {
+      this.http.put(this.apiUrl + teamId + '/person/' + member._id, member, {
+        headers: { "Content-Type": "application/json" }
+      }).subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        },
+        () => {
+          this.loading.dismiss();
+        }
+      )
     })
   }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 
@@ -17,14 +18,20 @@ import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 })
 export class TeamMgmtPage {
 
+  teamId;
+
   allDrivers = [];
   allManagements = [];
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private apiProvider: ApiServiceProvider) {
-    this.apiProvider.getTeamMember().then(data => {
-      this.parseTeamMember(data);
+              private apiProvider: ApiServiceProvider,
+              private storage: Storage) {
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+      this.apiProvider.getTeamMember(this.teamId).then(data => {
+        this.parseTeamMember(data);
+      });
     });
   }
 
