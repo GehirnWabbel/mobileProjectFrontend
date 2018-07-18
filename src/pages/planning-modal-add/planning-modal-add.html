@@ -13,32 +13,29 @@
 
 <ion-content>
 
-  <!--<ion-item>-->
-    <!--<ion-label>{{ starttime }}</ion-label>-->
-    <!--<ion-label>{{ duration }}</ion-label>-->
-  <!--</ion-item>-->
-
-
-  <!--<h3 padding>Wann?</h3>-->
   <ion-item>
     <ion-label>Zeitpunkt: </ion-label>
-    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" name="myDate" [(ngModel)]="myDate"> </ion-datetime>
+    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" [(ngModel)]="starttime"> </ion-datetime>
   </ion-item>
 
-  <!--<h3 padding>Wie lange?</h3>-->
   <ion-item>
     <ion-label>Fahrdauer: </ion-label>
-    <ion-datetime hourValues="0,1,2,3,4" placeholder="{{ duration }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="h:mm"> </ion-datetime>
+    <ion-datetime hourValues="0,1" placeholder="{{ duration }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="H:mm" [(ngModel)]="duration"> </ion-datetime>
   </ion-item>
 
-  <!--<h3 padding>Wer?</h3>-->
   <ion-list>
-    <button ion-item *ngFor="let driver of allDrivers" (click)="newStint(driver._id)">
-      <ion-avatar item-start>
-        <img src="assets/imgs/girl.png">
-      </ion-avatar>
-      <h2>{{ driver.name }}</h2>
-    </button>
+    <ion-item *ngFor="let driver of allDrivers" [(ngModel)]="selectedDriver">
+      <!--<ion-avatar item-start>-->
+        <!--<img src="assets/imgs/girl.png">-->
+      <!--</ion-avatar>-->
+      <!--<h2>{{ driver.name }}</h2>-->
+      <ion-label>{{ driver.name }}</ion-label>
+      <ion-checkbox [(ngModel)]="isDriver" (ionChange)="updateCheckbox()"></ion-checkbox>
+    </ion-item>
   </ion-list>
+
+  <button ion-button color="primary" (click)="newStint()">
+    <ion-icon name="add" id="iconAdd"></ion-icon>
+  </button>
 
 </ion-content>
