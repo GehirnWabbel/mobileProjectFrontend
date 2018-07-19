@@ -62,8 +62,16 @@ export class EventsPage {
   }
 
   openAddEventModal(){
-    const addModal = this.modal.create(EventModalAddPage, {
+    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId
     });
     addModal.present();
+  }
+
+  // Pull to refresh
+  doRefresh(refresher) {
+    this.apiProvider.getEvents(this.teamId).then(data => {
+      this.allEvents = this.convertData(data);
+    });
+    refresher.complete();
   }
 }

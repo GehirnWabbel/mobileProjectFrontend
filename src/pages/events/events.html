@@ -8,6 +8,15 @@
 </ion-header>
 
 <ion-content class="card-background-page">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-card (click)="navToPlanningPage(event)" *ngFor="let event of allEvents">
     <img src="assets//imgs/{{event.picturePath}}"/>
     <div class="card-title">{{event.name}}</div>
