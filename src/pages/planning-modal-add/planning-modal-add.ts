@@ -13,6 +13,13 @@ export class PlanningModalAddPage {
   allStints: Array<any>;
   allDrivers: Array<any>;
 
+  starttime: any;
+  duration: any;
+  selectedDriver: any;
+  isDriver: boolean;
+
+  // public myDate:string=new Date().toISOString();
+
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
@@ -23,6 +30,10 @@ export class PlanningModalAddPage {
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
     this.eventId = navParams.get("eventId");
+
+    // edit stint params
+    this.starttime = this.navParams.get('starttime');
+    this.duration = this.navParams.get('duration');
   }
 
   closeAddModal() {
@@ -44,17 +55,23 @@ export class PlanningModalAddPage {
     }
   }
 
-  newStint(driverId: any) {
-    let selectedDriver;
-    for (let i = 0; i <= this.allDrivers.length; i++) {
-      if (this.allDrivers[i]._id == driverId) {
-        selectedDriver = this.allDrivers[i];
-        break;
-      }
-    }
+  newStint() {
+    // let selectedDriver;
+    // for (let i = 0; i <= this.allDrivers.length; i++) {
+    //   if (this.allDrivers[i]._id == driverId) {
+    //     selectedDriver = this.allDrivers[i];
+    //     break;
+    //   }
+    // }
 
-    let stintOfDriver = this.getStintOfDriver(selectedDriver);
-    this.apiProvider.createStint(this.teamId, this.eventId, stintOfDriver);
-    this.navCtrl.setRoot(PlanningPage);
+
+    console.log("NEUE Startzeit: " + this.starttime);
+    console.log("NEUE Dauer: " + this.duration);
+    console.log("NEUER Fahrer: " + this.selectedDriver);
+
+    //
+    // let stintOfDriver = this.getStintOfDriver(selectedDriver);
+    // this.apiProvider.createStint(this.teamId, this.eventId, stintOfDriver);
+    // this.navCtrl.setRoot(PlanningPage);
   }
 }
