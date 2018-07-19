@@ -48,18 +48,34 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      timer(2500).subscribe(() => this.showSplash = false) // <-- hide animation after 3.5s
+      timer(2500).subscribe(() => this.showSplash = false); // <-- hide animation after 3.5s
 
-      this.deeplinks.route({
-        '/join': {"join": true}
-      } ).subscribe((match) => {
-        //alert(JSON.stringify(match.$args.teamname));
-        this.nav.setRoot(JoinTeamPage, {"teamId": match.$args.teamid, "teamName": match.$args.teamname});
-      }, (noMatch) => {
-        alert(JSON.stringify(noMatch));
-      } )
+      // this.deeplinks.route({
+      //   '/join': {"join": true}
+      // } ).subscribe((match) => {
+      //   //alert(JSON.stringify(match.$args.teamname));
+      //   this.nav.setRoot(JoinTeamPage, {"teamId": match.$args.teamid, "teamName": match.$args.teamname});
+      // }, (noMatch) => {
+      //   alert(JSON.stringify(noMatch));
+      // } )
+      //todo: remove above and use the universal links instead!
+      this.initializeUniversalLinks();
 
     });
+  }
+
+  initializeUniversalLinks() {
+    if(window["universalLinks"]){
+      window["universalLinks"].subscribe(null, eventData => {
+        console.log("Opened through universal Link!");
+        if(eventData.params.teamId) {
+          this.nav.setRoot(JoinTeamPage, {
+            teamId: eventData.params.teamId,
+            teamName: eventData.params.teamName
+          });
+        }
+      });
+    }
   }
 
   openPage(page) {

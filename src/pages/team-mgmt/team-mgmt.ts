@@ -5,6 +5,7 @@ import {
   NavParams,
   ToastController
 } from 'ionic-angular';
+import { SocialSharing} from "@ionic-native/social-sharing";
 import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
@@ -24,6 +25,7 @@ import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 export class TeamMgmtPage {
 
   teamId;
+  teamName;
 
   allDrivers = [];
   allManagements = [];
@@ -32,7 +34,8 @@ export class TeamMgmtPage {
               public navParams: NavParams,
               public toastCtrl: ToastController,
               private apiProvider: ApiServiceProvider,
-              private storage: Storage) {
+              private storage: Storage,
+              private sharing: SocialSharing) {
     console.log('constructor')
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -99,11 +102,25 @@ export class TeamMgmtPage {
     });
   }
 
+  inviteTeamMember() {
+    this.sharing.shareWithOptions({
+      subject: "Tritt Team " + this.teamName + " bei!",
+      url: "https://racemanager-mobile-project.herokuapp.com/join?teamId=" + this.teamId + "&teamName=" + this.teamName,
+    }).then(result => {
+      console.log("Sharing completed? " + result.completed);
+      console.log("Shared to app: " + result.app);
+    }).catch(error => {
+      console.log("Sharing Failed: " + error);
+    });
+  }
+
   reloadTeamData() {
     this.allDrivers = [];
     this.allManagements = [];
-    this.apiProvider.getAllTeamMember(this.teamId).then(data => {
-      this.parseTeamMember(data);
+    this.apiProvider.getTeam(this.teamId).then(data => {
+      console.log(JSON.stringify(data));
+      this.teamName = data["teamName"];
+      this.parseTeamMember(data["members"]);
     });
   }
 

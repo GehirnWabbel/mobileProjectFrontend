@@ -18,6 +18,7 @@ import { CreateTeamPage } from '../pages/create-team/create-team';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiServiceProvider } from '../providers/api-service/api-service';
+import {SocialSharing} from "@ionic-native/social-sharing";
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiServiceProvider,
-    Deeplinks
+    Deeplinks,
+    SocialSharing
   ]
 })
 export class AppModule {}

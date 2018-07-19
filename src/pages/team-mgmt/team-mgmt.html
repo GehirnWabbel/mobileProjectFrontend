@@ -14,7 +14,7 @@
     <ion-item-sliding *ngFor="let driver of allDrivers" >
       <ion-item (click)="navToPersonMgmtEditMode(driver)">
         <ion-avatar item-start>
-          <img src="../../assets/imgs/avatar/ava-{{driver.avatarNo}}.png">
+          <img src="assets/imgs/avatar/ava-{{driver.avatarNo}}.png">
         </ion-avatar>
         <h1>{{driver.name}}</h1>
         <ion-icon name="phone-portrait" item-end
@@ -34,7 +34,7 @@
     <ion-item-sliding *ngFor="let manager of allManagements">
       <ion-item (click)="navToPersonMgmtEditMode(manager)">
         <ion-avatar item-start>
-          <img src="../../assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
+          <img src="assets/imgs/avatar/ava-{{manager.avatarNo}}.png">
         </ion-avatar>
         <h1>{{manager.name}}</h1>
         <ion-icon name="phone-portrait" item-end
@@ -50,6 +50,10 @@
   </ion-list>
 
   <ion-fab right bottom>
-    <button ion-fab color="red" (click)="addTeamMember()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab color="black"><ion-icon name="arrow-dropup"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="addTeamMember()" color="red"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab (click)="inviteTeamMember()" color="blue"><ion-icon name="share"></ion-icon></button>
+    </ion-fab-list>
   </ion-fab>
 </ion-content>

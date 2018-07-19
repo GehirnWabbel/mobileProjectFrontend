@@ -192,4 +192,12 @@ export class ApiServiceProvider {
       )
     })
   }
+
+  getTeam(teamId : string) {
+    this.presentLoading();
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl + teamId)
+      .subscribe(data => {resolve(data);}, err => {console.log(err);}, () => {this.loading.dismiss();});
+    })
+  }
 }
