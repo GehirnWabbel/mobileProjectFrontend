@@ -8,5 +8,21 @@
 
 
 <ion-content padding>
+  <ion-item>
+    <ion-label color="primary">Neues Team:</ion-label>
+    <ion-input [(ngModel)]="newTeamName"  placeholder="Teamname"></ion-input>
+  </ion-item>
+  <button (click)="createTeam()" ion-button full>Team beitreten!</button>
 
+  <p>
+  Wenn bereits ein Team existiert, dem du beitreten willst, dann kann dieses nur durch eine Einladung eines Mitglieds berteten werden!
+  </p>
+
+  <h4>Features:</h4>
+
+  <p>
+    Rennen verwalten, Stints planen, Rennprotokoll anlegen, Statisiken ansehen und vieles mehr!
+  </p>
+
+  <button (click)="jumpDirectlyToEvents()" ion-button full>Skip!</button>
 </ion-content>
