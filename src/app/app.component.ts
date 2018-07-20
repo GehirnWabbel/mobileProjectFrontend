@@ -61,11 +61,13 @@ export class MyApp {
       this.storage.get("teamId").then(val => {
         this.teamId = val;
         console.log("App Component: Found TeamId: " + this.teamId);
+        this.determineStartPage();
       });
 
       this.storage.get("memberId").then(val => {
         this.memberId = val;
         console.log("App Component: Found MemberId: " + this.memberId);
+        this.determineStartPage();
       });
 
       this.deeplinks.route({
@@ -84,10 +86,14 @@ export class MyApp {
   determineStartPage(){
     ++this.determineStartPageCallCount;
     if(this.determineStartPageCallCount >= 2){
-      if(this.teamId && this.memberId) //todo: check whether member id and team exist on backend aswell
+      if(this.teamId && this.memberId) { //todo: check whether member id and team exist on backend aswell
+        console.log("App Component: Redirect to EventsPage");
         this.nav.setRoot(EventsPage);
+        return;
+      }
 
       if(this.teamId) { //todo check whether team exists
+        console.log("App Component: Redirect to MemberMgmtPage");
         this.nav.setRoot(MemberMgmtPage,
           {
             person: {
@@ -106,6 +112,10 @@ export class MyApp {
       }
 
     }
+  }
+
+  clearStorage() {
+    this.storage.clear().then(() => console.log("App Component: Storage cleared"));
   }
 
   openPage(page) {

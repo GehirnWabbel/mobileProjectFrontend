@@ -41,8 +41,8 @@ export class TeamMgmtPage {
               private apiProvider: ApiServiceProvider,
               private storage: Storage,
               private sharing: SocialSharing) {
-    console.log('constructor')
     this.storage.get("teamId").then(val => {
+      console.log("Team Management: Found TeamId in storage: " + val);
       this.teamId = val;
       this.reloadTeamData();
     });
@@ -115,10 +115,10 @@ export class TeamMgmtPage {
       subject: "Tritt Team " + this.teamName + " bei!",
       url: "https://racemanager-mobile-project.herokuapp.com/join?teamid=" + this.teamId + "&teamname=" + this.teamName,
     }).then(result => {
-      console.log("Sharing completed? " + result.completed);
-      console.log("Shared to app: " + result.app);
+      console.log("Team Management: Sharing completed? " + result.completed);
+      console.log("Team Management: Shared to app: " + result.app);
     }).catch(error => {
-      console.log("Sharing Failed: " + error);
+      console.log("Team Management: Sharing Failed: " + error);
     });
   }
 

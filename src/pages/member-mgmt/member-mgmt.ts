@@ -59,7 +59,7 @@ export class MemberMgmtPage {
   }
 
   static ionViewDidLoad() {
-    console.log('ionViewDidLoad MemberMgmtPage');
+    console.log('Member Mgmt: ionViewDidLoad MemberMgmtPage');
   }
 
   ionViewCanLeave() {
@@ -74,7 +74,7 @@ export class MemberMgmtPage {
           {
             text: 'Verwerfen',
             handler: () => {
-              console.log('Ja clicked, discarding changes');
+              console.log('Member Mgmt: Ja clicked, discarding changes');
               this.changeMode = false;
               let transition = confirm.dismiss();
               transition.then(() => {
@@ -86,7 +86,7 @@ export class MemberMgmtPage {
           {
             text: 'Abbrechen',
             handler: () => {
-              console.log('Nein clicked');
+              console.log('Member Mgmt: Nein clicked');
             },
             role: 'cancle'
           }
@@ -144,8 +144,10 @@ export class MemberMgmtPage {
       console.log(this.editMember.avatarNo);
       this.apiProvider.registerNewDriver(this.teamId, this.editMember).then(data => {
         console.log(data['avatarNo']);
-        if(!this.allowCancel) //we came from join team or create team and need to know which team member id belongs to this phone
+        if(!this.allowCancel) { //we came from join team or create team and need to know which team member id belongs to this phone
           this.storage.set("memberId", data['_id']);
+          console.log("Member Mgmt: New memberId stored: " + data["_id"]);
+        }
         Object.assign(this.editMember, data);
         this.aToastOnASuccessfulSave('Neues Teammitglied angelegt.')
       });
@@ -157,7 +159,7 @@ export class MemberMgmtPage {
         this.navCtrl.setRoot(EventsPage);
       }
     }
-    console.log('saved');
+    console.log('Member Mgmt: saved team member');
   }
 
   aToastOnASuccessfulSave(msg: string) {

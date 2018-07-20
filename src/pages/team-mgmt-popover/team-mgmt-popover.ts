@@ -38,7 +38,7 @@ export class TeamMgmtPopoverPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TeamMgmtPopoverPage');
+    console.log('Team Mgmt Popover: ionViewDidLoad TeamMgmtPopoverPage');
   }
 
   deleteTeam(event) {
@@ -56,7 +56,7 @@ export class TeamMgmtPopoverPage {
         {
           text: 'Abbrechen',
           handler: data => {
-            console.log("Team Mgmt Popover Team Löschen Cancle");
+            console.log("Team Mgmt Popover: Team Löschen Cancle");
           }
         },
         {
