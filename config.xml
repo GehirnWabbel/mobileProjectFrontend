@@ -88,15 +88,27 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
-    <plugin name="cordova-universal-links-plugin" spec="^1.2.1" />
     <allow-navigation href="http://192.168.2.101:8100" />
-    <univeral-links>
-        <host name="racemanager-mobile-project.herokuapp.com" schema="https">
-            <path url="/join" event="joinTeam"/>
-        </host>
-    </univeral-links>
-    <engine name="android" spec="~7.0.0" />
-    <engine name="ios" spec="~4.5.4" />
-    <engine name="browser" spec="~5.0.3" />
-
+    <engine name="android" spec="7.0.0" />
+    <engine name="ios" spec="4.5.4" />
+    <engine name="browser" spec="5.0.3" />
+    <plugin name="ionic-plugin-deeplinks" spec="^1.0.17">
+        <variable name="URL_SCHEME" value="gtcneedracing" />
+        <variable name="DEEP_LINKING_SCHEME" value="https" />
+        <variable name="DEEPLINK_HOST" value="racemanager-mobile-project.herokuapp.com" />
+        <variable name="ANDROID_PATH_PREFIX" value="/" />
+        <variable name="DEEPLINK_SCHEME" value="https" />
+        <variable name="ANDROID_2_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_3_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_4_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_5_PATH_PREFIX" value="/" />
+        <variable name="DEEPLINK_2_SCHEME" value=" " />
+        <variable name="DEEPLINK_2_HOST" value=" " />
+        <variable name="DEEPLINK_3_SCHEME" value=" " />
+        <variable name="DEEPLINK_3_HOST" value=" " />
+        <variable name="DEEPLINK_4_SCHEME" value=" " />
+        <variable name="DEEPLINK_4_HOST" value=" " />
+        <variable name="DEEPLINK_5_SCHEME" value=" " />
+        <variable name="DEEPLINK_5_HOST" value=" " />
+    </plugin>
 </widget>
