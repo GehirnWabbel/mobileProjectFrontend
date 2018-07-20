@@ -7,6 +7,7 @@ import { MyApp } from './app.component';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
+import { EventModalAddPage} from "../pages/event-modal-add/event-modal-add";
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
 import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
@@ -29,7 +30,8 @@ import {SocialSharing} from "@ionic-native/social-sharing";
     JoinTeamPage,
     MemberMgmtPage,
     CreateTeamPage,
-    PlanningModalAddPage
+    PlanningModalAddPage,
+    EventModalAddPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,8 @@ import {SocialSharing} from "@ionic-native/social-sharing";
     JoinTeamPage,
     MemberMgmtPage,
     CreateTeamPage,
-    PlanningModalAddPage
+    PlanningModalAddPage,
+    EventModalAddPage
   ],
   providers: [
     StatusBar,

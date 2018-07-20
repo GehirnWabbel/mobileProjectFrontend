@@ -200,4 +200,17 @@ export class ApiServiceProvider {
       .subscribe(data => {resolve(data);}, err => {console.log(err);}, () => {this.loading.dismiss();});
     })
   }
+
+  createTeam(newTeamName: string) {
+    return new Promise(resolve => {
+      this.http.post(this.apiUrl, newTeamName, { headers: { "Content-Type": "application/json" }})
+      .subscribe(data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
 }
