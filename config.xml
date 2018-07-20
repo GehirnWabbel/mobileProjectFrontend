@@ -88,13 +88,15 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
-    <engine name="android" spec="^7.0.0" />
-    <engine name="ios" spec="4.5.4" />
-    <allow-navigation href="http://192.168.2.101:8100" />
     <plugin name="cordova-universal-links-plugin" spec="^1.2.1" />
+    <allow-navigation href="http://192.168.2.101:8100" />
     <univeral-links>
         <host name="racemanager-mobile-project.herokuapp.com" schema="https">
-            <path url="/join" />
+            <path url="/join" event="joinTeam"/>
         </host>
     </univeral-links>
+    <engine name="android" spec="~7.0.0" />
+    <engine name="ios" spec="~4.5.4" />
+    <engine name="browser" spec="~5.0.3" />
+
 </widget>

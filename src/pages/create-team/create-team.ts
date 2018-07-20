@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import {EventsPage} from "../events/events";
 import { ApiServiceProvider } from '../../providers/api-service/api-service';
 import { Storage } from '@ionic/storage';
+import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 
 /**
  * Generated class for the CreateTeamPage page.
@@ -22,6 +23,7 @@ export class CreateTeamPage {
   teamId: string;
 
   constructor(public navCtrl: NavController,
+              public modalCtrl: ModalController,
               public navParams: NavParams,
               private apiProvider: ApiServiceProvider,
               private storage: Storage) {
@@ -34,7 +36,7 @@ export class CreateTeamPage {
   jumpDirectlyToEvents(){
     this.teamId = "5b06a79fef9f5500141336d2";
     this.storage.set('teamId', this.teamId );
-    console.log("Team Id mock: " + this.teamId + " saved in local storage." )
+    console.log("Team Id mock: " + this.teamId + " saved in local storage." );
     this.navCtrl.setRoot(EventsPage);
   }
 
@@ -44,13 +46,30 @@ export class CreateTeamPage {
       this.apiProvider.createTeam(newTameNameJson).then(data => {
           this.teamId = data['_id'];
           this.storage.set('teamId', this.teamId );
-          console.log("Team Id: " + this.teamId + " saved in local storage." )
-          this.navCtrl.setRoot(EventsPage);
+          console.log("Team Id: " + this.teamId + " saved in local storage." );
+          this.registerTeamMember();
         }
       );
 
     }
 
+  }
+
+  registerTeamMember() {
+    const addMember = this.modalCtrl.create(MemberMgmtPage, {
+      person: {
+        name: "",
+        driver: true,
+        connectedViaDevice: true,
+        color: 1,
+        avatarNo: 1,
+        minutesBeforeNotification: 30
+      },
+      mode: 'new',
+      allowCancel: false,
+      teamId: this.teamId
+    });
+    addMember.present();
   }
 
 }

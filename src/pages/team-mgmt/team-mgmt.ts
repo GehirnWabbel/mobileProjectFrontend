@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {
   IonicPage,
   NavController,
+  ModalController,
   NavParams,
   ToastController
 } from 'ionic-angular';
@@ -31,6 +32,7 @@ export class TeamMgmtPage {
   allManagements = [];
 
   constructor(public navCtrl: NavController,
+              public modalCtrl: ModalController,
               public navParams: NavParams,
               public toastCtrl: ToastController,
               private apiProvider: ApiServiceProvider,
@@ -71,16 +73,19 @@ export class TeamMgmtPage {
   navToPersonMgmtEditMode(person: any) {
     this.navCtrl.push(MemberMgmtPage, {
       person: person,
-      mode: 'edit'
+      mode: 'edit',
+      allowCancel: true
     })
       .catch(() => {})//catch error occuring when dismissing changes
   }
 
   navToPersonMgmtNewMode(person: any) {
-    this.navCtrl.push(MemberMgmtPage, {
+    const addModal = this.modalCtrl.create(MemberMgmtPage, {
       person: person,
-      mode: 'new'
-    })
+      mode: 'new',
+      allowCancel: true
+    });
+    addModal.present();
   }
 
 

@@ -31,12 +31,16 @@ export class JoinTeamPage {
               private storage: Storage) {
 
     //TODO: Remove Mock to use real Team ID
-    //this.teamNameUI = "Team: " + navParams.get("teamName");
-    //this.teamName = navParams.get("teamName");
-    this.teamNameUI = "Team: needracing.com";
-    this.teamName = "needracing.com";
-    //this.teamId = navParams.get("teamId");
-    this.teamId = "5b06a79fef9f5500141336d2";
+    console.log(navParams);
+    this.teamNameUI = "Team: " + navParams.get("teamName");
+    this.teamName = navParams.get("teamName");
+    //this.teamNameUI = "Team: needracing.com";
+    //this.teamName = "needracing.com";
+    this.teamId = navParams.get("teamId");
+    //this.teamId = "5b06a79fef9f5500141336d2";
+
+    console.log('TeamId: '+this.teamId);
+    console.log('teamName:'+this.teamName);
     this.storage.set('teamId', this.teamId );
     console.log("Team Id: " + this.teamId + " saved in local storage." )
 
@@ -78,9 +82,6 @@ export class JoinTeamPage {
 
         this.apiProvider.registerNewDriver(this.teamId, newDriver);
       }
-
-
-
     }
 
     this.navCtrl.setRoot(EventsPage);

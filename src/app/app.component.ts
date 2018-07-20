@@ -56,7 +56,7 @@ export class MyApp {
 
   initializeUniversalLinks() {
     if(window["universalLinks"]){
-      window["universalLinks"].subscribe(null, eventData => {
+      window["universalLinks"].subscribe("joinTeam", eventData => {
         console.log("Opened through universal Link!");
         if(eventData.params.teamId) {
           this.nav.setRoot(JoinTeamPage, {
@@ -65,7 +65,8 @@ export class MyApp {
           });
         }
       });
-    }
+    }else
+      console.log("No Universal Link Plugin avaliable!");
   }
 
   openPage(page) {

@@ -1,9 +1,18 @@
 <ion-header>
-  <ion-navbar color="dark-grey">
+  <!-- header if called as modal -->
+  <ion-navbar color="primary" *ngIf="mode === 'new'">
+    <ion-title>Neues Teammitglied</ion-title>
+    <ion-buttons end>
+      <button ion-button color="light" (click)="cancelCreationModal()" *ngIf="allowCancel === true">Abbrechen</button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <!-- Header if the page is called from the team overview -->
+  <ion-navbar color="dark-grey" *ngIf="mode === 'edit'">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Mitgliederverwaltung</ion-title>
+    <ion-title>Bearbeiten</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="toggleMode()">
         <ion-icon name="create" *ngIf="changeMode === false"></ion-icon>
@@ -82,6 +91,10 @@
 
     <ion-item *ngIf="editMember.driver === true && editMember.connectedViaDevice === false">
       <p id="unconnectedDriverNote" text-wrap>Fahrer nicht mit Telefon verbunden. Keine Fahrer Benachrichtigung möglich.</p>
+    </ion-item>
+
+    <ion-item *ngIf="mode === 'new'">
+      <button ion-button full (click)="savePerson()">Speichern</button>
     </ion-item>
 
   </ion-list>
