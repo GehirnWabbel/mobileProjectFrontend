@@ -4,7 +4,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { Deeplinks } from '@ionic-native/deeplinks';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
@@ -68,7 +67,6 @@ import {SocialSharing} from "@ionic-native/social-sharing";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiServiceProvider,
-    Deeplinks,
     SocialSharing
   ]
 })
