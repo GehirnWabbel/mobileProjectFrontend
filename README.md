@@ -1,12 +1,18 @@
 # Mobile Project Frontend
 
 
-Install Deeplinks:
+Install Deeplinks - no longer needed
 
-Run these two commands
+If installed, remove with:
 
-```
-cordova plugin add ionic-plugin-deeplinks --variable URL_SCHEME=gtcracemanager --variable DEEPLINK_SCHEME=https --variable DEEPLINK_HOST=racemanager-mobile-project.herokuapp.com --variable ANDROID_PATH_PREFIX=/
-```
+```ionic cordova plugin remove ionic-plugin-deeplinks```
 
-```npm install --save @ionic-native/deeplinks```
+Install Universal Links (nur Cordova Plugin, kein Ionic Befehl notwendig)
+
+```cordova plugin add cordova-universal-links-plugin```
+
+Install Social Sharing
+
+```ionic cordova plugin add cordova-plugin-x-socialsharing```
+
+```npm install --save @ionic-native/social-sharing```

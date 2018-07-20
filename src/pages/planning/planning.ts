@@ -17,7 +17,7 @@ import { PlanningModalAddPage } from "../planning-modal-add/planning-modal-add";
 })
 export class PlanningPage {
   allStints = []; // complete Stints
-  allDrivers = []; // subset of Stints (only driver objects)
+  allDrivers = []; // drivers for modal
   allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
   allPlanningItems = []; // Planning Items = Stints with attribute 'finished' false
 
@@ -186,15 +186,24 @@ export class PlanningPage {
     addModal.present();
   }
 
+  editStint(stintItem: any) {
+    console.log(stintItem);
+    const addModal = this.modal.create(PlanningModalAddPage, {
+      allStints: this.allStints,
+      allDrivers: this.allDrivers,
+      teamId: this.teamId,
+      eventId: this.eventId,
+      starttime: stintItem.starttime,
+      duration: stintItem.duration
+    });
+    addModal.present();
+  }
+
   /*
    *
    * TODO: Tag functionality
    *
    */
-
-  editStint() {
-    console.log("Pop up for editing driver");
-  }
 
   openKartTag() {
     console.log("Kart Tag options open");

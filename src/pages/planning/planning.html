@@ -34,7 +34,7 @@
 
   <!-- Planung -->
   <h3 padding>Planung</h3>
-  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allStints)">
+  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
     <ion-item-sliding *ngFor="let item of allPlanningItems">
 
         <ion-item>
@@ -60,11 +60,11 @@
         </ion-item>
 
       <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="setStintToDone(planningItem)">
+        <button ion-button color="secondary" (click)="setStintToDone(item)">
           <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
           Fertig
         </button>
-        <button ion-button color="editable" (click)="editStint()">
+        <button ion-button color="editable" (click)="editStint(item)">
           <ion-icon name="md-create" id="iconEdit"></ion-icon>
           Bearbeiten
         </button>

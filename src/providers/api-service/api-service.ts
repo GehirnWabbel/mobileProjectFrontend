@@ -146,6 +146,20 @@ export class ApiServiceProvider {
     });
   }
 
+  createEvent(newEvent: string, teamId: string){
+    let newEventJson = JSON.parse(JSON.stringify(newEvent));
+    return new Promise(resolve => {
+      this.http.post(this.apiUrl + teamId + "/event", newEventJson, { headers: { "Content-Type": "application/json" }})
+      .subscribe(data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
   getAllTeamMember(teamId: string) {
     this.presentLoading();
     return new Promise(resolve => {

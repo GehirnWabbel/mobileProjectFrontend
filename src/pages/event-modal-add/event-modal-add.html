@@ -16,30 +16,38 @@
 </ion-header>
 
 <ion-content>
-
   <ion-item>
     <ion-label color="primary" stacked>Titel des Events</ion-label>
-    <ion-input></ion-input>
+    <ion-input [(ngModel)]="eventName"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Strecke</ion-label>
+    <ion-select [(ngModel)]="track" interface="action-sheet">
+      <ion-option value="ch">Cheb</ion-option>
+      <ion-option value="op">Oppenrod</ion-option>
+      <ion-option value="wi">Wittgenborn</ion-option>
+      <ion-option value="wa">Wackersdorf</ion-option>
+      <ion-option value="li">Liedolsheim</ion-option>
+      <ion-option value="te">Templin</ion-option>
+      <ion-option value="ni">Niedergörsdorf</ion-option>
+    </ion-select>
   </ion-item>
   <ion-item>
-    <ion-label color="primary" stacked>Datum</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label color="primary" stacked>Adresse</ion-label>
-    <ion-input></ion-input>
+    <ion-label color="primary" stacked>Rennstart</ion-label>
+    <ion-datetime displayFormat="YYYY-MM-DDTHH:mm" [(ngModel)]="raceTime" placeholder="Datum und Uhrzeit"> </ion-datetime>
   </ion-item>
   <ion-item>
     <ion-label color="primary" stacked>Anzahl Renntage</ion-label>
-    <ion-input></ion-input>
+    <ion-input type="number" [(ngModel)]="raceDays"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label color="primary" stacked>Gewicht Kart voll</ion-label>
-    <ion-input></ion-input>
+    <ion-label color="primary" stacked>Gewicht Kart Tank voll</ion-label>
+    <ion-input type="number" placeholder="in kg" [(ngModel)]="kartFull"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label color="primary" stacked>Gewicht Kart leer</ion-label>
-    <ion-input></ion-input>
+    <ion-label color="primary" stacked>Gewicht Kart Tank leer</ion-label>
+    <ion-input type="number" placeholder="in kg" [(ngModel)]="kartEmpty"></ion-input>
   </ion-item>
 
   <button (click)="addEvent()" ion-button full>Speichern</button>
