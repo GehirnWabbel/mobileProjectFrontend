@@ -89,9 +89,6 @@
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <allow-navigation href="http://192.168.2.101:8100" />
-    <engine name="android" spec="7.0.0" />
-    <engine name="ios" spec="4.5.4" />
-    <engine name="browser" spec="5.0.3" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.17">
         <variable name="URL_SCHEME" value="gtcneedracing" />
         <variable name="DEEP_LINKING_SCHEME" value="https" />
@@ -111,4 +108,7 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
+    <engine name="android" spec="7.0.0" />
+    <engine name="ios" spec="4.5.4" />
+    <engine name="browser" spec="5.0.3" />
 </widget>

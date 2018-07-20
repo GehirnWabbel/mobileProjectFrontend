@@ -30,19 +30,15 @@ export class JoinTeamPage {
               private apiProvider: ApiServiceProvider,
               private storage: Storage) {
 
-    //TODO: Remove Mock to use real Team ID
-    console.log(navParams);
+    console.log("Join Team: " + navParams);
     this.teamNameUI = "Team: " + navParams.get("teamName");
     this.teamName = navParams.get("teamName");
-    //this.teamNameUI = "Team: needracing.com";
-    //this.teamName = "needracing.com";
     this.teamId = navParams.get("teamId");
-    //this.teamId = "5b06a79fef9f5500141336d2";
 
-    console.log('TeamId: '+this.teamId);
-    console.log('teamName:'+this.teamName);
+    console.log('Join Team: TeamId: '+this.teamId);
+    console.log('Join Team: teamName:'+this.teamName);
     this.storage.set('teamId', this.teamId );
-    console.log("Team Id: " + this.teamId + " saved in local storage." )
+    console.log("Join Team: Team Id: " + this.teamId + " saved in local storage." )
 
   }
 
@@ -64,7 +60,10 @@ export class JoinTeamPage {
         let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
 
         if(this.teamId != undefined ){
-          this.apiProvider.registerNewDriver(this.navParams.get("teamId"), newUser);
+          this.apiProvider.registerNewDriver(this.teamId, newUser).then(data => {
+            console.log("Join Team: MemeberId: " + data["_id"]);
+            this.storage.set("memberId", data["_id"]);
+          });
         }
         else{
           this.apiProvider.registerNewDriver("5b06a79fef9f5500141336d2", newUser);
@@ -80,7 +79,10 @@ export class JoinTeamPage {
         let colorNumber = Math.round(color);
         let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
 
-        this.apiProvider.registerNewDriver(this.teamId, newDriver);
+        this.apiProvider.registerNewDriver(this.teamId, newDriver).then(data => {
+          console.log("Join Team: MemberId: " + data["_id"]);
+          this.storage.set("memberId", data["_id"]);
+        });
       }
     }
 

@@ -19,6 +19,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiServiceProvider } from '../providers/api-service/api-service';
 import {SocialSharing} from "@ionic-native/social-sharing";
+import {Deeplinks} from "@ionic-native/deeplinks";
+import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import {SocialSharing} from "@ionic-native/social-sharing";
     MemberMgmtPage,
     CreateTeamPage,
     PlanningModalAddPage,
-    EventModalAddPage
+    EventModalAddPage,
+    TeamMgmtPopoverPage
   ],
   imports: [
     BrowserModule,
@@ -63,14 +66,16 @@ import {SocialSharing} from "@ionic-native/social-sharing";
     MemberMgmtPage,
     CreateTeamPage,
     PlanningModalAddPage,
-    EventModalAddPage
+    EventModalAddPage,
+    TeamMgmtPopoverPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiServiceProvider,
-    SocialSharing
+    SocialSharing,
+    Deeplinks
   ]
 })
 export class AppModule {}

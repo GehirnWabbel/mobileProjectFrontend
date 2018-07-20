@@ -3,6 +3,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { timer } from 'rxjs/observable/timer';
+import {Storage} from "@ionic/storage";
 
 import { PlanningPage } from '../pages/planning/planning';
 import { TeamMgmtPage } from '../pages/team-mgmt/team-mgmt';
@@ -10,6 +11,8 @@ import { EventsPage } from '../pages/events/events';
 import { ChartPage } from '../pages/chart/chart';
 import { JoinTeamPage } from '../pages/join-team/join-team';
 import { CreateTeamPage } from "../pages/create-team/create-team";
+import {Deeplinks} from "@ionic-native/deeplinks";
+import {MemberMgmtPage} from "../pages/member-mgmt/member-mgmt";
 
 
 @Component({
@@ -25,7 +28,9 @@ export class MyApp {
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen) {
+    public splashScreen: SplashScreen,
+    public deeplinks: Deeplinks,
+    public storage: Storage) {
 
     this.initializeApp();
 
@@ -39,6 +44,9 @@ export class MyApp {
   }
 
   showSplash = true;
+  teamId;
+  memberId;
+  determineStartPageCallCount = 0;
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -49,24 +57,55 @@ export class MyApp {
 
       timer(2500).subscribe(() => this.showSplash = false); // <-- hide animation after 3.5s
 
-      this.initializeUniversalLinks();
+      //check for existing teamId and memberId in storage
+      this.storage.get("teamId").then(val => {
+        this.teamId = val;
+        console.log("App Component: Found TeamId: " + this.teamId);
+      });
+
+      this.storage.get("memberId").then(val => {
+        this.memberId = val;
+        console.log("App Component: Found MemberId: " + this.memberId);
+      });
+
+      this.deeplinks.route({
+        '/join': {"join": true}
+      } ).subscribe((match) => {
+        //alert(JSON.stringify(match.$args.teamname));
+        console.log(match.$args);
+        this.nav.setRoot(JoinTeamPage, {"teamId": match.$args.teamid, "teamName": match.$args.teamname});
+      }, (noMatch) => {
+        alert(JSON.stringify(noMatch));
+      } )
 
     });
   }
 
-  initializeUniversalLinks() {
-    if(window["universalLinks"]){
-      window["universalLinks"].subscribe("joinTeam", eventData => {
-        console.log("Opened through universal Link!");
-        if(eventData.params.teamId) {
-          this.nav.setRoot(JoinTeamPage, {
-            teamId: eventData.params.teamId,
-            teamName: eventData.params.teamName
-          });
-        }
-      });
-    }else
-      console.log("No Universal Link Plugin avaliable!");
+  determineStartPage(){
+    ++this.determineStartPageCallCount;
+    if(this.determineStartPageCallCount >= 2){
+      if(this.teamId && this.memberId) //todo: check whether member id and team exist on backend aswell
+        this.nav.setRoot(EventsPage);
+
+      if(this.teamId) { //todo check whether team exists
+        this.nav.setRoot(MemberMgmtPage,
+          {
+            person: {
+              name: "",
+              driver: true,
+              connectedViaDevice: true,
+              color: 1,
+              avatarNo: 1,
+              minutesBeforeNotification: 30
+            },
+            mode: 'new',
+            allowCancel: false,
+            teamId: this.teamId
+          }
+        );
+      }
+
+    }
   }
 
   openPage(page) {

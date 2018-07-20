@@ -1,14 +1,30 @@
 <ion-header>
   <ion-navbar color="dark-grey">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Teamverwaltung</ion-title>
+    <ion-buttons start left>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="showPopoverMenu($event)" end>
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="reloadTeamData()">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Neu laden"
+      refreshingSpinner="circles"
+      refreshingText="Lade ..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <h3 padding>Fahrer</h3>
   <ion-list>
     <ion-item-sliding *ngFor="let driver of allDrivers" >

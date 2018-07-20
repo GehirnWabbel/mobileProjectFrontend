@@ -163,7 +163,7 @@ export class ApiServiceProvider {
   getAllTeamMember(teamId: string) {
     this.presentLoading();
     return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId + '/person').subscribe(data => {
+      this.http.get(this.apiUrl + teamId + '/person?active=true').subscribe(data => {
         resolve(data);
       }, err => {
         console.log(err);
@@ -194,7 +194,7 @@ export class ApiServiceProvider {
   }
 
   removeTeamMember(teamId : string, member: any) {
-    return new Promise(resolve => {
+    return new Promise(resolve => { //todo: instead of delete set active flag to false on person
       this.http.delete(this.apiUrl + teamId + '/person/' + member._id)
       .subscribe(
         data => {
@@ -226,5 +226,13 @@ export class ApiServiceProvider {
         }
       );
     });
+  }
+
+  deleteTeam(teamId: string) {
+    return new Promise(resolve => {
+      this.http.delete(this.apiUrl + teamId)
+      .subscribe(data => resolve(data),
+        err => console.log(err))
+    })
   }
 }

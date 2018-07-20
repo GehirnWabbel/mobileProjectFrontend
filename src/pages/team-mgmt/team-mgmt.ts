@@ -3,6 +3,7 @@ import {
   IonicPage,
   NavController,
   ModalController,
+  PopoverController,
   NavParams,
   ToastController
 } from 'ionic-angular';
@@ -10,6 +11,7 @@ import { SocialSharing} from "@ionic-native/social-sharing";
 import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
+import {TeamMgmtPopoverPage} from "../team-mgmt-popover/team-mgmt-popover";
 
 /**
  * Generated class for the TeamMgmtPage page.
@@ -33,6 +35,7 @@ export class TeamMgmtPage {
 
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
+              public popoverCtrl: PopoverController,
               public navParams: NavParams,
               public toastCtrl: ToastController,
               private apiProvider: ApiServiceProvider,
@@ -110,7 +113,7 @@ export class TeamMgmtPage {
   inviteTeamMember() {
     this.sharing.shareWithOptions({
       subject: "Tritt Team " + this.teamName + " bei!",
-      url: "https://racemanager-mobile-project.herokuapp.com/join?teamId=" + this.teamId + "&teamName=" + this.teamName,
+      url: "https://racemanager-mobile-project.herokuapp.com/join?teamid=" + this.teamId + "&teamname=" + this.teamName,
     }).then(result => {
       console.log("Sharing completed? " + result.completed);
       console.log("Shared to app: " + result.app);
@@ -123,7 +126,6 @@ export class TeamMgmtPage {
     this.allDrivers = [];
     this.allManagements = [];
     this.apiProvider.getTeam(this.teamId).then(data => {
-      console.log(JSON.stringify(data));
       this.teamName = data["teamName"];
       this.parseTeamMember(data["members"]);
     });
@@ -135,6 +137,18 @@ export class TeamMgmtPage {
       duration: 2500
     });
     toast.present();
+  }
+
+  showPopoverMenu(event){
+    const popover = this.popoverCtrl.create(TeamMgmtPopoverPage, {
+      teamId: this.teamId,
+      teamName: this.teamName
+    },{
+      cssClass: 'popover-resize'
+    });
+    popover.present({
+      ev: event
+    })
   }
 
 }
