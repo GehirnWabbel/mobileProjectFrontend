@@ -8,6 +8,7 @@ import {
 } from 'ionic-angular';
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {CreateTeamPage} from "../create-team/create-team";
+import { Storage } from "@ionic/storage";
 
 /**
  * Generated class for the TeamMgmtPopoverPage page.
@@ -65,8 +66,7 @@ export class TeamMgmtPopoverPage {
             console.log(data.teamName);
             if(data.teamName === this.teamName) {
               this.api.deleteTeam(this.teamId).then(data => {
-                this.storage.clear(); // also clear local storage
-                this.navCtrl.setRoot(CreateTeamPage);
+                this.storage.clear().then(() => this.navCtrl.setRoot(CreateTeamPage)); // also clear local storage
                 this.showToast("Team gelöscht.")
               })
             } else

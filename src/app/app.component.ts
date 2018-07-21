@@ -12,7 +12,7 @@ import { ChartPage } from '../pages/chart/chart';
 import { JoinTeamPage } from '../pages/join-team/join-team';
 import { CreateTeamPage } from "../pages/create-team/create-team";
 import {Deeplinks} from "@ionic-native/deeplinks";
-import {MemberMgmtPage} from "../pages/member-mgmt/member-mgmt";
+import {RootPageDeterminer} from "./RootPageDeterminer";
 
 
 @Component({
@@ -47,6 +47,7 @@ export class MyApp {
   teamId;
   memberId;
   determineStartPageCallCount = 0;
+  launchedFromDeeplink = false;
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -70,11 +71,12 @@ export class MyApp {
         this.determineStartPage();
       });
 
-      this.deeplinks.route({
+      this.deeplinks.route({ //todo: what happens if one is already in a team?
         '/join': {"join": true}
       } ).subscribe((match) => {
         //alert(JSON.stringify(match.$args.teamname));
-        console.log(match.$args);
+        console.log("App Component: " + match.$args);
+        this.launchedFromDeeplink = true; //prevent redirection by root page determination
         this.nav.setRoot(JoinTeamPage, {"teamId": match.$args.teamid, "teamName": match.$args.teamname});
       }, (noMatch) => {
         alert(JSON.stringify(noMatch));
@@ -85,32 +87,8 @@ export class MyApp {
 
   determineStartPage(){
     ++this.determineStartPageCallCount;
-    if(this.determineStartPageCallCount >= 2){
-      if(this.teamId && this.memberId) { //todo: check whether member id and team exist on backend aswell
-        console.log("App Component: Redirect to EventsPage");
-        this.nav.setRoot(EventsPage);
-        return;
-      }
-
-      if(this.teamId) { //todo check whether team exists
-        console.log("App Component: Redirect to MemberMgmtPage");
-        this.nav.setRoot(MemberMgmtPage,
-          {
-            person: {
-              name: "",
-              driver: true,
-              connectedViaDevice: true,
-              color: 1,
-              avatarNo: 1,
-              minutesBeforeNotification: 30
-            },
-            mode: 'new',
-            allowCancel: false,
-            teamId: this.teamId
-          }
-        );
-      }
-
+    if(this.determineStartPageCallCount >= 2 && !this.launchedFromDeeplink){
+      RootPageDeterminer.determineAndNavigateToRootPage(this.nav, this.teamId, this.memberId);
     }
   }
 

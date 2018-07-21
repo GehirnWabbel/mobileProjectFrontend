@@ -33,6 +33,8 @@ export class TeamMgmtPage {
   allDrivers = [];
   allManagements = [];
 
+  finishedStorageLoading = false;
+
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
               public popoverCtrl: PopoverController,
@@ -44,22 +46,14 @@ export class TeamMgmtPage {
     this.storage.get("teamId").then(val => {
       console.log("Team Management: Found TeamId in storage: " + val);
       this.teamId = val;
+      this.finishedStorageLoading = true;
       this.reloadTeamData();
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TeamMgmtPage');
-  }
-
-  ionViewWillEnter() {
-    console.log('will enter');
-  }
-
   ionViewDidEnter(){
-    console.log('did enter');
-    if(this.teamId != null)
-      this.reloadTeamData();
+    console.log('Team Management: did enter, loading team data');
+    this.reloadTeamData();
   }
 
   parseTeamMember(data: any){
@@ -123,12 +117,20 @@ export class TeamMgmtPage {
   }
 
   reloadTeamData() {
-    this.allDrivers = [];
-    this.allManagements = [];
-    this.apiProvider.getTeam(this.teamId).then(data => {
-      this.teamName = data["teamName"];
-      this.parseTeamMember(data["members"]);
-    });
+    if(this.finishedStorageLoading) {
+      this.allDrivers = [];
+      this.allManagements = [];
+      this.apiProvider.getTeam(this.teamId).then(data => {
+        this.teamName = data["name"];
+        console.log("Team Management: Loaded Team: " + this.teamName);
+        this.parseTeamMember(data["members"]);
+      });
+    }
+  }
+
+  refreshTeamData(refresher) {
+    this.reloadTeamData();
+    refresher.complete();
   }
 
   showToast(msg :string){
@@ -150,5 +152,4 @@ export class TeamMgmtPage {
       ev: event
     })
   }
-
 }

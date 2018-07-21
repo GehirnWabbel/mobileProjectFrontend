@@ -16,7 +16,7 @@
 
 
 <ion-content padding>
-  <ion-refresher (ionRefresh)="reloadTeamData()">
+  <ion-refresher (ionRefresh)="refreshTeamData($event)">
     <ion-refresher-content
       pullingIcon="arrow-dropdown"
       pullingText="Neu laden"
