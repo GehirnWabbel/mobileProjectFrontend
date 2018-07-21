@@ -12,3 +12,9 @@ Install Social Sharing
 ```ionic cordova plugin add cordova-plugin-x-socialsharing```
 
 ```npm install --save @ionic-native/social-sharing```
+
+Install Navigation Plugin
+
+```ionic cordova plugin add uk.co.workingedge.phonegap.plugin.launchnavigator```
+
+```npm install --save @ionic-native/launch-navigator```
