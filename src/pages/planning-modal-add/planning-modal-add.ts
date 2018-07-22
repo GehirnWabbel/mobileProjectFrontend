@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { ViewController, NavParams, NavController } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
-import { PlanningPage } from "../planning/planning";
 
 @Component({
   selector: "page-planning-modal-add",
@@ -56,6 +55,8 @@ export class PlanningModalAddPage {
   }
 
   newStint() {
+
+    // TODO: GET SELECTED DRIVER
     // let selectedDriver;
     // for (let i = 0; i <= this.allDrivers.length; i++) {
     //   if (this.allDrivers[i]._id == driverId) {
