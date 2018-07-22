@@ -14,29 +14,25 @@
 <ion-content>
 
   <ion-item>
-    <ion-label>Zeitpunkt: </ion-label>
-    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" [(ngModel)]="starttime" ngDefaultControl> </ion-datetime>
+    <ion-label color="primary" stacked>Zeitpunkt</ion-label>
+    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" required="true" [(ngModel)]="starttime" ngDefaultControl> </ion-datetime>
   </ion-item>
 
   <ion-item>
-    <ion-label>Fahrdauer: </ion-label>
-    <ion-datetime hourValues="0,1" placeholder="{{ duration }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="H:mm" [(ngModel)]="duration" ngDefaultControl> </ion-datetime>
+    <ion-label color="primary" stacked>Fahrdauer</ion-label>
+    <ion-input type="number" max="65" placeholder="in Minuten" required="true" [(ngModel)]="duration"></ion-input>
   </ion-item>
 
-  <ion-list>
-    <ion-item *ngFor="let driver of allDrivers" >
-      <!--[(ngModel)]="selectedDriver"
-      <ion-avatar item-start>-->
-        <!--<img src="assets/imgs/girl.png">-->
-      <!--</ion-avatar>-->
-      <!--<h2>{{ driver.name }}</h2>-->
-      <ion-label>{{ driver.name }}</ion-label>
-      <ion-checkbox [(ngModel)]="isDriver" (ionChange)="updateCheckbox()" ngDefaultControl></ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <ion-item>
+    <ion-label color="primary" stacked>Fahrer</ion-label>
+    <ion-select required="true" [(ngModel)]="selectedDriver" interface="action-sheet">
+      <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
+    </ion-select>
+  </ion-item>
 
-  <button ion-button color="primary" (click)="newStint()">
-    <ion-icon name="add" id="iconAdd"></ion-icon>
+  <div text-center>
+  <button ion-button color="primary" (click)="newStint()">Speichern
+    <!--<ion-icon name="add" id="iconAdd"></ion-icon>-->
   </button>
-
+  </div>
 </ion-content>

@@ -2,6 +2,15 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { LoadingController } from "ionic-angular";
 
+export interface Stint {
+  driverId: string;
+  startdate: Date;
+  enddate: Date;
+  raceday: number;
+  finished: boolean;
+  isBreak: boolean;
+}
+
 @Injectable()
 export class ApiServiceProvider {
   private loading;
@@ -120,14 +129,24 @@ export class ApiServiceProvider {
     });
   }
 
-  createStint(teamId: any, eventId: any, stintOfDriver: any) {
+  createStint(teamId: any, eventId: any, selectedDriver: any, startdate: Date, enddate: Date, raceday: number) {
     // Clone old stint and create new one in correct Stint format
     // only driver reference instead of complete driver object
-    const newStint = JSON.parse(JSON.stringify(stintOfDriver));
-    delete newStint.driver;
-    delete newStint.orderNo;
-    newStint.driverId = stintOfDriver.driver._id;
-    newStint.finished = false;
+    // const newStint = JSON.parse(JSON.stringify(stintOfDriver));
+    // delete newStint.driver;
+    // delete newStint.orderNo;
+    // newStint.driverId = stintOfDriver.driver._id;
+    // newStint.finished = false;
+
+    const newStint: Stint = {
+      driverId: selectedDriver._id,
+      startdate: startdate,
+      enddate: enddate,
+      raceday: raceday,
+      finished: false,
+      isBreak: false
+    }
+
     JSON.stringify(newStint);
 
     return new Promise(resolve => {

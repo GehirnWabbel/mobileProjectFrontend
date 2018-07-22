@@ -141,7 +141,7 @@ export class PlanningPage {
         }
       }
     }
-    // console.log(this.allProtocolItems);
+    console.log(this.allProtocolItems);
   }
 
   setStintToDone(driver: any) {
