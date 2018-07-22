@@ -6,6 +6,7 @@ import { PlanningPage } from "../planning/planning";
 import { EventModalAddPage } from "../event-modal-add/event-modal-add";
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { AlertController } from 'ionic-angular';
+import { MenuController } from 'ionic-angular';
 
 /**
  * Generated class for the EventsPage page.
@@ -22,6 +23,7 @@ import { AlertController } from 'ionic-angular';
 export class EventsPage {
   private allEvents: Array<any>;
   teamId: string;
+  activeMenu: string;
 
   constructor(
     public navCtrl: NavController,
@@ -30,7 +32,8 @@ export class EventsPage {
     private storage: Storage,
     private nav: LaunchNavigator,
     private modal: ModalController,
-    private alert: AlertController
+    private alert: AlertController,
+    public menu: MenuController
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -38,6 +41,8 @@ export class EventsPage {
         this.allEvents = this.convertData(data);
       });
     });
+    this.activeMenu = 'menu1';
+    this.menu.swipeEnable(false, this.activeMenu);
   }
 
   private convertData(data: any) {
@@ -60,6 +65,7 @@ export class EventsPage {
   }
 
   navToPlanningPage(event: any) {
+    this.menu.swipeEnable(true, this.activeMenu);
     this.storage.set("eventId", event._id);
     console.log("Event Id: " + event._id + " saved in local storage.");
     this.navCtrl.setRoot(PlanningPage);
@@ -103,7 +109,7 @@ export class EventsPage {
   }
 
   navigateToEvent(event: any){
+    this.menu.swipeEnable(true, this.activeMenu);
     this.nav.navigate(event.location);
-
   }
 }
