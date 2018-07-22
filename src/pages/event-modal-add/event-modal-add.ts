@@ -91,7 +91,7 @@ export class EventModalAddPage {
         }
 
         //format date
-        this.raceTime = new Date().toISOString();
+        this.raceTime = new Date(this.raceTime).toISOString();
 
         let newEventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + this.raceTime +
           "\",\"location\": \""+ this.address +"\",\"noRaceDays\": "+ this.raceDays +",\"picturePath\": \""+

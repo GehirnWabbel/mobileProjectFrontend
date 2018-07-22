@@ -4,6 +4,9 @@ import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningPage } from "../planning/planning";
 import { EventModalAddPage } from "../event-modal-add/event-modal-add";
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { AlertController } from 'ionic-angular';
+import { MenuController } from 'ionic-angular';
 
 /**
  * Generated class for the EventsPage page.
@@ -20,13 +23,17 @@ import { EventModalAddPage } from "../event-modal-add/event-modal-add";
 export class EventsPage {
   private allEvents: Array<any>;
   teamId: string;
+  activeMenu: string;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
     private storage: Storage,
-    private modal: ModalController
+    private nav: LaunchNavigator,
+    private modal: ModalController,
+    private alert: AlertController,
+    public menu: MenuController
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -34,6 +41,8 @@ export class EventsPage {
         this.allEvents = this.convertData(data);
       });
     });
+    this.activeMenu = 'menu1';
+    this.menu.swipeEnable(false, this.activeMenu);
   }
 
   private convertData(data: any) {
@@ -56,6 +65,7 @@ export class EventsPage {
   }
 
   navToPlanningPage(event: any) {
+    this.menu.swipeEnable(true, this.activeMenu);
     this.storage.set("eventId", event._id);
     console.log("Event Id: " + event._id + " saved in local storage.");
     this.navCtrl.setRoot(PlanningPage);
@@ -73,5 +83,33 @@ export class EventsPage {
       this.allEvents = this.convertData(data);
     });
     refresher.complete();
+  }
+
+  deleteEvent(event: any){
+    let alert = this.alert.create({
+      title: 'Soll dieses Event wirklich gelöscht werden?',
+      message: 'Das Löschen eines Events lässt sich nicht rückgängig machen!',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          handler: () => {
+            console.log('Delete cancelled');
+          }
+        },
+        {
+          text: 'Löschen',
+          handler: () => {
+            console.log('Delete Event: ' + event._id);
+            this.apiProvider.deleteEvent(event._id, this.teamId);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  navigateToEvent(event: any){
+    this.menu.swipeEnable(true, this.activeMenu);
+    this.nav.navigate(event.location);
   }
 }

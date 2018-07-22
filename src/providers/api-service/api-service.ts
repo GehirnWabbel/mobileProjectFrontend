@@ -220,4 +220,17 @@ export class ApiServiceProvider {
       )
     })
   }
+  deleteEvent(eventId: string, teamId: string){
+    return new Promise(resolve => {
+      this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json" }})
+        .subscribe(data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
+
 }

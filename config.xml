@@ -17,7 +17,7 @@
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
-    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreen" value="none" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashScreenDelay" value="10000" />
@@ -104,6 +104,10 @@
         <variable name="DEEPLINK_4_HOST" value=" " />
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
+    </plugin>
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="^4.2.1">
+        <variable name="OKHTTP_VERSION" value="3.+" />
     </plugin>
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />

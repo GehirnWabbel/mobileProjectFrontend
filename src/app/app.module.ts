@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
@@ -70,7 +71,8 @@ import { ApiServiceProvider } from '../providers/api-service/api-service';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiServiceProvider,
-    Deeplinks
+    Deeplinks,
+    LaunchNavigator
   ]
 })
 export class AppModule {}
