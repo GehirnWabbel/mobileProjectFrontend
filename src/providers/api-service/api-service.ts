@@ -45,6 +45,24 @@ export class ApiServiceProvider {
     });
   }
 
+  // get single event from API
+  getSingleEvent(teamId: string, eventId: string) {
+    return new Promise(resolve => {
+      this.presentLoading();
+      this.http.get(this.apiUrl + teamId + "/event/" + eventId).subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.log(err);
+        },
+        () => {
+          this.loading.dismiss();
+        }
+      );
+    });
+  }
+
   // get stints from API
   getStints(teamId: string, eventId: any) {
     return new Promise(resolve => {

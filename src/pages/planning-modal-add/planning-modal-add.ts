@@ -12,9 +12,11 @@ export class PlanningModalAddPage {
   teamId: string;
   allStints: Array<any>;
   allDrivers: Array<any>;
+  currentEvent = [];
 
   // stint attributes
   raceday: number;
+  numberOfRacedays: number;
   selectedDriver: any;
   starttime: string = new Date().toISOString();
   duration: string;
@@ -46,9 +48,9 @@ export class PlanningModalAddPage {
 
   // Split e.g. "12:30" in 12 Hours and 30 minutes and define date object
   setDateTime(date, time) {
-    var index = time.indexOf(":");
-    var hours = time.substring(0, index);
-    var minutes = time.substring(index + 1);
+    let index = time.indexOf(":");
+    let hours = time.substring(0, index);
+    let minutes = time.substring(index + 1);
 
     date.setHours(hours);
     date.setMinutes(minutes);
@@ -57,12 +59,20 @@ export class PlanningModalAddPage {
     return date;
   }
 
+  getSingleEventFromAPI() {
+    console.log("METHOD INVOCATION")
+    this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
+      this.currentEvent = data as Array<any>;
+      console.log(this.currentEvent);
+    });
+  }
+
   newStint() {
     //starttime
     this.setDateTime(this.starttimeISO, this.starttime);
 
     // endtime
-    var durationNumber = parseInt(this.duration);
+    let durationNumber = parseInt(this.duration);
     if(durationNumber >= 60){
       this.durationISO.setHours(1);
       this.durationISO.setMinutes(durationNumber - 60)
@@ -71,9 +81,10 @@ export class PlanningModalAddPage {
       this.durationISO.setMinutes(durationNumber);
     }
 
-    this.endtimeISO = this.starttimeISO;
-    this.endtimeISO.setHours(this.endtimeISO.getHours() + this.durationISO.getHours());
-    this.endtimeISO.setMinutes(this.endtimeISO.getMinutes() + this.durationISO.getMinutes())
+    this.endtimeISO.setHours(this.starttimeISO.getHours() + this.durationISO.getHours());
+    let minutes = this.starttimeISO.getMinutes() + this.durationISO.getMinutes();
+    console.log("FDSAFDAFDA: " + minutes)
+    this.endtimeISO.setMinutes(this.starttimeISO.getMinutes() + this.durationISO.getMinutes())
 
     // Outputs
     console.log("Startzeit: " + this.starttime);
@@ -81,15 +92,18 @@ export class PlanningModalAddPage {
     console.log("Dauer: " + this.duration);
     console.log("DauerISO Stunden: " + this.durationISO.getHours());
     console.log("DauerISO Minuten: " + this.durationISO.getMinutes());
+    console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
     console.log("EndzeitISO: " + this.endtimeISO.toISOString());
     console.log("Fahrer: " + this.selectedDriver.name);
 
     // calculate raceday
     // get data from event object
+    this.getSingleEventFromAPI();
 
-    this.raceday;
 
     //this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttime, this.endtime, this.raceday);
     //this.navCtrl.setRoot(PlanningPage);
   }
+
+
 }
