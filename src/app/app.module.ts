@@ -4,6 +4,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
@@ -19,7 +21,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiServiceProvider } from '../providers/api-service/api-service';
 import {SocialSharing} from "@ionic-native/social-sharing";
-import {Deeplinks} from "@ionic-native/deeplinks";
 import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover";
 
 @NgModule({
@@ -75,7 +76,8 @@ import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover"
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiServiceProvider,
     SocialSharing,
-    Deeplinks
+    Deeplinks,
+    LaunchNavigator
   ]
 })
 export class AppModule {}

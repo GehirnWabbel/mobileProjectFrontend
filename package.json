@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "5.2.10",
     "@ionic-native/core": "4.7.0",
     "@ionic-native/deeplinks": "^4.10.0",
+    "@ionic-native/launch-navigator": "^4.10.0",
     "@ionic-native/social-sharing": "^4.10.0",
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/status-bar": "4.7.0",
@@ -33,7 +34,9 @@
     "cordova-android": "7.0.0",
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
+    "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -48,6 +51,7 @@
     "ng2-charts": "^1.6.0",
     "rxjs": "5.5.10",
     "sw-toolbox": "3.6.0",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "^4.2.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -65,11 +69,10 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-x-socialsharing": {},
       "ionic-plugin-deeplinks": {
-        "URL_SCHEME": "gtcneedracing",
-        "DEEP_LINKING_SCHEME": "https",
+        "URL_SCHEME": "gtcracemanager",
+        "DEEPLINK_SCHEME": "https",
         "DEEPLINK_HOST": "racemanager-mobile-project.herokuapp.com",
         "ANDROID_PATH_PREFIX": "/",
-        "DEEPLINK_SCHEME": "https",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
         "ANDROID_4_PATH_PREFIX": "/",
@@ -82,6 +85,9 @@
         "DEEPLINK_4_HOST": " ",
         "DEEPLINK_5_SCHEME": " ",
         "DEEPLINK_5_HOST": " "
+      },
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+        "OKHTTP_VERSION": "3.+"
       }
     },
     "platforms": [
