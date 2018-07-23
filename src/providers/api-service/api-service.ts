@@ -174,6 +174,20 @@ export class ApiServiceProvider {
     })
   }
 
+  getSingleTeamMember(teamId: string, memberId: string) {
+    this.presentLoading();
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl + teamId + '/person/' + memberId).subscribe(data => {
+          resolve(data);
+        }, err => {
+          console.log(err);
+        },
+        () => {
+          this.loading.dismiss();
+        });
+    })
+  }
+
   updateTeamMember(teamId : string, member : any) {
     this.presentLoading();
     return new Promise(resolve => {
@@ -194,17 +208,8 @@ export class ApiServiceProvider {
   }
 
   removeTeamMember(teamId : string, member: any) {
-    return new Promise(resolve => { //todo: instead of delete set active flag to false on person
-      this.http.delete(this.apiUrl + teamId + '/person/' + member._id)
-      .subscribe(
-        data => {
-          resolve(data);
-        },
-        err => {
-          console.log(err);
-        }
-      )
-    })
+    member.active = false;
+    return this.updateTeamMember(teamId, member);
   }
 
   getTeam(teamId : string) {
@@ -235,6 +240,7 @@ export class ApiServiceProvider {
         err => console.log(err))
     })
   }
+
   deleteEvent(eventId: string, teamId: string){
     return new Promise(resolve => {
       this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json" }})
@@ -247,5 +253,4 @@ export class ApiServiceProvider {
         );
     });
   }
-
 }

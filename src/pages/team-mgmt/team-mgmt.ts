@@ -60,6 +60,8 @@ export class TeamMgmtPage {
     let allMember = data as Array<any>;
     for (let i=0; i < allMember.length; i++){
       let member = allMember[i];
+      if(!member.active)
+        continue;
       if(member.driver)
         this.allDrivers.push(member);
       else

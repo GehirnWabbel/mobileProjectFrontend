@@ -33,7 +33,7 @@
     "cordova": "^8.0.0",
     "cordova-android": "7.0.0",
     "cordova-browser": "5.0.3",
-    "cordova-ios": "4.5.4",
+    "cordova-ios": "^4.5.4",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-dialogs": "^2.0.1",
@@ -84,16 +84,18 @@
         "DEEPLINK_4_SCHEME": " ",
         "DEEPLINK_4_HOST": " ",
         "DEEPLINK_5_SCHEME": " ",
-        "DEEPLINK_5_HOST": " "
+        "DEEPLINK_5_HOST": " ",
+        "DEEP_LINKING_SCHEME": "https"
       },
       "uk.co.workingedge.phonegap.plugin.launchnavigator": {
-        "OKHTTP_VERSION": "3.+"
+        "OKHTTP_VERSION": "3.+",
+        "LOCATION_USAGE_DESCRIPTION": "This app requires access to your location for navigation purposes"
       }
     },
     "platforms": [
       "android",
-      "ios",
-      "browser"
+      "browser",
+      "ios"
     ]
   }
 }
