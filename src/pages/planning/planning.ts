@@ -22,13 +22,13 @@ export class PlanningPage {
   allPlanningItems = []; // Planning Items = Stints with attribute 'finished' false
 
   weekdays: Array<string> = [
-    "Sonntag",
     "Montag",
     "Dienstag",
     "Mittwoch",
     "Donnerstag",
     "Freitag",
-    "Samstag"
+    "Samstag",
+    "Sonntag"
   ];
 
   teamId: string;
@@ -141,7 +141,7 @@ export class PlanningPage {
         }
       }
     }
-    console.log(this.allProtocolItems);
+    //console.log(this.allProtocolItems);
   }
 
   setStintToDone(driver: any) {

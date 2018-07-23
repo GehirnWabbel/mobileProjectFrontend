@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ViewController, NavParams, NavController } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
-import { PlanningPage } from "../planning/planning";
+//import { PlanningPage } from "../planning/planning";
 
 @Component({
   selector: "page-planning-modal-add",
@@ -13,14 +13,15 @@ export class PlanningModalAddPage {
   allStints: Array<any>;
   allDrivers: Array<any>;
 
-  starttime: any;
-  duration: any;
-  endtime: any;
-  raceday: any;
+  // stint attributes
+  raceday: number;
   selectedDriver: any;
-  // isDriver: boolean;
+  starttime: string = new Date().toISOString();
+  duration: string;
+  private starttimeISO = new Date();
+  private durationISO = new Date();
+  private endtimeISO = new Date();
 
-  // public myDate:string=new Date().toISOString();
 
   constructor(
     public view: ViewController,
@@ -43,32 +44,52 @@ export class PlanningModalAddPage {
     this.view.dismiss();
   }
 
-  // getStintOfDriver(driver: any) {
-  //   for (let i = 0; i < this.allStints.length; i++) {
-  //     if (
-  //       this.allStints[i].driver != null &&
-  //       this.allStints[i].driver != "undefined"
-  //     ) {
-  //       // get stint of driver
-  //       if (this.allStints[i].driver._id == driver._id) {
-  //         let stint = this.allStints[i];
-  //         return stint;
-  //       }
-  //     }
-  //   }
-  // }
+  // Split e.g. "12:30" in 12 Hours and 30 minutes and define date object
+  setDateTime(date, time) {
+    var index = time.indexOf(":");
+    var hours = time.substring(0, index);
+    var minutes = time.substring(index + 1);
+
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds("00");
+
+    return date;
+  }
 
   newStint() {
-    console.log("NEUE Startzeit: " + this.starttime);
-    console.log("NEUE Dauer: " + this.duration);
-    console.log("NEUER Fahrer: " + this.selectedDriver.name);
+    //starttime
+    this.setDateTime(this.starttimeISO, this.starttime);
 
-    // calculate enddate
+    // endtime
+    var durationNumber = parseInt(this.duration);
+    if(durationNumber >= 60){
+      this.durationISO.setHours(1);
+      this.durationISO.setMinutes(durationNumber - 60)
+    } else {
+      this.durationISO.setHours(0);
+      this.durationISO.setMinutes(durationNumber);
+    }
+
+    this.endtimeISO = this.starttimeISO;
+    this.endtimeISO.setHours(this.endtimeISO.getHours() + this.durationISO.getHours());
+    this.endtimeISO.setMinutes(this.endtimeISO.getMinutes() + this.durationISO.getMinutes())
+
+    // Outputs
+    console.log("Startzeit: " + this.starttime);
+    console.log("StartzeitISO: " + this.starttimeISO.toISOString());
+    console.log("Dauer: " + this.duration);
+    console.log("DauerISO Stunden: " + this.durationISO.getHours());
+    console.log("DauerISO Minuten: " + this.durationISO.getMinutes());
+    console.log("EndzeitISO: " + this.endtimeISO.toISOString());
+    console.log("Fahrer: " + this.selectedDriver.name);
 
     // calculate raceday
     // get data from event object
 
-    this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttime, this.endtime, this.raceday);
-    this.navCtrl.setRoot(PlanningPage);
+    this.raceday;
+
+    //this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttime, this.endtime, this.raceday);
+    //this.navCtrl.setRoot(PlanningPage);
   }
 }
