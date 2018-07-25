@@ -4,7 +4,8 @@ import {
   NavController,
   NavParams,
   ModalController,
-  ViewController
+  ViewController,
+  ToastController
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
@@ -40,7 +41,8 @@ export class PlanningPage {
     private apiProvider: ApiServiceProvider,
     private modal: ModalController,
     private viewCtrl: ViewController,
-    private storage: Storage
+    private storage: Storage,
+    private toastCtrl: ToastController
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -57,6 +59,20 @@ export class PlanningPage {
 
   ionViewWillEnter() {
     this.viewCtrl.showBackButton(false);
+  }
+
+  presentToast(toastMessage: string) {
+    let toast = this.toastCtrl.create({
+      message: toastMessage,
+      duration: 3000,
+      position: "top"
+    });
+
+    toast.onDidDismiss(() => {
+      console.log("Dismissed toast");
+    });
+
+    toast.present();
   }
 
   formatStints(data: any) {
@@ -206,14 +222,17 @@ export class PlanningPage {
    */
 
   openKartTag() {
-    console.log("Kart Tag options open");
+    this.presentToast("Kart: ");
+
   }
 
   openWeatherTag() {
-    console.log("Weather Tag options open");
+    this.presentToast("Wetter: ");
+
   }
 
   openFlagTag() {
-    console.log("Flag Tag options open");
+    this.presentToast("Flaggen: ");
+
   }
 }

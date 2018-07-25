@@ -147,7 +147,14 @@ export class ApiServiceProvider {
     });
   }
 
-  createStint(teamId: any, eventId: any, selectedDriver: any, startdate: Date, enddate: Date, raceday: number) {
+  createStint(
+    teamId: any,
+    eventId: any,
+    selectedDriver: any,
+    startdate: Date,
+    enddate: Date,
+    raceday: number
+  ) {
     // Clone old stint and create new one in correct Stint format
     // only driver reference instead of complete driver object
     // const newStint = JSON.parse(JSON.stringify(stintOfDriver));
@@ -163,7 +170,7 @@ export class ApiServiceProvider {
       raceday: raceday,
       finished: false,
       isBreak: false
-    }
+    };
 
     JSON.stringify(newStint);
 
@@ -185,8 +192,12 @@ export class ApiServiceProvider {
 
   createTeam(newTeamName: string) {
     return new Promise(resolve => {
-      this.http.post(this.apiUrl, newTeamName, { headers: { "Content-Type": "application/json" }})
-        .subscribe(data => {
+      this.http
+        .post(this.apiUrl, newTeamName, {
+          headers: { "Content-Type": "application/json" }
+        })
+        .subscribe(
+          data => {
             resolve(data);
           },
           err => {
@@ -196,11 +207,15 @@ export class ApiServiceProvider {
     });
   }
 
-  createEvent(newEvent: string, teamId: string){
+  createEvent(newEvent: string, teamId: string) {
     let newEventJson = JSON.parse(JSON.stringify(newEvent));
     return new Promise(resolve => {
-      this.http.post(this.apiUrl + teamId + "/event", newEventJson, { headers: { "Content-Type": "application/json" }})
-        .subscribe(data => {
+      this.http
+        .post(this.apiUrl + teamId + "/event", newEventJson, {
+          headers: { "Content-Type": "application/json" }
+        })
+        .subscribe(
+          data => {
             resolve(data);
           },
           err => {
@@ -209,28 +224,11 @@ export class ApiServiceProvider {
         );
     });
   }
-
 
   getAllTeamMember(teamId: string) {
     this.presentLoading();
     return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId + '/person').subscribe(data => {
-        resolve(data);
-      }, err => {
-        console.log(err);
-      },
-      () => {
-        this.loading.dismiss();
-      });
-    })
-  }
-
-  updateTeamMember(teamId : string, member : any) {
-    this.presentLoading();
-    return new Promise(resolve => {
-      this.http.put(this.apiUrl + teamId + '/person/' + member._id, member, {
-        headers: { "Content-Type": "application/json" }
-      }).subscribe(
+      this.http.get(this.apiUrl + teamId + "/person").subscribe(
         data => {
           resolve(data);
         },
@@ -240,21 +238,43 @@ export class ApiServiceProvider {
         () => {
           this.loading.dismiss();
         }
-      )
-    })
+      );
+    });
   }
 
-  removeTeamMember(teamId : string, member: any) {
+  updateTeamMember(teamId: string, member: any) {
+    this.presentLoading();
     return new Promise(resolve => {
-      this.http.delete(this.apiUrl + teamId + '/person/' + member._id)
-      .subscribe(
-        data => {
-          resolve(data);
-        },
-        err => {
-          console.log(err);
-        }
-      )
-    })
+      this.http
+        .put(this.apiUrl + teamId + "/person/" + member._id, member, {
+          headers: { "Content-Type": "application/json" }
+        })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          },
+          () => {
+            this.loading.dismiss();
+          }
+        );
+    });
+  }
+
+  removeTeamMember(teamId: string, member: any) {
+    return new Promise(resolve => {
+      this.http
+        .delete(this.apiUrl + teamId + "/person/" + member._id)
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
   }
 }
