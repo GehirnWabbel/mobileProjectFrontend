@@ -34,6 +34,9 @@ export class PlanningPage {
 
   teamId: string;
   eventId: string;
+  kartTag: string;
+  weatherTag: string;
+  flagTag: string;
 
   constructor(
     public navCtrl: NavController,
@@ -77,7 +80,7 @@ export class PlanningPage {
 
   formatStints(data: any) {
     this.allStints = data as Array<any>;
-    console.log("All Stints: ", this.allStints);
+    console.log("All stints of event (protocol and planned): ", this.allStints);
     let arrayWithStints = this.allStints;
     this.getDriversOfStint(arrayWithStints);
     this.getProtocolItemsOfStint(arrayWithStints);
@@ -107,6 +110,18 @@ export class PlanningPage {
             starttimeFormatted.getHours() +
             ":" +
             starttimeFormatted.getMinutes();
+
+          // endtime of stint
+          planningItem.endtime =
+            endtimeFormatted.getHours() +
+            ":" +
+            endtimeFormatted.getMinutes();
+
+
+          // Tags
+          planningItem.kartTag = allStints[i].tags[0];
+          planningItem.weatherTag = allStints[i].tags[1];
+          planningItem.flagTag = allStints[i].tags[2];
 
           this.allPlanningItems.push(planningItem);
         }
@@ -151,6 +166,11 @@ export class PlanningPage {
             endtimeFormatted.getHours() +
             ":" +
             endtimeFormatted.getMinutes();
+
+          // Tags
+          protocolItem.kartTag = allStints[i].tags[0];
+          protocolItem.weatherTag = allStints[i].tags[1];
+          protocolItem.flagTag = allStints[i].tags[2];
 
           // Add to array
           this.allProtocolItems.push(protocolItem);
@@ -209,30 +229,25 @@ export class PlanningPage {
       allDrivers: this.allDrivers,
       teamId: this.teamId,
       eventId: this.eventId,
-      starttime: stintItem.starttime,
-      duration: stintItem.duration
+      starttime: stintItem.starttimeFormatted,
+      duration: stintItem.duration,
+      selectedDriver: stintItem.name, // CAUTION: Hier wird fälschlicherweise nur der String vom Fahrer übergeben
+      kartTag: stintItem.kartTag,
+      weatherTag: stintItem.weatherTag,
+      flagTag: stintItem.flagTag
     });
     addModal.present();
   }
 
-  /*
-   *
-   * TODO: Tag functionality
-   *
-   */
-
-  openKartTag() {
-    this.presentToast("Kart: ");
-
+  openKartTag(item: any) {
+    this.presentToast("Kart: " + item.kartTag);
   }
 
-  openWeatherTag() {
-    this.presentToast("Wetter: ");
-
+  openWeatherTag(item: any) {
+    this.presentToast("Wetter: " + item.weatherTag);
   }
 
-  openFlagTag() {
-    this.presentToast("Flaggen: ");
-
+  openFlagTag(item: any) {
+    this.presentToast("Flaggen: " + item.flagTag);
   }
 }

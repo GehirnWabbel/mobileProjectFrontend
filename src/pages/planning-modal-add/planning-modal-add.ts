@@ -24,6 +24,10 @@ export class PlanningModalAddPage {
   selectedDriver: any;
   starttime: string = new Date().toISOString();
   duration: string;
+  kartTag: string;
+  weatherTag: string;
+  flagTag: string;
+
   private starttimeISO = new Date();
   private durationISO = new Date();
   private endtimeISO = new Date();
@@ -44,6 +48,10 @@ export class PlanningModalAddPage {
     this.starttime = this.navParams.get("starttime");
     this.duration = this.navParams.get("duration");
     this.selectedDriver = this.navParams.get("selectedDriver");
+    this.kartTag = this.navParams.get("kartTag");
+    this.weatherTag = this.navParams.get("weatherTag");
+    this.flagTag = this.navParams.get("flagTag");
+
 
     // get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
@@ -127,7 +135,6 @@ export class PlanningModalAddPage {
     // let testDate  = new Date("2018-07-30T01:26:54.686Z");
 
     this.raceday = this.calcDate(this.starttimeISO, eventStartdate);
-    // this.presentToast("Raceday calculated: " + this.raceday);
 
 
     // TODO: complete tag stuff
@@ -148,6 +155,8 @@ export class PlanningModalAddPage {
 
     // this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttime, this.endtime, this.raceday);
     // this.navCtrl.setRoot(PlanningPage);
+
+    this.presentToast("Stint angelegt");
   }
 
 

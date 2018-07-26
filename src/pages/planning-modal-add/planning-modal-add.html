@@ -20,7 +20,7 @@
 
   <ion-item>
     <ion-label color="primary" stacked>Fahrdauer</ion-label>
-    <ion-input type="number" [max]="65" placeholder="in Minuten" required="true" [(ngModel)]="duration"></ion-input>
+    <ion-input type="number" [max]="65" placeholder="in Minuten" required="true" [(ngModel)]="duration">Minuten</ion-input>
   </ion-item>
 
   <ion-item>
@@ -29,6 +29,26 @@
       <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
     </ion-select>
   </ion-item>
+
+  <!-- Tags -->
+
+  <ion-item>
+    <ion-label color="primary" stacked>Kart</ion-label>
+    <ion-input type="text" placeholder="{{ kartTag }}" required="false" [(ngModel)]="kartTag"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Wetter</ion-label>
+    <ion-input type="text" placeholder="{{ weatherTag }}" required="false" [(ngModel)]="weatherTag"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Flaggen</ion-label>
+    <ion-input type="text" placeholder="{{ flagTag }}" required="false" [(ngModel)]="flagTag"></ion-input>
+  </ion-item>
+
+
+  <!-- Save Button -->
 
   <div text-center>
     <button ion-button color="primary" (click)="newStint()">Speichern</button>
