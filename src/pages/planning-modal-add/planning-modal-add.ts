@@ -6,7 +6,7 @@ import {
   ToastController
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
-//import { PlanningPage } from "../planning/planning";
+import { PlanningPage } from "../planning/planning";
 
 @Component({
   selector: "page-planning-modal-add",
@@ -23,10 +23,13 @@ export class PlanningModalAddPage {
   raceday: number;
   selectedDriver: any;
   starttime: string = new Date().toISOString();
+  endtime: string = new Date().toISOString();
   duration: string;
   kartTag: string;
   weatherTag: string;
   flagTag: string;
+  existingStint: any;
+  existingStintUpdated: any;
 
   private starttimeISO = new Date();
   private durationISO = new Date();
@@ -44,14 +47,23 @@ export class PlanningModalAddPage {
     this.teamId = navParams.get("teamId");
     this.eventId = navParams.get("eventId");
 
-    // edit stint params
-    this.starttime = this.navParams.get("starttime");
-    this.duration = this.navParams.get("duration");
-    this.selectedDriver = this.navParams.get("selectedDriver");
-    this.kartTag = this.navParams.get("kartTag");
-    this.weatherTag = this.navParams.get("weatherTag");
-    this.flagTag = this.navParams.get("flagTag");
+    // get existing stint data
+    this.existingStint = this.navParams.get("existingStint");
+    let existingStintDuration = this.navParams.get("duration");
+    console.log("Existing stint received: " + this.existingStint);
 
+    if (this.existingStint != undefined) {
+      this.starttime = this.existingStint.startdate;
+      this.endtime = this.existingStint.enddate;
+      let durationFloat = existingStintDuration;
+      this.duration = parseInt(durationFloat).toString();
+      this.selectedDriver = this.existingStint.driver;
+      this.kartTag = this.existingStint.tags[0];
+      this.weatherTag = this.existingStint.tags[1];
+      this.flagTag = this.existingStint.tags[2];
+    } else {
+      this.selectedDriver = {name: "wähle einen Fahrer"};
+    }
 
     // get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
@@ -140,6 +152,7 @@ export class PlanningModalAddPage {
     // TODO: complete tag stuff
 
 
+
     // Outputs
     console.log("#################### NEW STINT DATA ########################");
     // console.log("Startzeit: " + this.starttime);
@@ -153,12 +166,24 @@ export class PlanningModalAddPage {
     // console.log("RaceDays of Event: " + this.currentEvent.noRaceDays);
     console.log("Renntag des Stints: " + this.raceday);
 
-    // this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttime, this.endtime, this.raceday);
-    // this.navCtrl.setRoot(PlanningPage);
-
+    //this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttimeISO, this.endtimeISO, this.raceday);
+    this.navCtrl.setRoot(PlanningPage);
     this.presentToast("Stint angelegt");
   }
 
+  editStintInModal() {
+
+    // TODO: get changes and edit existingSting to existingStintUpdated
 
 
+
+    this.apiProvider.updateStintData(
+      this.teamId,
+      this.eventId,
+      this.existingStint._id,
+      this.existingStintUpdated
+    );
+    this.navCtrl.setRoot(PlanningPage);
+    this.presentToast("Stint geändert");
+  }
 }

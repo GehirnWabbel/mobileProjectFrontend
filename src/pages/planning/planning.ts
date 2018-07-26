@@ -70,11 +70,9 @@ export class PlanningPage {
       duration: 3000,
       position: "top"
     });
-
     toast.onDidDismiss(() => {
-      console.log("Dismissed toast");
+      // console.log("Dismissed toast");
     });
-
     toast.present();
   }
 
@@ -86,6 +84,7 @@ export class PlanningPage {
     this.getProtocolItemsOfStint(arrayWithStints);
   }
 
+  // Planning Items
   getDriversOfStint(allStints) {
     for (let i = 0; i <= allStints.length - 1; i++) {
       // add to allDrivers if a member is a driver and Stint is NOT finished
@@ -98,25 +97,29 @@ export class PlanningPage {
         ) {
           let planningItem = allStints[i].driver;
 
+          // driver
+          planningItem.selectedDriver = allStints[i].driver.driver;
+
           // calculate duration of stint
           let endtimeFormatted = new Date(allStints[i].enddate);
           let starttimeFormatted = new Date(allStints[i].startdate);
-          let duration =
-            endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
-          planningItem.duration = duration / 60000;
+          let duration = endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
+          duration = duration / 60000;
+          planningItem.duration = parseInt(duration.toString());
 
           // startdate of stint
           planningItem.starttime =
             starttimeFormatted.getHours() +
             ":" +
             starttimeFormatted.getMinutes();
+          planningItem.starttimeFormatted = starttimeFormatted;
 
           // endtime of stint
           planningItem.endtime =
             endtimeFormatted.getHours() +
             ":" +
             endtimeFormatted.getMinutes();
-
+          planningItem.endtimeFormatted = endtimeFormatted;
 
           // Tags
           planningItem.kartTag = allStints[i].tags[0];
@@ -149,7 +152,8 @@ export class PlanningPage {
           let starttimeFormatted = new Date(allStints[i].startdate);
           let duration =
             endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
-          protocolItem.duration = duration / 60000;
+          duration = duration / 60000;
+          protocolItem.duration = parseInt(duration.toString());
 
           // starttime of stint
           protocolItem.starttime =
@@ -183,17 +187,12 @@ export class PlanningPage {
   setStintToDone(driver: any) {
     let finishedStint = this.getStintOfDriver(driver);
 
-    // console.log("complete stint before update: " + finishedStint);
-    // console.log("Stint finished: " + finishedStint.finished);
-
     finishedStint.finished = true;
     finishedStint.driverId = driver._id;
     delete finishedStint.driver;
     let finishedStintId = finishedStint._id;
     delete finishedStint._id;
 
-    // console.log("Stint finished: " + finishedStint.finished);
-    // console.log("complete updated Stint: " + finishedStint);
     this.apiProvider.setStintToDoneAPI(
       this.teamId,
       this.eventId,
@@ -224,17 +223,24 @@ export class PlanningPage {
 
   editStint(stintItem: any) {
     console.log(stintItem);
+
+    let existingStint = this.getStintOfDriver(stintItem);
     const addModal = this.modal.create(PlanningModalAddPage, {
+
       allStints: this.allStints,
       allDrivers: this.allDrivers,
       teamId: this.teamId,
       eventId: this.eventId,
-      starttime: stintItem.starttimeFormatted,
-      duration: stintItem.duration,
-      selectedDriver: stintItem.name, // CAUTION: Hier wird fälschlicherweise nur der String vom Fahrer übergeben
-      kartTag: stintItem.kartTag,
-      weatherTag: stintItem.weatherTag,
-      flagTag: stintItem.flagTag
+      existingStint: existingStint,
+      duration: stintItem.duration
+
+    //   starttime: stintItem.starttimeFormatted,
+    //   endtime: stintItem.endtimeFormatted,
+    //
+    //   selectedDriver: stintItem.selectedDriver,
+    //   kartTag: stintItem.kartTag,
+    //   weatherTag: stintItem.weatherTag,
+    //   flagTag: stintItem.flagTag
     });
     addModal.present();
   }

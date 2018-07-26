@@ -170,6 +170,7 @@ export class ApiServiceProvider {
       raceday: raceday,
       finished: false,
       isBreak: false
+      // TODO tag array/attributes
     };
 
     JSON.stringify(newStint);
@@ -179,6 +180,39 @@ export class ApiServiceProvider {
         .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {
           headers: { "Content-Type": "application/json" }
         })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
+
+  // update Stint data, e.g. change driver of existing planned stint
+  updateStintData(
+    teamId: any,
+    eventId: any,
+    existingStintId: string,
+    existingStint: any
+  ) {
+    let toBePuttedStint = JSON.stringify(existingStint);
+
+    console.log("EXISTING STINT READY TO PUT: " + toBePuttedStint);
+    return new Promise(resolve => {
+      this.http
+        .put(
+          this.apiUrl +
+          teamId +
+          "/event/" +
+          eventId +
+          "/stint/" +
+          existingStintId,
+          toBePuttedStint,
+          { headers: { "Content-Type": "application/json" } }
+        )
         .subscribe(
           data => {
             resolve(data);

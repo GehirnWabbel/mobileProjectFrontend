@@ -25,7 +25,7 @@
 
   <ion-item>
     <ion-label color="primary" stacked>Fahrer</ion-label>
-    <ion-select required="true" [(ngModel)]="selectedDriver" interface="action-sheet">
+    <ion-select required="true" placeholder="{{ selectedDriver.name }}" [(ngModel)]="selectedDriver" interface="action-sheet">
       <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
     </ion-select>
   </ion-item>
