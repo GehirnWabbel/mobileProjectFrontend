@@ -9,6 +9,7 @@ export interface Stint {
   raceday: number;
   finished: boolean;
   isBreak: boolean;
+  tags: Array<string>;
 }
 
 @Injectable()
@@ -153,7 +154,8 @@ export class ApiServiceProvider {
     selectedDriver: any,
     startdate: Date,
     enddate: Date,
-    raceday: number
+    raceday: number,
+    tagsArray: Array<string>
   ) {
     // Clone old stint and create new one in correct Stint format
     // only driver reference instead of complete driver object
@@ -169,8 +171,8 @@ export class ApiServiceProvider {
       enddate: enddate,
       raceday: raceday,
       finished: false,
-      isBreak: false
-      // TODO tag array/attributes
+      isBreak: false,
+      tags: tagsArray // TODO tag array/attributes
     };
 
     JSON.stringify(newStint);

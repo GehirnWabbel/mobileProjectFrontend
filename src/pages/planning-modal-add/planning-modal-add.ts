@@ -25,6 +25,7 @@ export class PlanningModalAddPage {
   starttime: string = new Date().toISOString();
   endtime: string = new Date().toISOString();
   duration: string;
+  tagsArray = [];
   kartTag: string;
   weatherTag: string;
   flagTag: string;
@@ -53,6 +54,7 @@ export class PlanningModalAddPage {
     console.log("Existing stint received: " + this.existingStint);
 
     if (this.existingStint != undefined) {
+      // if we received an existing stint fill UI inputs with existing stint values
       this.starttime = this.existingStint.startdate;
       this.endtime = this.existingStint.enddate;
       let durationFloat = existingStintDuration;
@@ -61,8 +63,12 @@ export class PlanningModalAddPage {
       this.kartTag = this.existingStint.tags[0];
       this.weatherTag = this.existingStint.tags[1];
       this.flagTag = this.existingStint.tags[2];
+
+
+
     } else {
-      this.selectedDriver = {name: "wähle einen Fahrer"};
+      this.selectedDriver = { name: "wähle einen Fahrer" };
+      this.tagsArray = [];
     }
 
     // get current event
@@ -121,61 +127,98 @@ export class PlanningModalAddPage {
   }
 
   newStint() {
-    // starttime
-    this.setDateTime(this.starttimeISO, this.starttime);
-
-    // format duration from minutes to hour and minutes in ISO format
-    let durationNumber = parseInt(this.duration);
-    if (durationNumber >= 60) {
-      this.durationISO.setHours(1);
-      this.durationISO.setMinutes(durationNumber - 60);
+    if (this.existingStint != undefined) {
+      // start editing routine
+      this.editStintInModal();
     } else {
-      this.durationISO.setHours(0);
-      this.durationISO.setMinutes(durationNumber);
-    }
-
-    // set endtimeISO
-    this.endtimeISO.setHours(
-      this.starttimeISO.getHours() + this.durationISO.getHours()
-    );
-    this.endtimeISO.setMinutes(
-      this.starttimeISO.getMinutes() + this.durationISO.getMinutes()
-    );
-
-    // calculate raceday of new stint
-    let eventStartdate = new Date(this.currentEvent.startdate);
-    // let testDate  = new Date("2018-07-30T01:26:54.686Z");
-
-    this.raceday = this.calcDate(this.starttimeISO, eventStartdate);
 
 
-    // TODO: complete tag stuff
+      // starttime
+      this.setDateTime(this.starttimeISO, this.starttime);
+
+      // format duration from minutes to hour and minutes in ISO format
+      let durationNumber = parseInt(this.duration);
+      if (durationNumber >= 60) {
+        this.durationISO.setHours(1);
+        this.durationISO.setMinutes(durationNumber - 60);
+      } else {
+        this.durationISO.setHours(0);
+        this.durationISO.setMinutes(durationNumber);
+      }
+
+      // set endtimeISO
+      this.endtimeISO.setHours(
+        this.starttimeISO.getHours() + this.durationISO.getHours()
+      );
+      this.endtimeISO.setMinutes(
+        this.starttimeISO.getMinutes() + this.durationISO.getMinutes()
+      );
+
+      // calculate raceday of new stint
+      let eventStartdate = new Date(this.currentEvent.startdate);
+      // let testDate  = new Date("2018-07-30T01:26:54.686Z");
+
+      this.raceday = this.calcDate(this.starttimeISO, eventStartdate);
 
 
+      // tags
+      this.tagsArray[0] = this.kartTag;
+      this.tagsArray[1] = this.weatherTag;
+      this.tagsArray[2] = this.flagTag;
 
-    // Outputs
-    console.log("#################### NEW STINT DATA ########################");
-    // console.log("Startzeit: " + this.starttime);
-    console.log("Geplante Startzeit: " + this.starttimeISO);
-    // console.log("Dauer: " + this.duration);
-    console.log("Geplante Fahrzeit in Stunden: " + this.durationISO.getHours());
-    console.log("Geplante Fahrzeit in  Minuten: " + this.durationISO.getMinutes());
-    // console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
-    console.log("Geplante Endzeit: " + this.endtimeISO);
-    console.log("Geplanter Fahrer: " + this.selectedDriver.name);
-    // console.log("RaceDays of Event: " + this.currentEvent.noRaceDays);
-    console.log("Renntag des Stints: " + this.raceday);
+      // Outputs
+      console.log("#################### NEW STINT DATA ########################");
+      // console.log("Startzeit: " + this.starttime);
+      console.log("Geplante Startzeit: " + this.starttimeISO);
+      // console.log("Dauer: " + this.duration);
+      console.log("Geplante Fahrzeit in Stunden: " + this.durationISO.getHours());
+      console.log("Geplante Fahrzeit in  Minuten: " + this.durationISO.getMinutes());
+      // console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
+      console.log("Geplante Endzeit: " + this.endtimeISO);
+      console.log("Geplanter Fahrer: " + this.selectedDriver.name);
+      // console.log("RaceDays of Event: " + this.currentEvent.noRaceDays);
+      console.log("Renntag des Stints: " + this.raceday);
+      console.log("Karttag: " + this.kartTag);
+      console.log("Wetter: " + this.weatherTag);
+      console.log("Flaggen: " + this.flagTag);
+      console.log("Tags als array: " + this.tagsArray);
 
-    //this.apiProvider.createStint(this.teamId, this.eventId, this.selectedDriver, this.starttimeISO, this.endtimeISO, this.raceday);
-    this.navCtrl.setRoot(PlanningPage);
-    this.presentToast("Stint angelegt");
+
+      this.apiProvider.createStint(
+        this.teamId,
+        this.eventId,
+        this.selectedDriver,
+        this.starttimeISO,
+        this.endtimeISO,
+        this.raceday,
+        this.tagsArray
+      );
+      this.navCtrl.setRoot(PlanningPage);
+      this.presentToast("Stint angelegt");
+    } // if edit or new
   }
 
   editStintInModal() {
 
-    // TODO: get changes and edit existingSting to existingStintUpdated
+    // get changes and edit existingSting to existingStintUpdated which will be putted to backend
+    // stint ID remains the same
+    this.existingStintUpdated = this.existingStint;
+
+    delete this.existingStintUpdated.selectedDriver;
+    delete this.existingStintUpdated.starttime;
+    delete this.existingStintUpdated.endtime;
+    delete this.existingStintUpdated.raceday;
 
 
+    this.existingStintUpdated.driver = this.selectedDriver._id;
+    this.existingStintUpdated.startdate = this.starttimeISO;
+    this.existingStintUpdated.enddate = this.endtimeISO;
+    this.existingStintUpdated.finished = false;
+    this.existingStintUpdated.isBreak = false;
+    this.existingStintUpdated.raceDay = this.raceday;
+    this.existingStintUpdated.tags[0] = this.kartTag;
+    this.existingStintUpdated.tags[1] = this.weatherTag;
+    this.existingStintUpdated.tags[2] = this.flagTag;
 
     this.apiProvider.updateStintData(
       this.teamId,
