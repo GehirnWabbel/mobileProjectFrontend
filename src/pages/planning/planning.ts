@@ -5,11 +5,13 @@ import {
   NavParams,
   ModalController,
   ViewController,
-  ToastController
+  ToastController,
+  Events
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningModalAddPage } from "../planning-modal-add/planning-modal-add";
+import { colorDefinitions } from "../../app/colordefinitions";
 
 @IonicPage()
 @Component({
@@ -38,6 +40,8 @@ export class PlanningPage {
   weatherTag: string;
   flagTag: string;
 
+  colorDefinitions;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -45,19 +49,44 @@ export class PlanningPage {
     private modal: ModalController,
     private viewCtrl: ViewController,
     private storage: Storage,
+    public ionEvents: Events,
     private toastCtrl: ToastController
   ) {
-    this.storage.get("teamId").then(val => {
-      this.teamId = val;
+    this.refreshPlanningPage();
+    this.ionEvents.subscribe('stint:edited', eventData => {
+      this.refreshPlanningPage();
     });
+    this.ionEvents.subscribe('stint:created', eventData => {
+      this.refreshPlanningPage();
+    });
+    this.ionEvents.subscribe('stint:setToDone', eventData => {
+      this.refreshPlanningPage();
+    });
+    this.colorDefinitions = colorDefinitions;
+  }
 
-    this.storage.get("eventId").then(val => {
-      this.eventId = val;
-      this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
-        this.formatStints(data);
-        this.getDriversFromAPI();
+
+  // initial data loading, which will be called if different ionEvents are published
+  refreshPlanningPage() {
+
+      // clear old data
+      this.allPlanningItems = [];
+      this.allProtocolItems = [];
+      this.allStints = [];
+      this.allDrivers = [];
+
+      // load new data
+      this.storage.get("teamId").then(val => {
+        this.teamId = val;
       });
-    });
+
+      this.storage.get("eventId").then(val => {
+        this.eventId = val;
+        this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
+          this.formatStints(data);
+          this.getDriversFromAPI();
+        });
+      });
   }
 
   ionViewWillEnter() {
@@ -72,6 +101,7 @@ export class PlanningPage {
     });
     toast.onDidDismiss(() => {
       // console.log("Dismissed toast");
+
     });
     toast.present();
   }
@@ -181,7 +211,7 @@ export class PlanningPage {
         }
       }
     }
-    //console.log(this.allProtocolItems);
+    // console.log(this.allProtocolItems);
   }
 
   setStintToDone(driver: any) {
@@ -199,6 +229,8 @@ export class PlanningPage {
       finishedStint,
       finishedStintId
     );
+    this.ionEvents.publish("stint:edited");
+    this.presentToast("Stint abgeschlossen");
   }
 
   getStintOfDriver(driver: any) {

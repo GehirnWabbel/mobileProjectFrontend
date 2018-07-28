@@ -172,7 +172,7 @@ export class ApiServiceProvider {
       raceday: raceday,
       finished: false,
       isBreak: false,
-      tags: tagsArray // TODO tag array/attributes
+      tags: tagsArray
     };
 
     JSON.stringify(newStint);

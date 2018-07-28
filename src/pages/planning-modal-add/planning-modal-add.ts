@@ -3,7 +3,8 @@ import {
   ViewController,
   NavParams,
   NavController,
-  ToastController
+  ToastController,
+  Events
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { PlanningPage } from "../planning/planning";
@@ -41,6 +42,7 @@ export class PlanningModalAddPage {
     public apiProvider: ApiServiceProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
+    public ionEvents: Events,
     private toastCtrl: ToastController
   ) {
     this.allStints = navParams.get("allStints");
@@ -51,9 +53,10 @@ export class PlanningModalAddPage {
     // get existing stint data
     this.existingStint = this.navParams.get("existingStint");
     let existingStintDuration = this.navParams.get("duration");
-    console.log("Existing stint received: " + this.existingStint);
+
 
     if (this.existingStint != undefined) {
+      console.log("Existing stint received: " + this.existingStint);
       // if we received an existing stint fill UI inputs with existing stint values
       this.starttime = this.existingStint.startdate;
       this.endtime = this.existingStint.enddate;
@@ -64,9 +67,8 @@ export class PlanningModalAddPage {
       this.weatherTag = this.existingStint.tags[1];
       this.flagTag = this.existingStint.tags[2];
 
-
-
     } else {
+      console.log("Ready to create a new Stint");
       this.selectedDriver = { name: "wähle einen Fahrer" };
       this.tagsArray = [];
     }
@@ -193,6 +195,7 @@ export class PlanningModalAddPage {
         this.raceday,
         this.tagsArray
       );
+      this.ionEvents.publish("stint:created");
       this.navCtrl.setRoot(PlanningPage);
       this.presentToast("Stint angelegt");
     } // if edit or new
@@ -226,6 +229,7 @@ export class PlanningModalAddPage {
       this.existingStint._id,
       this.existingStintUpdated
     );
+    this.ionEvents.publish("stint:edited");
     this.navCtrl.setRoot(PlanningPage);
     this.presentToast("Stint geändert");
   }

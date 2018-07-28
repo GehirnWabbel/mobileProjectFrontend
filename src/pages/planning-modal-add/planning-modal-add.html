@@ -32,7 +32,7 @@
 
   <!-- Tags -->
 
-  <ion-item>
+  <ion-item *ngIf="kartTag != undefined">
     <ion-label color="primary" stacked>Kart</ion-label>
     <ion-input type="text" placeholder="{{ kartTag }}" required="false" [(ngModel)]="kartTag"></ion-input>
   </ion-item>

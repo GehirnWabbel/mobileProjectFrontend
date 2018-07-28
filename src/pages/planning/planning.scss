@@ -5,18 +5,33 @@ ion-avatar img  {
     max-height: 100px !important; //any size
     }
 
+.item-content {
+  background: linear-gradient(to right, green 20%, white 220%);
+  background-size: 100%;
+  background-position:left bottom;
+}
+
+.ion-item {
+  margin: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
 .tag {
     font-size: 14px;
 }
 
 #iconCheckmark {
-    font-size: 25px; 
+    font-size: 25px;
 }
 
 #iconEdit {
-    font-size: 25px; 
+    font-size: 25px;
 }
 
 #iconAdd {
-    font-size: 25px; 
+    font-size: 25px;
 }
+

@@ -10,33 +10,35 @@
 
 <ion-content>
 
-  <!-- Protokoll -->
+  <!-- Protokoll [style.background-color]="colorDefinitions[item.color]"-->
   <h3 padding>Protokoll</h3>
   <ion-list>
     <ion-item-group>
-      <ion-item *ngFor="let item of allProtocolItems">
+      <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.background-color]="colorDefinitions[item.color]">
+
         <ion-avatar item-start>
-          <img src="assets/imgs/rasta.png">
+          <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
         </ion-avatar>
         <h2>{{ item.name }}</h2>
-        <p>
+
+        <p style="color: black">
           Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
         </p>
-        <p>
+        <p style="color: black">
           Ende: <span style="display:inline-block; width: 29px;"></span> {{ item.endtime }} Uhr
         </p>
-        <p>
+        <p style="color: black">
           Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min
         </p>
 
         <p>
-          <ion-badge item-end (click)="openKartTag(item)">
+          <ion-badge color="dark-grey" item-end (click)="openKartTag(item)">
             <ion-icon name="car"></ion-icon>
           </ion-badge>
-          <ion-badge item-end (click)="openWeatherTag(item)">
+          <ion-badge color="dark-grey" item-end (click)="openWeatherTag(item)">
             <ion-icon name="partly-sunny"></ion-icon>
           </ion-badge>
-          <ion-badge item-end (click)="openFlagTag(item)">
+          <ion-badge color="dark-grey" item-end (click)="openFlagTag(item)">
             <ion-icon name="flag"></ion-icon>
           </ion-badge>
         </p>
@@ -50,24 +52,24 @@
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
     <ion-item-sliding *ngFor="let item of allPlanningItems">
 
-        <ion-item>
+        <ion-item class="ion-item" [style.background-color]="colorDefinitions[item.color]">
           <ion-avatar item-start>
-            <img src="assets/imgs/blacky.png">
+            <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
           </ion-avatar>
 
           <h2>{{ item.name }}</h2>
-          <p>Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
-          <p>Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
-          <p>Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
+          <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
+          <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
+          <p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
 
           <p>
-            <ion-badge item-end (click)="openKartTag(item)">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openKartTag(item)">
               <ion-icon name="car"></ion-icon>
             </ion-badge>
-            <ion-badge item-end (click)="openWeatherTag(item)">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openWeatherTag(item)">
               <ion-icon name="partly-sunny"></ion-icon>
             </ion-badge>
-            <ion-badge item-end (click)="openFlagTag(item)">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openFlagTag(item)">
               <ion-icon name="flag"></ion-icon>
             </ion-badge>
           </p>
