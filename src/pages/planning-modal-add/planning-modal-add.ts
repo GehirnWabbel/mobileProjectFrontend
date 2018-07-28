@@ -171,12 +171,12 @@ export class PlanningModalAddPage {
       // Outputs
       console.log("#################### NEW STINT DATA ########################");
       // console.log("Startzeit: " + this.starttime);
-      console.log("Geplante Startzeit: " + this.starttimeISO);
+      console.log("Geplante Startzeit: " + this.starttime);
       // console.log("Dauer: " + this.duration);
       console.log("Geplante Fahrzeit in Stunden: " + this.durationISO.getHours());
       console.log("Geplante Fahrzeit in  Minuten: " + this.durationISO.getMinutes());
       // console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
-      console.log("Geplante Endzeit: " + this.endtimeISO);
+      console.log("Geplante Endzeit: " + this.endtime);
       console.log("Geplanter Fahrer: " + this.selectedDriver.name);
       // console.log("RaceDays of Event: " + this.currentEvent.noRaceDays);
       console.log("Renntag des Stints: " + this.raceday);
@@ -190,8 +190,8 @@ export class PlanningModalAddPage {
         this.teamId,
         this.eventId,
         this.selectedDriver,
-        this.starttimeISO,
-        this.endtimeISO,
+        this.starttime,
+        this.endtime,
         this.raceday,
         this.tagsArray
       );
@@ -214,8 +214,8 @@ export class PlanningModalAddPage {
 
 
     this.existingStintUpdated.driver = this.selectedDriver._id;
-    this.existingStintUpdated.startdate = this.starttimeISO;
-    this.existingStintUpdated.enddate = this.endtimeISO;
+    this.existingStintUpdated.startdate = this.starttime;
+    this.existingStintUpdated.enddate = this.endtime;
     this.existingStintUpdated.finished = false;
     this.existingStintUpdated.isBreak = false;
     this.existingStintUpdated.raceDay = this.raceday;

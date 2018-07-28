@@ -4,8 +4,8 @@ import { LoadingController } from "ionic-angular";
 
 export interface Stint {
   driverId: string;
-  startdate: Date;
-  enddate: Date;
+  startdate: string; //ISO string
+  enddate: string; //ISO string
   raceday: number;
   finished: boolean;
   isBreak: boolean;
@@ -149,11 +149,11 @@ export class ApiServiceProvider {
   }
 
   createStint(
-    teamId: any,
-    eventId: any,
+    teamId: string,
+    eventId: string,
     selectedDriver: any,
-    startdate: Date,
-    enddate: Date,
+    startdate: string, //ISO string
+    enddate: string, //ISO string
     raceday: number,
     tagsArray: Array<string>
   ) {
@@ -195,8 +195,8 @@ export class ApiServiceProvider {
 
   // update Stint data, e.g. change driver of existing planned stint
   updateStintData(
-    teamId: any,
-    eventId: any,
+    teamId: string,
+    eventId: string,
     existingStintId: string,
     existingStint: any
   ) {
