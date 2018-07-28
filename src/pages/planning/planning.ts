@@ -6,7 +6,7 @@ import {
   ModalController,
   ViewController,
   ToastController,
-  Events
+  Events, ItemSliding
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
@@ -60,6 +60,9 @@ export class PlanningPage {
       this.refreshPlanningPage();
     });
     this.ionEvents.subscribe('stint:setToDone', eventData => {
+      this.refreshPlanningPage();
+    });
+    this.ionEvents.subscribe('stint:deleted', eventData => {
       this.refreshPlanningPage();
     });
     this.colorDefinitions = colorDefinitions;
@@ -214,7 +217,7 @@ export class PlanningPage {
     // console.log(this.allProtocolItems);
   }
 
-  setStintToDone(driver: any) {
+  setStintToDone(driver: any, slidingItem: ItemSliding) {
     let finishedStint = this.getStintOfDriver(driver);
 
     finishedStint.finished = true;
@@ -229,8 +232,29 @@ export class PlanningPage {
       finishedStint,
       finishedStintId
     );
+    slidingItem.close();
     this.ionEvents.publish("stint:edited");
     this.presentToast("Stint abgeschlossen");
+  }
+
+  deletePlannedStint(driver: any, slidingItem: ItemSliding) {
+    // let finishedStint = this.getStintOfDriver(driver);
+    //
+    // finishedStint.finished = true;
+    // finishedStint.driverId = driver._id;
+    // delete finishedStint.driver;
+    // let finishedStintId = finishedStint._id;
+    // delete finishedStint._id;
+    //
+    // this.apiProvider.setStintToDoneAPI(
+    //   this.teamId,
+    //   this.eventId,
+    //   finishedStint,
+    //   finishedStintId
+    // );
+    slidingItem.close();
+    this.ionEvents.publish("stint:deleted");
+    this.presentToast("Stint gelöscht");
   }
 
   getStintOfDriver(driver: any) {
@@ -253,7 +277,7 @@ export class PlanningPage {
     addModal.present();
   }
 
-  editStint(stintItem: any) {
+  editStint(stintItem: any, slidingItem: ItemSliding) {
     console.log(stintItem);
 
     let existingStint = this.getStintOfDriver(stintItem);
@@ -274,6 +298,7 @@ export class PlanningPage {
     //   weatherTag: stintItem.weatherTag,
     //   flagTag: stintItem.flagTag
     });
+    slidingItem.close();
     addModal.present();
   }
 

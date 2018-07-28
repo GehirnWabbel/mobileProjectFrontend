@@ -8,9 +8,7 @@
 </ion-header>
 
 
-<ion-content>
-
-  <!-- Protokoll [style.background-color]="colorDefinitions[item.color]"-->
+<ion-content padding-right>
   <h3 padding>Protokoll</h3>
   <ion-list>
     <ion-item-group>
@@ -20,7 +18,7 @@
           <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
         </ion-avatar>
         <h2>{{ item.name }}</h2>
-
+        <p><span style="display:inline-block; height: 10px;"></span></p>
         <p style="color: black">
           Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
         </p>
@@ -50,7 +48,7 @@
   <!-- Planung -->
   <h3 padding>Planung</h3>
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
-    <ion-item-sliding *ngFor="let item of allPlanningItems">
+    <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
 
         <ion-item class="ion-item" [style.background-color]="colorDefinitions[item.color]">
           <ion-avatar item-start>
@@ -58,6 +56,7 @@
           </ion-avatar>
 
           <h2>{{ item.name }}</h2>
+          <p><span style="display:inline-block; height: 10px;"></span></p>
           <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
           <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
           <p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
@@ -75,14 +74,21 @@
           </p>
         </ion-item>
 
-      <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="setStintToDone(item)">
+      <ion-item-options class="ion-item-options" side="right">
+        <button ion-button color="secondary" (click)="setStintToDone(item, slidingItem)">
           <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
           Fertig
         </button>
-        <button ion-button color="editable" (click)="editStint(item)">
+        <button ion-button color="editable" (click)="editStint(item, slidingItem)">
           <ion-icon name="md-create" id="iconEdit"></ion-icon>
           Bearbeiten
+        </button>
+      </ion-item-options>
+
+      <ion-item-options class="ion-item-options-delete" side="left">
+        <button ion-button color="red" (click)="deletePlannedStint(item, slidingItem)">
+          <ion-icon name="md-trash" id="iconDelete"></ion-icon>
+          Löschen
         </button>
       </ion-item-options>
     </ion-item-sliding>

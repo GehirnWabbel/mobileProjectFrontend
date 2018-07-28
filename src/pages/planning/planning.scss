@@ -12,11 +12,32 @@ ion-avatar img  {
 }
 
 .ion-item {
+  width: 98%;
   margin: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+}
+
+.ion-item-options {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 88%;
+  margin-top: 3%;
+  width: 44%;
+}
+
+.ion-item-options-delete {
+  margin-left: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 88%;
+  margin-top: 3%;
 }
 
 .tag {
@@ -33,5 +54,9 @@ ion-avatar img  {
 
 #iconAdd {
     font-size: 25px;
+}
+
+#iconDelete {
+  font-size: 25px;
 }
 
