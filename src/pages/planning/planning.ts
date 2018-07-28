@@ -238,20 +238,13 @@ export class PlanningPage {
   }
 
   deletePlannedStint(driver: any, slidingItem: ItemSliding) {
-    // let finishedStint = this.getStintOfDriver(driver);
-    //
-    // finishedStint.finished = true;
-    // finishedStint.driverId = driver._id;
-    // delete finishedStint.driver;
-    // let finishedStintId = finishedStint._id;
-    // delete finishedStint._id;
-    //
-    // this.apiProvider.setStintToDoneAPI(
-    //   this.teamId,
-    //   this.eventId,
-    //   finishedStint,
-    //   finishedStintId
-    // );
+    let stint = this.getStintOfDriver(driver);
+
+    this.apiProvider.removePlannedStint(
+      this.teamId,
+      this.eventId,
+      stint._id
+    );
     slidingItem.close();
     this.ionEvents.publish("stint:deleted");
     this.presentToast("Stint gelöscht");

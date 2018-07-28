@@ -313,4 +313,19 @@ export class ApiServiceProvider {
         );
     });
   }
+
+  removePlannedStint(teamId: string, eventId: string, stintId: string) {
+    return new Promise(resolve => {
+      this.http
+        .delete(this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId)
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
 }
