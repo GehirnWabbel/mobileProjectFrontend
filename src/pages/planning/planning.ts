@@ -133,7 +133,7 @@ export class PlanningPage{
   // Planning Items
   getPlanningItemsOfStint(allStints) {
     for (let i = 0; i <= allStints.length - 1; i++) {
-      // add to allDrivers if a member is a driver and Stint is NOT finished
+      // Add to allDrivers if a member is a driver and Stint is NOT finished
       // Some stints do not even have a driver subArray
 
       if (allStints[i].driver != null && allStints[i].driver != "undefined") {
@@ -143,29 +143,29 @@ export class PlanningPage{
         ) {
           let planningItem = allStints[i].driver;
 
-          // driver
+          // Driver
           planningItem.selectedDriver = allStints[i].driver.driver;
 
-          // calculate duration of stint
-          let endtimeFormatted = new Date(allStints[i].enddate);
-          let starttimeFormatted = new Date(allStints[i].startdate);
-          let duration = endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
+          // Calculate duration
+          let endtimeISO = new Date(allStints[i].enddate);
+          let starttimeISO = new Date(allStints[i].startdate);
+          let duration = endtimeISO.valueOf() - starttimeISO.valueOf();
           duration = duration / 60000;
-          planningItem.duration = parseInt(duration.toString());
+          planningItem.duration = Math.abs(parseInt(duration.toString()));
 
-          // startdate of stint
+          // Startdate of stint
           planningItem.starttime =
-            starttimeFormatted.getHours() +
+            starttimeISO.getHours() +
             ":" +
-            starttimeFormatted.getMinutes();
-          planningItem.starttimeFormatted = starttimeFormatted;
+            starttimeISO.getMinutes();
+          planningItem.starttimeISO = starttimeISO;
 
-          // endtime of stint
+          // Endtime of stint
           planningItem.endtime =
-            endtimeFormatted.getHours() +
+            endtimeISO.getHours() +
             ":" +
-            endtimeFormatted.getMinutes();
-          planningItem.endtimeFormatted = endtimeFormatted;
+            endtimeISO.getMinutes();
+          planningItem.endtimeISO = endtimeISO;
 
           // Tags
           planningItem.kartTag = allStints[i].tags[0];
@@ -182,35 +182,35 @@ export class PlanningPage{
   // Protocol Items
   getProtocolItemsOfStint(allStints) {
     for (let i = 0; i < allStints.length; i++) {
-      // add to allProtocolItems if stint is finished
+
+      // Add to allProtocolItems if stint is finished
       if (allStints[i].driver != null && allStints[i].driver != "undefined") {
         if (allStints[i].finished == true) {
           let protocolItem = allStints[i].driver;
 
-          // calculate duration of stint
-          // TODO: Formatierung der Dauer bzw. Einheit
-          let endtimeFormatted = new Date(allStints[i].enddate);
-          let starttimeFormatted = new Date(allStints[i].startdate);
+          // Calculate duration
+          let endtimeISO = new Date(allStints[i].enddate);
+          let starttimeISO = new Date(allStints[i].startdate);
           let duration =
-            endtimeFormatted.valueOf() - starttimeFormatted.valueOf();
+            endtimeISO.valueOf() - starttimeISO.valueOf();
           duration = duration / 60000;
-          protocolItem.duration = parseInt(duration.toString());
+          protocolItem.duration = Math.abs(parseInt(duration.toString()));
 
-          // starttime of stint
+          // Starttime of stint
           protocolItem.starttime =
-            this.weekdays[starttimeFormatted.getDay()] +
+            this.weekdays[starttimeISO.getDay()] +
             ", " +
-            starttimeFormatted.getHours() +
+            starttimeISO.getHours() +
             ":" +
-            starttimeFormatted.getMinutes();
+            starttimeISO.getMinutes();
 
-          // endtime of stint
+          // Endtime of stint
           protocolItem.endtime =
-            this.weekdays[endtimeFormatted.getDay()] +
+            this.weekdays[endtimeISO.getDay()] +
             ", " +
-            endtimeFormatted.getHours() +
+            endtimeISO.getHours() +
             ":" +
-            endtimeFormatted.getMinutes();
+            endtimeISO.getMinutes();
 
           // Tags
           protocolItem.kartTag = allStints[i].tags[0];
