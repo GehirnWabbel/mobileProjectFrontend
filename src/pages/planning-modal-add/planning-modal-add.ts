@@ -269,14 +269,16 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.raceday;
 
     this.existingStintUpdated.driver = this.selectedDriver._id;
-    this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
-    this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
+    this.existingStintUpdated.startdate = this.starttimeISO;
+    this.existingStintUpdated.enddate = this.endtimeISO;
     this.existingStintUpdated.finished = false;
     this.existingStintUpdated.isBreak = false;
     this.existingStintUpdated.raceDay = this.raceday;
     this.existingStintUpdated.tags[0] = this.kartTag;
     this.existingStintUpdated.tags[1] = this.weatherTag;
     this.existingStintUpdated.tags[2] = this.flagTag;
+
+    console.log(JSON.stringify(this.existingStintUpdated));
 
     /*
      *
