@@ -79,7 +79,7 @@
           <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
           Fertig
         </button>
-        <button ion-button color="editable" (click)="editStint(item, slidingItem)">
+        <button ion-button color="editable" (click)="editStintModal(item, slidingItem)">
           <ion-icon name="md-create" id="iconEdit"></ion-icon>
           Bearbeiten
         </button>
@@ -96,7 +96,7 @@
 
   <!-- FAB for adding new driver -->
   <ion-fab bottom right>
-    <button ion-fab color="primary" (click)="openAddStintModal()">
+    <button ion-fab color="primary" (click)="addStintModal()">
       <ion-icon name="add" id="iconAdd"></ion-icon>
     </button>
   </ion-fab>

@@ -151,7 +151,7 @@ export class ApiServiceProvider {
   createStint(
     teamId: string,
     eventId: string,
-    selectedDriver: any,
+    idOfSelectedDriver: string,
     startdate: string, //ISO string
     enddate: string, //ISO string
     raceday: number,
@@ -166,7 +166,7 @@ export class ApiServiceProvider {
     // newStint.finished = false;
 
     const newStint: Stint = {
-      driverId: selectedDriver._id,
+      driverId: idOfSelectedDriver,
       startdate: startdate,
       enddate: enddate,
       raceday: raceday,

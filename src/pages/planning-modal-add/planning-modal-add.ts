@@ -2,18 +2,18 @@ import { Component } from "@angular/core";
 import {
   ViewController,
   NavParams,
-  NavController,
   ToastController,
   Events
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
-import { PlanningPage } from "../planning/planning";
 
 @Component({
   selector: "page-planning-modal-add",
   templateUrl: "planning-modal-add.html"
 })
 export class PlanningModalAddPage {
+
+  // General class attributes
   eventId: string;
   teamId: string;
   allStints: Array<any>;
@@ -23,40 +23,47 @@ export class PlanningModalAddPage {
   // stint attributes
   raceday: number;
   selectedDriver: any;
-  starttime: string = new Date().toISOString();
-  endtime: string = new Date().toISOString();
+  starttime: string;
+  endtime: string;
   duration: string;
-  tagsArray = [];
+  tagsArray: Array<string>;
   kartTag: string;
   weatherTag: string;
   flagTag: string;
   existingStint: any;
   existingStintUpdated: any;
-
-  private starttimeISO = new Date();
-  private durationISO = new Date();
-  private endtimeISO = new Date();
+  starttimeISO: Date;
+  durationISO: Date;
+  endtimeISO: Date;
 
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
-    public navCtrl: NavController,
     public navParams: NavParams,
     public ionEvents: Events,
     private toastCtrl: ToastController
   ) {
+    // Inilialize with data from planning page
     this.allStints = navParams.get("allStints");
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
     this.eventId = navParams.get("eventId");
 
-    // get existing stint data
+    // Get existing stint data
     this.existingStint = this.navParams.get("existingStint");
     let existingStintDuration = this.navParams.get("duration");
 
+    // Inizialize
+    this.starttimeISO = new Date();
+    this.durationISO = new Date();
+    this.endtimeISO = new Date();
+    this.starttime = new Date().toISOString();
+    this.endtime = new Date().toISOString();
 
+    // Check if this modal is for editing or adding a stint and set attributes accordingly
     if (this.existingStint != undefined) {
-      console.log("Existing stint received: " + this.existingStint);
+
+      console.log("Existing stint data received");
       // if we received an existing stint fill UI inputs with existing stint values
       this.starttime = this.existingStint.startdate;
       this.endtime = this.existingStint.enddate;
@@ -73,16 +80,18 @@ export class PlanningModalAddPage {
       this.tagsArray = [];
     }
 
-    // get current event
+    // Get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
       this.currentEvent = data as Array<any>;
     });
   }
 
+  // Invoked when closing the modal
   closeAddModal() {
     this.view.dismiss();
   }
 
+  // Present toast messages
   presentToast(toastMessage: string) {
     let toast = this.toastCtrl.create({
       message: toastMessage,
@@ -91,13 +100,12 @@ export class PlanningModalAddPage {
     });
 
     toast.onDidDismiss(() => {
-      console.log("Dismissed toast");
-    });
+      });
 
     toast.present();
   }
 
-  // calculate the difference between two dates
+  // Calculate the difference between two dates
   calcDate(date1,date2) {
     var diff = Math.floor(date1.getTime() - date2.getTime());
     var day = 1000 * 60 * 60 * 24;
@@ -115,7 +123,7 @@ export class PlanningModalAddPage {
     return days;
   }
 
-  // Split e.g. "12:30" in 12 Hours and 30 minutes and define date object
+  // Split time, e.g. "12:30" in 12 Hours and 30 minutes and define date object
   setDateTime(date, time) {
     let index = time.indexOf(":");
     let hours = time.substring(0, index);
@@ -128,17 +136,21 @@ export class PlanningModalAddPage {
     return date;
   }
 
+  // Routine for adding a new stint
   newStint() {
+
+    // Check if this modal is for editing or adding a stint
     if (this.existingStint != undefined) {
-      // start editing routine
+      // Start editing routine
       this.editStintInModal();
+
     } else {
+      // Start adding routine
 
-
-      // starttime
+      // Starttime
       this.setDateTime(this.starttimeISO, this.starttime);
 
-      // format duration from minutes to hour and minutes in ISO format
+      // Format duration from minutes to hour and minutes in ISO format
       let durationNumber = parseInt(this.duration);
       if (durationNumber >= 60) {
         this.durationISO.setHours(1);
@@ -148,7 +160,7 @@ export class PlanningModalAddPage {
         this.durationISO.setMinutes(durationNumber);
       }
 
-      // set endtimeISO
+      // Set endtimeISO
       this.endtimeISO.setHours(
         this.starttimeISO.getHours() + this.durationISO.getHours()
       );
@@ -156,51 +168,49 @@ export class PlanningModalAddPage {
         this.starttimeISO.getMinutes() + this.durationISO.getMinutes()
       );
 
-      // calculate raceday of new stint
+      // Calculate raceday of new stint
       let eventStartdate = new Date(this.currentEvent.startdate);
-      // let testDate  = new Date("2018-07-30T01:26:54.686Z");
-
       this.raceday = this.calcDate(this.starttimeISO, eventStartdate);
 
-
-      // tags
+      // Tags
       this.tagsArray[0] = this.kartTag;
       this.tagsArray[1] = this.weatherTag;
       this.tagsArray[2] = this.flagTag;
 
       // Outputs
       console.log("#################### NEW STINT DATA ########################");
-      // console.log("Startzeit: " + this.starttime);
+      console.log("Startzeit: " + this.starttime);
       console.log("Geplante Startzeit: " + this.starttime);
-      // console.log("Dauer: " + this.duration);
+      console.log("Dauer: " + this.duration);
       console.log("Geplante Fahrzeit in Stunden: " + this.durationISO.getHours());
       console.log("Geplante Fahrzeit in  Minuten: " + this.durationISO.getMinutes());
-      // console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
+      console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
       console.log("Geplante Endzeit: " + this.endtime);
       console.log("Geplanter Fahrer: " + this.selectedDriver.name);
-      // console.log("RaceDays of Event: " + this.currentEvent.noRaceDays);
+      console.log("Geplanter Fahrer ID: " + this.selectedDriver._id);
+      console.log("Number of RaceDays of Event: " + this.currentEvent.noRaceDays);
       console.log("Renntag des Stints: " + this.raceday);
-      console.log("Karttag: " + this.kartTag);
-      console.log("Wetter: " + this.weatherTag);
-      console.log("Flaggen: " + this.flagTag);
       console.log("Tags als array: " + this.tagsArray);
 
-
+      // Call API Method
       this.apiProvider.createStint(
         this.teamId,
         this.eventId,
-        this.selectedDriver,
+        this.selectedDriver._id,
         this.starttime,
         this.endtime,
         this.raceday,
         this.tagsArray
       );
+
+      // Publish event for auto-reload of PlanningPage, close Modal and present toast
       this.ionEvents.publish("stint:created");
-      this.navCtrl.setRoot(PlanningPage);
+      this.closeAddModal();
       this.presentToast("Stint angelegt");
-    } // if edit or new
+    }
   }
 
+  // Routine for editing an existing stint
   editStintInModal() {
 
     // get changes and edit existingSting to existingStintUpdated which will be putted to backend
@@ -212,7 +222,6 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.endtime;
     delete this.existingStintUpdated.raceday;
 
-
     this.existingStintUpdated.driver = this.selectedDriver._id;
     this.existingStintUpdated.startdate = this.starttime;
     this.existingStintUpdated.enddate = this.endtime;
@@ -223,14 +232,16 @@ export class PlanningModalAddPage {
     this.existingStintUpdated.tags[1] = this.weatherTag;
     this.existingStintUpdated.tags[2] = this.flagTag;
 
+    // PUT to Backend
     this.apiProvider.updateStintData(
       this.teamId,
       this.eventId,
       this.existingStint._id,
       this.existingStintUpdated
     );
+
     this.ionEvents.publish("stint:edited");
-    this.navCtrl.setRoot(PlanningPage);
+    this.closeAddModal();
     this.presentToast("Stint geändert");
   }
 }

@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 import {
   IonicPage,
-  NavController,
-  NavParams,
   ModalController,
   ViewController,
   ToastController,
-  Events, ItemSliding
+  Events,
+  ItemSliding
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
@@ -18,12 +17,22 @@ import { colorDefinitions } from "../../app/colordefinitions";
   selector: "page-planning",
   templateUrl: "planning.html"
 })
-export class PlanningPage {
-  allStints = []; // complete Stints
-  allDrivers = []; // drivers for modal
-  allProtocolItems = []; // Protocol Items = Stints with attribute 'finished' true
-  allPlanningItems = []; // Planning Items = Stints with attribute 'finished' false
+export class PlanningPage{
 
+  // Class attributes
+  teamId: string;
+  eventId: string;
+  kartTag: string;
+  weatherTag: string;
+  flagTag: string;
+  colorDefinitions;
+
+  allStints: Array<any>; // All Stints
+  allDrivers: Array<any>; // Drivers for modal
+  allProtocolItems: Array<any>; // Subset of allStints
+  allPlanningItems: Array<any>; // Subset of allStints
+
+  // Weekdays array for date translations
   weekdays: Array<string> = [
     "Montag",
     "Dienstag",
@@ -34,68 +43,74 @@ export class PlanningPage {
     "Sonntag"
   ];
 
-  teamId: string;
-  eventId: string;
-  kartTag: string;
-  weatherTag: string;
-  flagTag: string;
-
-  colorDefinitions;
-
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
     private modal: ModalController,
     private viewCtrl: ViewController,
     private storage: Storage,
-    public ionEvents: Events,
+    private ionEvents: Events,
     private toastCtrl: ToastController
   ) {
-    this.refreshPlanningPage();
+
+    // Initialize color definitions
+    this.colorDefinitions = colorDefinitions;
+
+    // Initialize arrays
+    this.allPlanningItems = [];
+    this.allProtocolItems = [];
+    this.allStints = [];
+    this.allDrivers = [];
+
+    // Get teamId out of local storage
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+    });
+
+    // Get eventId out of local storage
+    this.storage.get("eventId").then(val => {
+      this.eventId = val;
+
+      // Get all stints from backend
+      this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
+        this.formatStints(backendData);
+        this.getDriversFromAPI();
+      });
+    });
+  }
+
+  // Invoked before this page is entered/set to active
+  ionViewWillEnter() {
+
+    // Disable back button
+    this.viewCtrl.showBackButton(false);
+
+    // Subscribe to ionic events: stint modifications
     this.ionEvents.subscribe('stint:edited', eventData => {
+      console.log("EVENT RECEIVED: edited");
       this.refreshPlanningPage();
     });
     this.ionEvents.subscribe('stint:created', eventData => {
+      console.log("EVENT RECEIVED: created");
       this.refreshPlanningPage();
     });
     this.ionEvents.subscribe('stint:setToDone', eventData => {
+      console.log("EVENT RECEIVED: finished");
       this.refreshPlanningPage();
     });
     this.ionEvents.subscribe('stint:deleted', eventData => {
+      console.log("EVENT RECEIVED: deleted");
       this.refreshPlanningPage();
     });
-    this.colorDefinitions = colorDefinitions;
   }
 
-
-  // initial data loading, which will be called if different ionEvents are published
+  // Data/page refresh, which will be invoked if different ionEvents are published
   refreshPlanningPage() {
+    // works but dirty
+    // window.location.reload();
 
-      // clear old data
-      this.allPlanningItems = [];
-      this.allProtocolItems = [];
-      this.allStints = [];
-      this.allDrivers = [];
-
-      // load new data
-      this.storage.get("teamId").then(val => {
-        this.teamId = val;
-      });
-
-      this.storage.get("eventId").then(val => {
-        this.eventId = val;
-        this.apiProvider.getStints(this.teamId, this.eventId).then(data => {
-          this.formatStints(data);
-          this.getDriversFromAPI();
-        });
-      });
   }
 
-  ionViewWillEnter() {
-    this.viewCtrl.showBackButton(false);
-  }
-
+  // Present invokes toast messages
   presentToast(toastMessage: string) {
     let toast = this.toastCtrl.create({
       message: toastMessage,
@@ -103,22 +118,21 @@ export class PlanningPage {
       position: "top"
     });
     toast.onDidDismiss(() => {
-      // console.log("Dismissed toast");
-
-    });
+      });
     toast.present();
   }
 
-  formatStints(data: any) {
-    this.allStints = data as Array<any>;
+  // Formatting raw data from backend
+  formatStints(backendData: any) {
+    this.allStints = backendData as Array<any>;
     console.log("All stints of event (protocol and planned): ", this.allStints);
     let arrayWithStints = this.allStints;
-    this.getDriversOfStint(arrayWithStints);
+    this.getPlanningItemsOfStint(arrayWithStints);
     this.getProtocolItemsOfStint(arrayWithStints);
   }
 
   // Planning Items
-  getDriversOfStint(allStints) {
+  getPlanningItemsOfStint(allStints) {
     for (let i = 0; i <= allStints.length - 1; i++) {
       // add to allDrivers if a member is a driver and Stint is NOT finished
       // Some stints do not even have a driver subArray
@@ -166,12 +180,7 @@ export class PlanningPage {
     // console.log(this.allPlanningItems);
   }
 
-  getDriversFromAPI() {
-    this.apiProvider.getDrivers(this.teamId).then(data => {
-      this.allDrivers = data as Array<any>;
-    });
-  }
-
+  // Protocol Items
   getProtocolItemsOfStint(allStints) {
     for (let i = 0; i < allStints.length; i++) {
       // add to allProtocolItems if stint is finished
@@ -217,11 +226,61 @@ export class PlanningPage {
     // console.log(this.allProtocolItems);
   }
 
-  setStintToDone(driver: any, slidingItem: ItemSliding) {
-    let finishedStint = this.getStintOfDriver(driver);
+  // Driver objects
+  getDriversFromAPI() {
+    this.apiProvider.getDrivers(this.teamId).then(data => {
+      this.allDrivers = data as Array<any>;
+    });
+  }
+
+  // Get stint by driver and (indirect) current event
+  getStintByDriver(driver: any) {
+      for (let i = 0; i < this.allStints.length; i++) {
+        if (this.allStints[i].driver._id == driver._id) {
+          let stint = this.allStints[i];
+          return stint;
+        }
+      }
+  }
+
+  // Open Modal for adding a new stint
+  addStintModal() {
+    const addModal = this.modal.create(PlanningModalAddPage, {
+      allStints: this.allStints,
+      allDrivers: this.allDrivers,
+      teamId: this.teamId,
+      eventId: this.eventId
+    });
+    addModal.present();
+  }
+
+  // Open Modal for editing an existing sting
+  editStintModal(planningItem: any, slidingItem: ItemSliding) {
+    console.log("STINT TO BE EDITED: " + planningItem);
+
+    let existingStint = this.getStintByDriver(planningItem);
+    const addModal = this.modal.create(PlanningModalAddPage, {
+
+      allStints: this.allStints,
+      allDrivers: this.allDrivers,
+      teamId: this.teamId,
+      eventId: this.eventId,
+      existingStint: existingStint,
+      duration: planningItem.duration
+
+    });
+    slidingItem.close();
+    addModal.present();
+  }
+
+  // Update 'finished' attribute of an existing stint --> new protocol item
+  setStintToDone(planningItem: any, slidingItem: ItemSliding) {
+    let finishedStint = this.getStintByDriver(planningItem);
+
+    console.log("STINT TO BE EDITED: " + finishedStint);
 
     finishedStint.finished = true;
-    finishedStint.driverId = driver._id;
+    finishedStint.driverId = planningItem._id;
     delete finishedStint.driver;
     let finishedStintId = finishedStint._id;
     delete finishedStint._id;
@@ -237,9 +296,11 @@ export class PlanningPage {
     this.presentToast("Stint abgeschlossen");
   }
 
-  deletePlannedStint(driver: any, slidingItem: ItemSliding) {
-    let stint = this.getStintOfDriver(driver);
+  // Delete a planned stint
+  deletePlannedStint(planningItem: any, slidingItem: ItemSliding) {
+    let stint = this.getStintByDriver(planningItem);
 
+    console.log("TO BE DELETED SINT: " + stint);
     this.apiProvider.removePlannedStint(
       this.teamId,
       this.eventId,
@@ -250,59 +311,17 @@ export class PlanningPage {
     this.presentToast("Stint gelöscht");
   }
 
-  getStintOfDriver(driver: any) {
-    for (let i = 0; i < this.allStints.length; i++) {
-      // search stint of driver
-      if (this.allStints[i].driver._id == driver._id) {
-        let stint = this.allStints[i];
-        return stint;
-      }
-    }
-  }
-
-  openAddStintModal() {
-    const addModal = this.modal.create(PlanningModalAddPage, {
-      allStints: this.allStints,
-      allDrivers: this.allDrivers,
-      teamId: this.teamId,
-      eventId: this.eventId
-    });
-    addModal.present();
-  }
-
-  editStint(stintItem: any, slidingItem: ItemSliding) {
-    console.log(stintItem);
-
-    let existingStint = this.getStintOfDriver(stintItem);
-    const addModal = this.modal.create(PlanningModalAddPage, {
-
-      allStints: this.allStints,
-      allDrivers: this.allDrivers,
-      teamId: this.teamId,
-      eventId: this.eventId,
-      existingStint: existingStint,
-      duration: stintItem.duration
-
-    //   starttime: stintItem.starttimeFormatted,
-    //   endtime: stintItem.endtimeFormatted,
-    //
-    //   selectedDriver: stintItem.selectedDriver,
-    //   kartTag: stintItem.kartTag,
-    //   weatherTag: stintItem.weatherTag,
-    //   flagTag: stintItem.flagTag
-    });
-    slidingItem.close();
-    addModal.present();
-  }
-
+  // Invoked when clicking the kart tag
   openKartTag(item: any) {
     this.presentToast("Kart: " + item.kartTag);
   }
 
+  // Invoked when clicking the weather tag
   openWeatherTag(item: any) {
     this.presentToast("Wetter: " + item.weatherTag);
   }
 
+  // Invoked when clicking the flag tag
   openFlagTag(item: any) {
     this.presentToast("Flaggen: " + item.flagTag);
   }
