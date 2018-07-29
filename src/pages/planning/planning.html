@@ -10,9 +10,17 @@
 
 <ion-content padding-right>
   <h3 padding>Protokoll</h3>
+
+  <div *ngIf="allProtocolItems.length < 1" text-center>
+    <p>
+      Noch kein Protokoll vorhanden
+    </p>
+  </div>
+
   <ion-list>
     <ion-item-group>
       <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.border-color]="colorDefinitions[item.color]">
+
 
 
         <ion-thumbnail item-start>
@@ -50,6 +58,13 @@
 
   <!-- Planung -->
   <h3 padding>Planung</h3>
+
+  <div *ngIf="allPlanningItems.length < 1" text-center>
+    <p>
+      Noch keine Planung erstellt
+    </p>
+  </div>
+
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
     <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
 
@@ -106,6 +121,9 @@
   </ion-fab>
 
   <!-- Footer message -->
-  <div text-center> Keine weiteren Stints geplant</div>
-  <div>&#160;</div>
+  <div *ngIf="allProtocolItems.length > 0" text-center>
+    <p>
+      Keine weiteren Stints geplant
+    </p>
+  </div>
 </ion-content>

@@ -106,7 +106,7 @@ export class PlanningPage{
   // Data/page refresh, which will be invoked if different ionEvents are published
   refreshPlanningPage() {
     // works but dirty
-    window.location.reload();
+    // window.location.reload();
   }
 
   // Present invokes toast messages
