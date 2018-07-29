@@ -55,27 +55,8 @@ export class PlanningPage{
     // Initialize color definitions
     this.colorDefinitions = colorDefinitions;
 
-    // Initialize arrays
-    this.allPlanningItems = [];
-    this.allProtocolItems = [];
-    this.allStints = [];
-    this.allDrivers = [];
-
-    // Get teamId out of local storage
-    this.storage.get("teamId").then(val => {
-      this.teamId = val;
-    });
-
-    // Get eventId out of local storage
-    this.storage.get("eventId").then(val => {
-      this.eventId = val;
-
-      // Get all stints from backend
-      this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
-        this.formatStints(backendData);
-        this.getDriversFromAPI();
-      });
-    });
+    // Load data
+    this.refreshPlanningPage();
   }
 
   // Invoked before this page is entered/set to active
@@ -105,8 +86,30 @@ export class PlanningPage{
 
   // Data/page refresh, which will be invoked if different ionEvents are published
   refreshPlanningPage() {
-    // works but dirty
+    // works but is totally dirty
     // window.location.reload();
+
+    // Initialize arrays
+    this.allPlanningItems = [];
+    this.allProtocolItems = [];
+    this.allStints = [];
+    this.allDrivers = [];
+
+    // Get teamId out of local storage
+    this.storage.get("teamId").then(val => {
+      this.teamId = val;
+    });
+
+    // Get eventId out of local storage
+    this.storage.get("eventId").then(val => {
+      this.eventId = val;
+
+      // Get all stints from backend
+      this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
+        this.formatStints(backendData);
+        this.getDriversFromAPI();
+      });
+    });
   }
 
   // Present invokes toast messages
@@ -225,7 +228,7 @@ export class PlanningPage{
     // console.log(this.allProtocolItems);
   }
 
-  // Driver objects
+  // Driver objects from API
   getDriversFromAPI() {
     this.apiProvider.getDrivers(this.teamId).then(data => {
       this.allDrivers = data as Array<any>;

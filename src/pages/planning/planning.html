@@ -21,8 +21,6 @@
     <ion-item-group>
       <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.border-color]="colorDefinitions[item.color]">
 
-
-
         <ion-thumbnail item-start>
           <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png" >
         </ion-thumbnail>
@@ -61,7 +59,7 @@
 
   <div *ngIf="allPlanningItems.length < 1" text-center>
     <p>
-      Noch keine Planung erstellt
+      Noch keine Planung vorhanden
     </p>
   </div>
 
@@ -121,7 +119,7 @@
   </ion-fab>
 
   <!-- Footer message -->
-  <div *ngIf="allProtocolItems.length > 0" text-center>
+  <div *ngIf="allProtocolItems.length > 1" text-center>
     <p>
       Keine weiteren Stints geplant
     </p>

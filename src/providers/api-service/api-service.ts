@@ -83,7 +83,6 @@ export class ApiServiceProvider {
   // get drivers from API
   getDrivers(teamId: string) {
     return new Promise(resolve => {
-      this.presentLoading();
       this.http.get(this.apiUrl + teamId + "/person?driver=true").subscribe(
         data => {
           resolve(data);
@@ -92,7 +91,6 @@ export class ApiServiceProvider {
           console.log(err);
         },
         () => {
-          this.loading.dismiss();
         }
       );
     });
