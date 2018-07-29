@@ -268,7 +268,7 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.endtimeISO;
     delete this.existingStintUpdated.raceday;
 
-    this.existingStintUpdated.driver = this.selectedDriver._id;
+    this.existingStintUpdated.driver = this.selectedDriver;
     this.existingStintUpdated.startdate = this.starttimeISO;
     this.existingStintUpdated.enddate = this.endtimeISO;
     this.existingStintUpdated.finished = false;

@@ -12,6 +12,9 @@ ion-avatar img  {
   border-bottom-right-radius: 5px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  background-color: #eaeaea;
+  border-left: 8px solid;
+;
 }
 
 .ion-item-options {
@@ -32,6 +35,14 @@ ion-avatar img  {
   border-top-right-radius: 5px;
   max-height: 88%;
   margin-top: 3%;
+}
+
+.driverColor {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 2px;
 }
 
 .tag {

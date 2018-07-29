@@ -12,12 +12,14 @@
   <h3 padding>Protokoll</h3>
   <ion-list>
     <ion-item-group>
-      <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.background-color]="colorDefinitions[item.color]">
+      <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.border-color]="colorDefinitions[item.color]">
+
 
         <ion-avatar item-start>
-          <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
+          <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png" >
         </ion-avatar>
-        <h2>{{ item.name }}</h2>
+        <h2 >{{ item.name }}</h2>
+        <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
         <p><span style="display:inline-block; height: 10px;"></span></p>
         <p style="color: black">
           Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
@@ -28,6 +30,7 @@
         <p style="color: black">
           Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min
         </p>
+
 
         <p>
           <ion-badge color="dark-grey" item-end (click)="openKartTag(item)">
@@ -50,12 +53,13 @@
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
     <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
 
-        <ion-item class="ion-item" [style.background-color]="colorDefinitions[item.color]">
+        <ion-item class="ion-item">
           <ion-avatar item-start>
             <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
           </ion-avatar>
 
           <h2>{{ item.name }}</h2>
+          <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
           <p><span style="display:inline-block; height: 10px;"></span></p>
           <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
           <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
