@@ -13,44 +13,34 @@ import { ApiServiceProvider } from "../../providers/api-service/api-service";
 })
 export class PlanningModalAddPage {
 
-  /*
-   *
-   * DISCLAIMER
-   *
-   * THE DIFFERENCE HERE IS THAT WE HAVE ATTRIBUTES WHICH REPRESENT THE UI-VALUES
-   * AND WE HAVE ATTRIBUTES WHICH WILL BE PASSED TO THE API PROVIDER METHODS.
-   * ESPECIALLY THE DATETIME OBJECTS, LIKE DURATION ARE DIFFICULT TO HANDLE.
-   *
-   */
-
   // Numbers
-  raceday: number;
+  private raceday: number;
 
   // Objects
-  selectedDriver: any;
-  currentEvent: any;
-  existingStint: any;
-  existingStintUpdated: any;
+  private selectedDriver: any;
+  private currentEvent: any;
+  private existingStint: any;
+  private existingStintUpdated: any;
 
   // Strings
-  eventId: string;
-  teamId: string;
-  starttime: string;
-  endtime: string;
-  duration: string;
-  kartTag: string;
-  weatherTag: string;
-  flagTag: string;
+  private eventId: string;
+  private teamId: string;
+  public starttime: string;
+  public endtime: string;
+  public duration: string;
+  private kartTag: string;
+  private weatherTag: string;
+  private flagTag: string;
 
   // Arrays
-  allStints: Array<any>;
-  allDrivers: Array<any>;
-  tagsArray: Array<string>;
+  public allStints: Array<any>;
+  public allDrivers: Array<any>;
+  private tagsArray: Array<string>;
 
   // Date objects
-  starttimeISO: Date;
-  durationISO: Date;
-  endtimeISO: Date;
+  private starttimeISO: Date;
+  private durationISO: Date;
+  private endtimeISO: Date;
 
   constructor(
     private view: ViewController,
@@ -83,9 +73,7 @@ export class PlanningModalAddPage {
       // If we received an existing stint fill UI inputs with existing stint values
       this.starttime = this.existingStint.startdate;
       this.endtime = this.existingStint.enddate;
-      let durationFloat = existingStintDuration;
-      this.duration = Math.abs(parseInt(durationFloat)).toString();
-
+      this.duration = Math.abs(parseInt(existingStintDuration)).toString();
       this.selectedDriver = this.existingStint.driver;
       this.kartTag = this.existingStint.tags[0];
       this.weatherTag = this.existingStint.tags[1];
@@ -263,14 +251,49 @@ export class PlanningModalAddPage {
     // Stint ID remains the same
     this.existingStintUpdated = this.existingStint;
 
+    // Starttime
+    this.starttimeISO = new Date(this.starttime);
+
+    // Format duration from minutes to hour and minutes in ISO format
+    let durationNumber = parseInt(this.duration);
+    if (durationNumber >= 60) {
+      this.durationISO.setHours(1);
+      this.durationISO.setMinutes(durationNumber - 60);
+    } else {
+      this.durationISO.setHours(0);
+      this.durationISO.setMinutes(durationNumber);
+    }
+
+    // Set endtimeISO
+    this.endtimeISO = new Date(this.starttime);
+    this.endtimeISO.setHours(
+      this.starttimeISO.getHours() + this.durationISO.getHours()
+    );
+    this.endtimeISO.setMinutes(
+      this.starttimeISO.getMinutes() + this.durationISO.getMinutes()
+    );
+
+    // Calculate raceday of new stint
+    let eventStartdate = new Date(this.currentEvent.startdate);
+    this.raceday = this.calcTimeBetween2Dates(this.starttimeISO, eventStartdate);
+
+    // Delete unneccessary attributes
     delete this.existingStintUpdated.selectedDriver;
     delete this.existingStintUpdated.starttimeISO;
     delete this.existingStintUpdated.endtimeISO;
     delete this.existingStintUpdated.raceday;
+    delete this.existingStintUpdated.driver.starttimeISO;
+    delete this.existingStintUpdated.driver.endtimeISO;
+    delete this.existingStintUpdated.driver.kartTag;
+    delete this.existingStintUpdated.driver.weatherTag;
+    delete this.existingStintUpdated.driver.flagTag
+    delete this.existingStintUpdated.driver.duration;
 
+    // Add new data to existing stint
     this.existingStintUpdated.driver = this.selectedDriver;
-    this.existingStintUpdated.startdate = this.starttimeISO;
-    this.existingStintUpdated.enddate = this.endtimeISO;
+    this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
+    this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
+    this.existingStintUpdated.duration = this.duration;
     this.existingStintUpdated.finished = false;
     this.existingStintUpdated.isBreak = false;
     this.existingStintUpdated.raceDay = this.raceday;
