@@ -72,8 +72,12 @@ export class EventsPage {
   }
 
   openAddEventModal(){
-    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId
-    });
+    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId});
+    // addModal.onDidDismiss(() => {
+    //   this.apiProvider.getEvents(this.teamId).then( data => {
+    //     this.allEvents = this.convertData(data)
+    //   });
+    // });
     addModal.present();
   }
 
@@ -101,6 +105,8 @@ export class EventsPage {
           handler: () => {
             console.log('Delete Event: ' + event._id);
             this.apiProvider.deleteEvent(event._id, this.teamId);
+            this.allEvents = this.allEvents.filter( el => el._id !== event._id );
+
           }
         }
       ]
