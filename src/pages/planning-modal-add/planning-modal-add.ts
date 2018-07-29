@@ -13,25 +13,41 @@ import { ApiServiceProvider } from "../../providers/api-service/api-service";
 })
 export class PlanningModalAddPage {
 
-  // General class attributes
+  /*
+   *
+   * DISCLAIMER
+   *
+   * THE DIFFERENCE HERE IS THAT WE HAVE ATTRIBUTES WHICH REPRESENT THE UI-VALUES
+   * AND WE HAVE ATTRIBUTES WHICH WILL BE PASSED TO THE API PROVIDER METHODS.
+   * ESPECIALLY THE DATETIME OBJECTS, LIKE DURATION ARE DIFFICULT TO HANDLE.
+   *
+   */
+
+  // Numbers
+  raceday: number;
+
+  // Objects
+  selectedDriver: any;
+  currentEvent: any;
+  existingStint: any;
+  existingStintUpdated: any;
+
+  // Strings
   eventId: string;
   teamId: string;
-  allStints: Array<any>;
-  allDrivers: Array<any>;
-  currentEvent: any;
-
-  // stint attributes
-  raceday: number;
-  selectedDriver: any;
   starttime: string;
   endtime: string;
   duration: string;
-  tagsArray: Array<string>;
   kartTag: string;
   weatherTag: string;
   flagTag: string;
-  existingStint: any;
-  existingStintUpdated: any;
+
+  // Arrays
+  allStints: Array<any>;
+  allDrivers: Array<any>;
+  tagsArray: Array<string>;
+
+  // Date objects
   starttimeISO: Date;
   durationISO: Date;
   endtimeISO: Date;
@@ -43,7 +59,8 @@ export class PlanningModalAddPage {
     public ionEvents: Events,
     private toastCtrl: ToastController
   ) {
-    // Inilialize with data from planning page
+
+    // Initialize with existing data from planning page
     this.allStints = navParams.get("allStints");
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
@@ -147,6 +164,12 @@ export class PlanningModalAddPage {
     } else {
       // Start adding routine
 
+      /*
+       *
+       * Calculation and data preparation
+       *
+       */
+
       // Starttime
       this.setDateTime(this.starttimeISO, this.starttime);
 
@@ -177,22 +200,47 @@ export class PlanningModalAddPage {
       this.tagsArray[1] = this.weatherTag;
       this.tagsArray[2] = this.flagTag;
 
+
+      /*
+       *
+       * OUTPUTS
+       *
+       */
+
       // Outputs
       console.log("#################### NEW STINT DATA ########################");
+
+      // Starttime
       console.log("Startzeit: " + this.starttime);
       console.log("Geplante Startzeit: " + this.starttime);
+
+      // Duration
       console.log("Dauer: " + this.duration);
       console.log("Geplante Fahrzeit in Stunden: " + this.durationISO.getHours());
       console.log("Geplante Fahrzeit in  Minuten: " + this.durationISO.getMinutes());
       console.log("DauerISO Gesamt: " + this.durationISO.toISOString());
+
+      // Endtime
       console.log("Geplante Endzeit: " + this.endtime);
+
+      // Driver
       console.log("Geplanter Fahrer: " + this.selectedDriver.name);
       console.log("Geplanter Fahrer ID: " + this.selectedDriver._id);
+
+      // Racedays
       console.log("Number of RaceDays of Event: " + this.currentEvent.noRaceDays);
       console.log("Renntag des Stints: " + this.raceday);
+
+      // Tags
       console.log("Tags als array: " + this.tagsArray);
 
-      // Call API Method
+      /*
+       *
+       * VALUE PASSING TO API
+       *
+       */
+
+      // Call API method
       this.apiProvider.createStint(
         this.teamId,
         this.eventId,
@@ -213,8 +261,14 @@ export class PlanningModalAddPage {
   // Routine for editing an existing stint
   editStintInModal() {
 
-    // get changes and edit existingSting to existingStintUpdated which will be putted to backend
-    // stint ID remains the same
+    /*
+     *
+     * Calculation and data preparation
+     *
+     */
+
+    // Get changes and edit existingSting to existingStintUpdated which will be putted to backend
+    // Stint ID remains the same
     this.existingStintUpdated = this.existingStint;
 
     delete this.existingStintUpdated.selectedDriver;
@@ -232,7 +286,14 @@ export class PlanningModalAddPage {
     this.existingStintUpdated.tags[1] = this.weatherTag;
     this.existingStintUpdated.tags[2] = this.flagTag;
 
-    // PUT to Backend
+
+    /*
+     *
+     * VALUE PASSING TO API
+     *
+     */
+
+    // Call API method
     this.apiProvider.updateStintData(
       this.teamId,
       this.eventId,

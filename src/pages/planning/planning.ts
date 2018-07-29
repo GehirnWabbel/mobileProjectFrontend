@@ -107,7 +107,6 @@ export class PlanningPage{
   refreshPlanningPage() {
     // works but dirty
     // window.location.reload();
-
   }
 
   // Present invokes toast messages

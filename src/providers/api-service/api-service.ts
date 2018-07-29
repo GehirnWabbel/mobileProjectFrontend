@@ -98,39 +98,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // update Stint to API -> stint will be finished -> protocol item
-  setStintToDoneAPI(
-    teamId: any,
-    eventId: any,
-    finishedStint: any,
-    finishedStintId: any
-  ) {
-    let toBePuttedStint = JSON.stringify(finishedStint);
-
-    console.log("FINISHED STINT READY TO PUT: " + toBePuttedStint);
-    return new Promise(resolve => {
-      this.http
-        .put(
-          this.apiUrl +
-            teamId +
-            "/event/" +
-            eventId +
-            "/stint/" +
-            finishedStintId,
-          toBePuttedStint,
-          { headers: { "Content-Type": "application/json" } }
-        )
-        .subscribe(
-          data => {
-            resolve(data);
-          },
-          err => {
-            console.log(err);
-          }
-        );
-    });
-  }
-
   registerNewDriver(teamId: string, newDriver: any) {
     return new Promise(resolve => {
       this.http
@@ -157,14 +124,6 @@ export class ApiServiceProvider {
     raceday: number,
     tagsArray: Array<string>
   ) {
-    // Clone old stint and create new one in correct Stint format
-    // only driver reference instead of complete driver object
-    // const newStint = JSON.parse(JSON.stringify(stintOfDriver));
-    // delete newStint.driver;
-    // delete newStint.orderNo;
-    // newStint.driverId = stintOfDriver.driver._id;
-    // newStint.finished = false;
-
     const newStint: Stint = {
       driverId: idOfSelectedDriver,
       startdate: startdate,
@@ -193,16 +152,15 @@ export class ApiServiceProvider {
     });
   }
 
-  // update Stint data, e.g. change driver of existing planned stint
-  updateStintData(
-    teamId: string,
-    eventId: string,
-    existingStintId: string,
-    existingStint: any
+  // update Stint to API -> stint will be finished -> protocol item
+  setStintToDoneAPI(
+    teamId: any,
+    eventId: any,
+    finishedStint: any,
+    finishedStintId: any
   ) {
-    let toBePuttedStint = JSON.stringify(existingStint);
+    let toBePuttedStint = JSON.stringify(finishedStint);
 
-    console.log("EXISTING STINT READY TO PUT: " + toBePuttedStint);
     return new Promise(resolve => {
       this.http
         .put(
@@ -211,7 +169,37 @@ export class ApiServiceProvider {
           "/event/" +
           eventId +
           "/stint/" +
-          existingStintId,
+          finishedStintId,
+          toBePuttedStint,
+          { headers: { "Content-Type": "application/json" } }
+        )
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
+
+  updateStintData(
+    teamId: string,
+    eventId: string,
+    existingStintId: string,
+    existingStint: any
+  ) {
+    let toBePuttedStint = JSON.stringify(existingStint);
+    return new Promise(resolve => {
+      this.http
+        .put(
+          this.apiUrl +
+            teamId +
+            "/event/" +
+            eventId +
+            "/stint/" +
+            existingStintId,
           toBePuttedStint,
           { headers: { "Content-Type": "application/json" } }
         )
@@ -317,7 +305,9 @@ export class ApiServiceProvider {
   removePlannedStint(teamId: string, eventId: string, stintId: string) {
     return new Promise(resolve => {
       this.http
-        .delete(this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId)
+        .delete(
+          this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId
+        )
         .subscribe(
           data => {
             resolve(data);
