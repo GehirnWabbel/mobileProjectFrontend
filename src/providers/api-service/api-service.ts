@@ -28,7 +28,6 @@ export class ApiServiceProvider {
     this.loading.present();
   }
 
-  // get events from API
   getEvents(teamId: string) {
     return new Promise(resolve => {
       this.presentLoading();
@@ -46,7 +45,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get single event from API
   getSingleEvent(teamId: string, eventId: string) {
     return new Promise(resolve => {
       this.presentLoading();
@@ -64,7 +62,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get stints from API
   getStints(teamId: string, eventId: any) {
     return new Promise(resolve => {
       this.http
@@ -80,7 +77,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get drivers from API
   getDrivers(teamId: string) {
     return new Promise(resolve => {
       this.http.get(this.apiUrl + teamId + "/person?driver=true").subscribe(
@@ -117,9 +113,10 @@ export class ApiServiceProvider {
     teamId: string,
     eventId: string,
     idOfSelectedDriver: string,
-    startdate: string, //ISO string
-    enddate: string, //ISO string
+    startdate: string,
+    enddate: string,
     raceday: number,
+    isBreakToogle: boolean,
     tagsArray: Array<string>
   ) {
     const newStint: Stint = {
@@ -128,12 +125,10 @@ export class ApiServiceProvider {
       enddate: enddate,
       raceday: raceday,
       finished: false,
-      isBreak: false,
+      isBreak: isBreakToogle,
       tags: tagsArray
     };
-
     JSON.stringify(newStint);
-
     return new Promise(resolve => {
       this.http
         .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {
@@ -150,7 +145,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // update Stint to API -> stint will be finished -> protocol item
   setStintToDoneAPI(
     teamId: any,
     eventId: any,
@@ -158,7 +152,6 @@ export class ApiServiceProvider {
     finishedStintId: any
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);
-
     return new Promise(resolve => {
       this.http
         .put(
