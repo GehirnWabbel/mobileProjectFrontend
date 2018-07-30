@@ -290,7 +290,7 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.driver.duration;
 
     // Add new data to existing stint
-    this.existingStintUpdated.driver = this.selectedDriver;
+    this.existingStintUpdated.driver = this.selectedDriver._id;
     this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
     this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
     this.existingStintUpdated.duration = this.duration;
