@@ -49,7 +49,11 @@
     <ion-label color="primary" stacked>Gewicht Kart Tank leer</ion-label>
     <ion-input type="number" placeholder="in kg" [(ngModel)]="kartEmpty"></ion-input>
   </ion-item>
+  <!-- Save Button -->
+  <div>&#160;</div>
+  <div text-center>
+    <button ion-button color="primary" (click)="addEvent()">Speichern</button>
+  </div>
 
-  <button (click)="addEvent()" ion-button full>Speichern</button>
 
 </ion-content>

@@ -20,12 +20,11 @@ $colors: (
 );
 
 .my-container {
-    background-image:  url('assets/imgs/sidemenu.png');
-    background-repeat: repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     height: 100%;
+    background-color: #666666;
     position: absolute;
 }
 .transp {

@@ -329,59 +329,32 @@ export class ApiServiceProvider {
         });
     })
   }
-  updateTeamMember(teamId : string, member : any) {
-    this.presentLoading();
-      this.http.put(this.apiUrl + teamId + '/person/' + member._id, member, {
-    return new Promise(resolve => {
-        headers: { "Content-Type": "application/json" }
-      }).subscribe(
-          resolve(data);
-        data => {
-        },
-        err => {
-          console.log(err);
-        },
-        () => {
-          this.loading.dismiss();
-        }
-      )
-    })
-  }
-  removeTeamMember(teamId : string, member: any) {
-    member.active = false;
-    return this.updateTeamMember(teamId, member);
-  }
-  }
-    });
-      );
-        }
-        err => {
-          console.log(err);
-          resolve(data);
-        },
-      .subscribe(data => {
-      this.http.post(this.apiUrl, newTeamName, { headers: { "Content-Type": "application/json" }})
-    return new Promise(resolve => {
-  createTeam(newTeamName: string) {
-  }
-    })
-      .subscribe(data => {resolve(data);}, err => {console.log(err);}, () => {this.loading.dismiss();});
-      this.http.get(this.apiUrl + teamId)
-    return new Promise(resolve => {
-    this.presentLoading();
+
   getTeam(teamId : string) {
-  }
+    this.presentLoading();
+    return new Promise(resolve => {
+      this.http.get(this.apiUrl + teamId)
+        .subscribe(data => {resolve(data);}, err => {console.log(err);}, () => {this.loading.dismiss();});
     })
-        err => console.log(err))
-      .subscribe(data => resolve(data),
-      this.http.delete(this.apiUrl + teamId)
-    return new Promise(resolve => {
+  }
+
+
   deleteTeam(teamId: string) {
-  deleteEvent(eventId: string, teamId: string){
-      this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json" }})
     return new Promise(resolve => {
-            resolve(data);
+      this.http.delete(this.apiUrl + teamId)
+        .subscribe(data => resolve(data),
+          err => console.log(err))
+    })
+  }
+
+
+
+
+  deleteEvent(eventId: string, teamId: string){
+    return new Promise(resolve => {
+      this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json" }})
         .subscribe(data => {
+            resolve(data);
           },
           err => {
             console.log(err);
@@ -389,20 +362,22 @@ export class ApiServiceProvider {
         );
     });
   }
+
+
   getStatistics(eventId: string, teamId: string, finished: boolean) {
     return new Promise(resolve => {
       this.presentLoading();
       this.http.get(this.apiUrl + teamId + "/event/" + eventId + "/driver_stats?finished=" + finished,
         { headers: { "Content-Type" : "application/json"}})
-      .subscribe(data => {
-        err => {
-      },
-        resolve(data);
-        },
-        console.log(err);
-        () => {
-        this.loading.dismiss();
-        })
+        .subscribe(data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          },
+          () => {
+            this.loading.dismiss();
+          })
     })
   }
 }

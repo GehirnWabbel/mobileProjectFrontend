@@ -112,14 +112,14 @@ export class MemberMgmtPage {
 
   avatarForward() {
     this.editMember.avatarNo++;
-    if(this.editMember.avatarNo > 18)
-      this.editMember.avatarNo -= 18;
+    if(this.editMember.avatarNo > 11)
+      this.editMember.avatarNo -= 11;
   }
 
   avatarBackward() {
     this.editMember.avatarNo--;
-    if(this.editMember.avatarNo < 1)
-      this.editMember.avatarNo += 18;
+    if(this.editMember.avatarNo < 11)
+      this.editMember.avatarNo += 11;
   }
 
   isDriverChanged() {
