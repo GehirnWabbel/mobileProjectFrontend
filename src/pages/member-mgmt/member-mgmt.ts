@@ -29,6 +29,7 @@ export class MemberMgmtPage {
   colorDefinitions;
 
   teamId;
+  memberId;
 
   constructor(
     public navCtrl: NavController,
@@ -48,6 +49,16 @@ export class MemberMgmtPage {
         console.log("Member Mgmt: Found stored TeamId: " + this.teamId);
       });
     }
+    if(this.navParams.data.memberId) {
+      this.memberId = this.navParams.data.memberId;
+      console.log("Member Mgtm: Found passed memberId: " + this.memberId);
+    }else {
+      this.storage.get("memberId").then(val => {
+        this.memberId = val;
+        console.log("Member Mgmt: Found stored memberId: " + this.memberId);
+      });
+    }
+
     this.mode = this.navParams.data.mode;
     if(this.mode === 'new')
       this.changeMode = true;
@@ -138,7 +149,7 @@ export class MemberMgmtPage {
 
   savePerson(){
     if(this.mode === 'edit') {
-      this.apiProvider.updateTeamMember(this.teamId, this.editMember).catch(reason => {
+      this.apiProvider.updateTeamMember(this.teamId, this.editMember, this.memberId).catch(reason => {
         console.log("Member Management: Update failed!");
         console.dir(reason);
         this.storage.clear().then(() => {

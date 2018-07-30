@@ -3,9 +3,11 @@ import {
   ViewController,
   NavParams,
   ToastController,
-  Events
+  Events, NavController
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
+import {Storage} from "@ionic/storage";
+import {CreateTeamPage} from "../create-team/create-team";
 
 @Component({
   selector: "page-planning-modal-add",
@@ -25,6 +27,7 @@ export class PlanningModalAddPage {
   // Strings
   private eventId: string;
   private teamId: string;
+  private memberId: string;
   public starttime: string;
   public endtime: string;
   public duration: string;
@@ -47,13 +50,16 @@ export class PlanningModalAddPage {
     private apiProvider: ApiServiceProvider,
     private navParams: NavParams,
     private ionEvents: Events,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private storage: Storage,
+    private navCtrl: NavController
   ) {
 
     // Initialize with existing data from planning page
     this.allStints = navParams.get("allStints");
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
+    this.memberId = this.navParams.get("memberId");
     this.eventId = navParams.get("eventId");
 
     // Get existing stint data
@@ -86,8 +92,18 @@ export class PlanningModalAddPage {
     }
 
     // Get current event
-    this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
+    this.apiProvider.getSingleEvent(this.teamId, this.eventId, this.memberId).then(data => {
       this.currentEvent = data as Array<any>;
+    }).catch(reason => {
+      this.errorHandling(reason);
+    });
+  }
+
+  errorHandling(reason) {
+    console.log("Planning-Modal-Add: error while loading data");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
     });
   }
 
@@ -228,8 +244,11 @@ export class PlanningModalAddPage {
         this.starttimeISO.toISOString(),
         this.endtimeISO.toISOString(),
         this.raceday,
-        this.tagsArray
-      );
+        this.tagsArray,
+        this.memberId
+      ).catch(reason => {
+        this.errorHandling(reason);
+      });
 
       // Publish event for auto-reload of PlanningPage, close Modal and present toast
       this.ionEvents.publish("stint:created");
@@ -314,8 +333,9 @@ export class PlanningModalAddPage {
       this.teamId,
       this.eventId,
       this.existingStint._id,
-      this.existingStintUpdated
-    );
+      this.existingStintUpdated,
+      this.memberId
+    ).catch(reason => this.errorHandling(reason));
 
     this.ionEvents.publish("stint:edited");
     this.closeAddModal();

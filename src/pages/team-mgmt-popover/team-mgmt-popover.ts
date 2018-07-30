@@ -26,6 +26,7 @@ export class TeamMgmtPopoverPage {
 
   teamId;
   teamName;
+  memberId;
 
   constructor(public viewCtrl: ViewController,
               public navCtrl: NavController,
@@ -36,6 +37,7 @@ export class TeamMgmtPopoverPage {
               private api: ApiServiceProvider) {
     this.teamId = this.navParams.get("teamId");
     this.teamName = this.navParams.get("teamName");
+    this.memberId = this.navParams.get("memberId");
   }
 
   ionViewDidLoad() {
@@ -65,7 +67,7 @@ export class TeamMgmtPopoverPage {
           handler: data => {
             console.log(data.teamName);
             if(data.teamName === this.teamName) {
-              this.api.deleteTeam(this.teamId).then(data => {
+              this.api.deleteTeam(this.teamId, this.memberId).then(data => {
                 this.storage.clear().then(() => this.navCtrl.setRoot(CreateTeamPage))
                 .catch(reason => {
                   console.log("Team Management Popover: Failed to delete team!");

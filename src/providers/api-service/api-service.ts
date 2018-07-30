@@ -113,11 +113,11 @@ export class ApiServiceProvider {
     });
   }
 
-  registerNewDriver(teamId: string, newDriver: any, memberId: string) {
+  registerNewDriver(teamId: string, newDriver: any) {
     return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl + teamId + "/person", newDriver, {
-          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
+          headers: { "Content-Type": "application/json" }
         })
         .subscribe(
           data => {

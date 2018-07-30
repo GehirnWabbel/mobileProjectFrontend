@@ -186,10 +186,10 @@ export class JoinTeamPage {
     //2. delete on old team
     //3. register on new team with same data
     console.log("Join Team: Transfere to start ...");
-    this.api.getSingleTeamMember(this.storageTeamId, this.storageMemberId).then(data => {
+    this.api.getSingleTeamMember(this.storageTeamId, this.storageMemberId, this.storageMemberId).then(data => {
       console.log("Join Team: Transfere: Recieved member data");
       console.log(JSON.stringify(data));
-      this.api.removeTeamMember(this.storageTeamId, data).then(removeData => {
+      this.api.removeTeamMember(this.storageTeamId, data, this.storageMemberId).then(removeData => {
         console.log('Join Team: Transfere: Deactivated Member in old team.');
         delete data['_id'];
         this.api.registerNewDriver(this.teamId, data).then(result => {

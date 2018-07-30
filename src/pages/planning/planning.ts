@@ -22,6 +22,7 @@ export class PlanningPage{
 
   // Class attributes
   teamId: string;
+  memberId: string;
   eventId: string;
   kartTag: string;
   weatherTag: string;
@@ -102,12 +103,16 @@ export class PlanningPage{
       this.teamId = val;
     });
 
+    this.storage.get("memberId").then(val => {
+      this.memberId = val;
+    });
+
     // Get eventId out of local storage
     this.storage.get("eventId").then(val => {
       this.eventId = val;
 
       // Get all stints from backend
-      this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
+      this.apiProvider.getStints(this.teamId, this.eventId, this.memberId).then(backendData => {
         this.formatStints(backendData);
         this.getDriversFromAPI();
       }).catch(reason => {
@@ -242,7 +247,7 @@ export class PlanningPage{
 
   // Driver objects from API
   getDriversFromAPI() {
-    this.apiProvider.getDrivers(this.teamId).then(data => {
+    this.apiProvider.getDrivers(this.teamId, this.memberId).then(data => {
       this.allDrivers = data as Array<any>;
     }).catch(reason => this.errorHandling(reason));
   }
@@ -263,6 +268,7 @@ export class PlanningPage{
       allStints: this.allStints,
       allDrivers: this.allDrivers,
       teamId: this.teamId,
+      memberId: this.memberId,
       eventId: this.eventId
     });
     addModal.present();
@@ -278,6 +284,7 @@ export class PlanningPage{
       allStints: this.allStints,
       allDrivers: this.allDrivers,
       teamId: this.teamId,
+      memberId: this.memberId,
       eventId: this.eventId,
       existingStint: existingStint,
       duration: planningItem.duration
@@ -303,7 +310,8 @@ export class PlanningPage{
       this.teamId,
       this.eventId,
       finishedStint,
-      finishedStintId
+      finishedStintId,
+      this.memberId
     ).catch(reason => this.errorHandling(reason));
     slidingItem.close();
     this.ionEvents.publish("stint:setToDone");
@@ -318,8 +326,9 @@ export class PlanningPage{
     this.apiProvider.removePlannedStint(
       this.teamId,
       this.eventId,
-      stint._id
-    );
+      stint._id,
+      this.memberId
+    ).catch(reason => this.errorHandling(reason));
     slidingItem.close();
     this.ionEvents.publish("stint:deleted");
     this.presentToast("Stint gelöscht");
