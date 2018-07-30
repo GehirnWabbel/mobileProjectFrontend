@@ -381,6 +381,7 @@ export class ApiServiceProvider {
     })
   }
 
+  //TODO: Error Handling
   editEvent(event: string, teamId: string, eventId: string) {
     let newEventJson = JSON.parse(JSON.stringify(event));
     return new Promise(resolve => {

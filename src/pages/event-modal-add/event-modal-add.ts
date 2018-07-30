@@ -68,7 +68,7 @@ export class EventModalAddPage {
       switch (this.track){
 
         case "ch": {
-          this.address = "Kartarena Cheb, 50°05'1\"N 12°26'E, 58 9, 350 02 Odrava, Tschechien";
+          this.address = "Dřenice 13, 350 02 Cheb, Tschechien";
           this.picture = "cheb.png";
           break;
         }
@@ -78,7 +78,7 @@ export class EventModalAddPage {
           break;
         }
         case "wi": {
-          this.address = "50°17'23.9\"N 9°16'47.1\"E";
+          this.address = "Waldensberger Str. 57, 63607 Wächtersbach";
           this.picture = "wittgenborn.png";
           break;
         }
@@ -114,6 +114,8 @@ export class EventModalAddPage {
         this.kartEmpty +"}";
 
       if((this.navParams.get('edit')) == true){
+
+        //TODO: Error Handling
         this.apiProvider.editEvent(eventJson, this.teamId, this.navParams.get('eventId')).then( data =>
           {
             this.ionEvents.publish('event:edit');
@@ -124,6 +126,8 @@ export class EventModalAddPage {
       }
 
       else {
+
+        //TODO: Error Handling
         this.apiProvider.createEvent(eventJson, this.teamId).then( data => {
           this.ionEvents.publish('event:create');
           this.closeAddModal();
