@@ -35,7 +35,7 @@
   </ion-item>
   <ion-item>
     <ion-label color="primary" stacked>Rennstart</ion-label>
-    <ion-datetime displayFormat="DD.MM.YYYY HH:mm" [(ngModel)]="raceTime" placeholder="Datum und Uhrzeit"> </ion-datetime>
+    <ion-datetime displayFormat="D.MM.YYYY H:mm" pickerFormat="D.MMM YYYY H:mm" [(ngModel)]="raceTime" placeholder="Datum und Uhrzeit" min="2018" max="2020"> </ion-datetime>
   </ion-item>
   <ion-item>
     <ion-label color="primary" stacked>Anzahl Renntage</ion-label>
