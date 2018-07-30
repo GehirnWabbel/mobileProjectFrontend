@@ -1,8 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
-
-import { Chart } from 'chart.js';
-// import { ChartServiceProvider } from '../../providers/chart-service/chart-service';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, NavController} from 'ionic-angular';
+import {colorDefinitions} from "../../app/colordefinitions";
+import {Chart} from 'chart.js';
+import {Storage} from "@ionic/storage";
+import {ApiServiceProvider} from "../../providers/api-service/api-service";
 
 @IonicPage()
 @Component({
@@ -12,128 +13,165 @@ import { Chart } from 'chart.js';
 })
 export class ChartPage {
 
-  @ViewChild('barCanvas') barCanvas;
-    @ViewChild('doughnutCanvas') doughnutCanvas;
-    @ViewChild('lineCanvas') lineCanvas;
+  @ViewChild('totalStints') totalStintsCanvas;
+  @ViewChild('totalTime') totalTimeCanvas;
 
-    barChart: any;
-    doughnutChart: any;
-    lineChart: any;
+  totalStintsChart: any;
+  totalTimeChart: any;
 
-    private driverStats = [];
+  driverStatsFinished;
+  driverStatsPlanned;
 
-    constructor(
-        public navCtrl: NavController,
-        ) {
+  teamId: string;
+  eventId: string;
 
-        // GET driver stat data and save in driverStats Array
-        // this.chartProvider.getDriverStats().subscribe(driverStatData => this.driverStats = driverStatData);
-    }
-
-    ionViewDidLoad() {
-
-        console.dir(this.driverStats);
-
-        this.barChart = new Chart(this.barCanvas.nativeElement, {
-
-            type: 'bar',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-
-        });
-
-        this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
-
-            type: 'doughnut',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    hoverBackgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
-                    ]
-                }]
-            }
-
-        });
-
-        this.lineChart = new Chart(this.lineCanvas.nativeElement, {
-
-            type: 'line',
-            data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fill: false,
-                        lineTension: 0.1,
-                        backgroundColor: "#d32323",
-                        borderColor: "#d32323",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(0,0,0,0)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        spanGaps: false,
-                    }
-                ]
-            }
-
-        });
-
-    }
+  constructor(
+    public navCtrl: NavController,
+    private storage: Storage,
+    private api: ApiServiceProvider
+  ) {
   }
+
+  ionViewDidLoad() {
+    this.storage.get("teamId").then(teamIdVal => {
+      this.teamId = teamIdVal;
+      this.storage.get("eventId").then(eventIdVal => {
+        this.eventId = eventIdVal;
+        this.loadData();
+      })
+    })
+  }
+
+  loadData() {
+    this.api.getStatistics(this.eventId, this.teamId, true).then(finishedData => {
+      this.driverStatsFinished = finishedData;
+      this.api.getStatistics(this.eventId, this.teamId, false).then(plannedData => {
+        this.driverStatsPlanned = plannedData;
+        this.buildCharts();
+      })
+    })
+  }
+
+  refreshData(event) {
+    this.loadData();
+    event.complete();
+  }
+
+
+  buildCharts() {
+    // put together the driver labels
+    let driverNames = [];
+    let colorsFinished = [];
+    let colorsFinishedLightend = [];
+    let colorsPlanned = [];
+    let colorsPlannedLightend = [];
+    let totalStintsFinished = [];
+    let totalStintsPlanned = [];
+    let totalTimeFinished = [];
+    let totalTimePlanned = [];
+
+    console.dir(this.driverStatsFinished);
+    console.dir(this.driverStatsPlanned);
+
+    let i = 0;
+    for (let stats of this.driverStatsFinished) {
+      console.dir(stats);
+      colorsFinished[i] = colorDefinitions[stats['driver'].color];
+      colorsFinishedLightend[i] = this.shadeColor2(colorsFinished[i], 0.2);
+      driverNames[i] = stats['driver'].name;
+      totalStintsFinished[i] = stats['totalStints'];
+      totalTimeFinished[i] = stats['totalDrivingTime'];
+      ++i;
+    }
+
+    let maxI = i;
+    for (let stats of this.driverStatsPlanned) {
+      console.dir(stats);
+      i = driverNames.indexOf(stats['driver'].name);
+      if(i < 0) //driver not found yet => so take the next avaliable i
+        i = maxI++; //use post increase operator to save the index before increasing
+
+      let driverColor = colorDefinitions[stats['driver'].color];
+      colorsPlanned[i] = this.shadeColor2(driverColor, 0.4);
+      colorsPlannedLightend[i] = this.shadeColor2(colorsPlanned[i], 0.2);
+      driverNames[i] = stats['driver'].name;
+      totalStintsPlanned[i] = stats['totalStints'];
+      totalTimePlanned[i] = stats['totalDrivingTime'];
+    }
+
+    this.totalStintsChart = new Chart(this.totalStintsCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: driverNames,
+        datasets: [{
+          label: 'Finished Stints',
+          data: totalStintsFinished,
+          backgroundColor: colorsFinishedLightend,
+          borderColor: colorsFinished,
+          borderWidth: 1
+        },
+          {
+            label: 'Planned Stints',
+            data: totalStintsPlanned,
+            backgroundColor: colorsPlannedLightend,
+            borderColor: colorsPlanned,
+            borderWidth: 1
+          }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            stacked: true
+          }],
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    this.totalTimeChart = new Chart(this.totalTimeCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: driverNames,
+        datasets: [{
+          label: 'Finished Driving Time',
+          data: totalTimeFinished,
+          backgroundColor: colorsFinishedLightend,
+          borderColor: colorsFinished,
+          borderWidth: 1
+        },
+          {
+            label: 'Planned Driving Time',
+            data: totalTimePlanned,
+            backgroundColor: colorsPlannedLightend,
+            borderColor: colorsPlanned,
+            borderWidth: 1
+          }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            stacked: true
+          }],
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  }
+
+  //Credits got to: SO User Pimp Trizkit => https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+  shadeColor2(color, percent) {
+    var f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255,
+      p = percent < 0 ? percent * -1 : percent, R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
+    return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
+  }
+}

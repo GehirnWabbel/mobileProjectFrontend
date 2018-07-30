@@ -253,4 +253,21 @@ export class ApiServiceProvider {
         );
     });
   }
+
+  getStatistics(eventId: string, teamId: string, finished: boolean) {
+    return new Promise(resolve => {
+      this.presentLoading();
+      this.http.get(this.apiUrl + teamId + "/event/" + eventId + "/driver_stats?finished=" + finished,
+        { headers: { "Content-Type" : "application/json"}})
+      .subscribe(data => {
+        resolve(data);
+      },
+        err => {
+        console.log(err);
+        },
+        () => {
+        this.loading.dismiss();
+        })
+    })
+  }
 }

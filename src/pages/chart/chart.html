@@ -9,31 +9,31 @@
 
 
 <ion-content>
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Neu laden"
+      refreshingSpinner="circles"
+      refreshingText="Lade ..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
  
   <ion-card> 
     <ion-card-header>
-      Bar Chart
+      Anzahl der Stints
     </ion-card-header>
     <ion-card-content>
-      <canvas #barCanvas></canvas>
+      <canvas #totalStints></canvas>
     </ion-card-content>
   </ion-card>
 
   <ion-card>
     <ion-card-header>
-      Doughnut Chart
+      Gesamtfahrzeit
     </ion-card-header>
     <ion-card-content>
-      <canvas #doughnutCanvas></canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      Line Chart
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #lineCanvas></canvas>
+      <canvas #totalTime></canvas>
     </ion-card-content>
   </ion-card>
 
