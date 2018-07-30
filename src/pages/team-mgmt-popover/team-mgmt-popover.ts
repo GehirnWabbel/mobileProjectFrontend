@@ -66,7 +66,14 @@ export class TeamMgmtPopoverPage {
             console.log(data.teamName);
             if(data.teamName === this.teamName) {
               this.api.deleteTeam(this.teamId).then(data => {
-                this.storage.clear().then(() => this.navCtrl.setRoot(CreateTeamPage)); // also clear local storage
+                this.storage.clear().then(() => this.navCtrl.setRoot(CreateTeamPage))
+                .catch(reason => {
+                  console.log("Team Management Popover: Failed to delete team!");
+                  console.dir(reason);
+                  this.storage.clear().then(() => {
+                    this.navCtrl.setRoot(CreateTeamPage);
+                  })
+                }); // also clear local storage
                 this.showToast("Team gelöscht.")
               })
             } else

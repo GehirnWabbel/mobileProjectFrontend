@@ -10,6 +10,7 @@ import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { colorDefinitions } from "../../app/colordefinitions";
 import { Storage } from "@ionic/storage";
 import {EventsPage} from "../events/events";
+import {CreateTeamPage} from "../create-team/create-team";
 
 
 @IonicPage()
@@ -137,7 +138,14 @@ export class MemberMgmtPage {
 
   savePerson(){
     if(this.mode === 'edit') {
-      this.apiProvider.updateTeamMember(this.teamId, this.editMember);
+      this.apiProvider.updateTeamMember(this.teamId, this.editMember).catch(reason => {
+        console.log("Member Management: Update failed!");
+        console.dir(reason);
+        this.storage.clear().then(() => {
+          console.log("Member Management: Storage cleared!");
+          this.navCtrl.setRoot(CreateTeamPage);
+        });
+      });
       this.aToastOnASuccessfulSave('Änderungen gespeichert.');
       this.changeMode = false;
     } else {
@@ -149,15 +157,24 @@ export class MemberMgmtPage {
           console.log("Member Mgmt: New memberId stored: " + data["_id"]);
         }
         Object.assign(this.editMember, data);
-        this.aToastOnASuccessfulSave('Neues Teammitglied angelegt.')
-      });
-      this.changeMode = false;
+        this.aToastOnASuccessfulSave('Neues Teammitglied angelegt.');
 
-      if(this.allowCancel) // cancel is permitted if a new member joins the team and if a new team is created; then one wants to land on the event page not the team overview page
-        this.viewCrtl.dismiss(); //back to where we came from
-      else {
-        this.navCtrl.setRoot(EventsPage);
-      }
+        this.changeMode = false;
+
+        if(this.allowCancel) // cancel is permitted if a new member joins the team and if a new team is created; then one wants to land on the event page not the team overview page
+          this.viewCrtl.dismiss(); //back to where we came from
+        else {
+          this.navCtrl.setRoot(EventsPage);
+        }
+
+      }).catch(reason => {
+        console.log("Member Management: Creation failed!");
+        console.dir(reason);
+        this.storage.clear().then(() => {
+          console.log("Member Management: Storage cleared!");
+          this.navCtrl.setRoot(CreateTeamPage);
+        });
+      });
     }
     console.log('Member Mgmt: saved team member');
   }

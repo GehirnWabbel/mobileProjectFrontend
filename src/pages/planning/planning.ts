@@ -5,12 +5,13 @@ import {
   ViewController,
   ToastController,
   Events,
-  ItemSliding
+  ItemSliding, NavController
 } from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningModalAddPage } from "../planning-modal-add/planning-modal-add";
 import { colorDefinitions } from "../../app/colordefinitions";
+import {CreateTeamPage} from "../create-team/create-team";
 
 @IonicPage()
 @Component({
@@ -49,7 +50,8 @@ export class PlanningPage{
     private viewCtrl: ViewController,
     private storage: Storage,
     private ionEvents: Events,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private navCtrl: NavController
   ) {
 
     // Initialize color definitions
@@ -108,7 +110,17 @@ export class PlanningPage{
       this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
         this.formatStints(backendData);
         this.getDriversFromAPI();
+      }).catch(reason => {
+        this.errorHandling(reason);
       });
+    });
+  }
+
+  errorHandling(reason) {
+    console.log("Planning: Failed to load data");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
     });
   }
 
@@ -232,7 +244,7 @@ export class PlanningPage{
   getDriversFromAPI() {
     this.apiProvider.getDrivers(this.teamId).then(data => {
       this.allDrivers = data as Array<any>;
-    });
+    }).catch(reason => this.errorHandling(reason));
   }
 
   // Get stint by driver and (indirect) current event
@@ -292,7 +304,7 @@ export class PlanningPage{
       this.eventId,
       finishedStint,
       finishedStintId
-    );
+    ).catch(reason => this.errorHandling(reason));
     slidingItem.close();
     this.ionEvents.publish("stint:setToDone");
     this.presentToast("Stint abgeschlossen");

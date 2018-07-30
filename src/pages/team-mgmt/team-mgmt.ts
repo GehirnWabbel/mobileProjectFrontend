@@ -12,6 +12,7 @@ import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 import {TeamMgmtPopoverPage} from "../team-mgmt-popover/team-mgmt-popover";
+import {CreateTeamPage} from "../create-team/create-team";
 
 /**
  * Generated class for the TeamMgmtPage page.
@@ -34,6 +35,7 @@ export class TeamMgmtPage {
   allManagements = [];
 
   finishedStorageLoading = false;
+  isLoading = false;
 
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
@@ -101,6 +103,7 @@ export class TeamMgmtPage {
 
   removeTeamMember(person: any) {
     this.apiProvider.removeTeamMember(this.teamId, person).then(data => {
+      console.log("Team Management: Reomve Done");
       this.reloadTeamData();
       this.showToast('Teammitglied \"' + person.name + '\" gelöscht.');
     });
@@ -119,13 +122,20 @@ export class TeamMgmtPage {
   }
 
   reloadTeamData() {
-    if(this.finishedStorageLoading) {
+    if(this.finishedStorageLoading && !this.isLoading) {
+      this.isLoading = true;
       this.allDrivers = [];
       this.allManagements = [];
       this.apiProvider.getTeam(this.teamId).then(data => {
         this.teamName = data["name"];
         console.log("Team Management: Loaded Team: " + this.teamName);
         this.parseTeamMember(data["members"]);
+      }).catch(reason => {
+        console.log("Team Management: run to error while refrehing team data; assuming user has been remove from team");
+        this.storage.clear().then(() => {
+          this.isLoading = false;
+          this.navCtrl.setRoot(CreateTeamPage);
+        });
       });
     }
   }

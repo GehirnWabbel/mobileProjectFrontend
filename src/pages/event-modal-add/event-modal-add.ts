@@ -3,6 +3,8 @@ import {NavController, NavParams, ViewController} from 'ionic-angular';
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { EventsPage } from "../events/events";
 import { ToastController } from 'ionic-angular';
+import {Storage} from "@ionic/storage";
+import {CreateTeamPage} from "../create-team/create-team";
 
 /**
  * Generated class for the EventModalAddPage page.
@@ -26,15 +28,18 @@ export class EventModalAddPage {
   address: string;
   picture: string;
   teamId: string;
+  memberId: string;
 
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private storage: Storage
   ) {
     this.teamId = navParams.get('teamId');
+    this.memberId = this.navParams.get("memberId");
   }
 
   ionViewDidLoad() {
@@ -101,7 +106,13 @@ export class EventModalAddPage {
         this.picture +"\",\"kartWeightWithFuel\": "+ this.kartFull +",\"kartWeightWithoutFuel\": "+
         this.kartEmpty +"}";
 
-      this.apiProvider.createEvent(newEventJson, this.teamId);
+      this.apiProvider.createEvent(newEventJson, this.teamId, this.memberId).catch(reason => {
+        console.log("Events Add: Failed to create Event!");
+        console.dir(reason);
+        this.storage.clear().then(() => {
+          this.navCtrl.setRoot(CreateTeamPage);
+        })
+      });
       this.navCtrl.setRoot(EventsPage);
     }
   }

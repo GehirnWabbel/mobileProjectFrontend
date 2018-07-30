@@ -122,6 +122,8 @@ export class JoinTeamPage {
           this.apiProvider.registerNewDriver(this.teamId, newUser).then(data => {
             console.log("Join Team: MemeberId: " + data["_id"]);
             this.storage.set("memberId", data["_id"]);
+          }).catch(reason => {
+            this.errorHandling(reason);
           });
         }
       }
@@ -137,6 +139,8 @@ export class JoinTeamPage {
         this.apiProvider.registerNewDriver(this.teamId, newDriver).then(data => {
           console.log("Join Team: MemberId: " + data["_id"]);
           this.storage.set("memberId", data["_id"]);
+        }).catch(reason => {
+          this.errorHandling(reason);
         });
       }
     }
@@ -199,8 +203,16 @@ export class JoinTeamPage {
               this.navCtrl.setRoot(EventsPage);
             })
           })
-        })
-      });
+        }).catch(reason => this.errorHandling(reason));
+      }).catch(reason => this.errorHandling(reason));
+    }).catch(reason => this.errorHandling(reason));
+  }
+
+  errorHandling(reason) {
+    console.log("Join Team: Failed to create team Member");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
     })
   }
 

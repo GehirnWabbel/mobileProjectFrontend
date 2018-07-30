@@ -7,6 +7,7 @@ import { EventModalAddPage } from "../event-modal-add/event-modal-add";
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { AlertController } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
+import {CreateTeamPage} from "../create-team/create-team";
 
 /**
  * Generated class for the EventsPage page.
@@ -23,6 +24,7 @@ import { MenuController } from 'ionic-angular';
 export class EventsPage {
   private allEvents: Array<any>;
   teamId: string;
+  memberId: string;
   activeMenu: string;
 
   constructor(
@@ -37,8 +39,17 @@ export class EventsPage {
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
-      this.apiProvider.getEvents(this.teamId).then(data => {
-        this.allEvents = this.convertData(data);
+      this.storage.get("memberId").then(memberVal => {
+        this.memberId = memberVal;
+        this.apiProvider.getEvents(this.teamId, this.memberId).then(data => {
+          this.allEvents = this.convertData(data);
+        }).catch(reason => {
+          console.log("Events: Failed to load Events");
+          console.dir(reason);
+          this.storage.clear().then(() => {
+            this.navCtrl.setRoot(CreateTeamPage);
+          })
+        });
       });
     });
     this.activeMenu = 'menu1';
@@ -72,7 +83,7 @@ export class EventsPage {
   }
 
   openAddEventModal(){
-    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId});
+    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId, "memberId": this.memberId});
     // addModal.onDidDismiss(() => {
     //   this.apiProvider.getEvents(this.teamId).then( data => {
     //     this.allEvents = this.convertData(data)
@@ -83,8 +94,14 @@ export class EventsPage {
 
   // Pull to refresh
   doRefresh(refresher) {
-    this.apiProvider.getEvents(this.teamId).then(data => {
+    this.apiProvider.getEvents(this.teamId, this.memberId).then(data => {
       this.allEvents = this.convertData(data);
+    }).catch(reason => {
+      console.log("Events: failed to load the events");
+      console.dir(reason);
+      this.storage.clear().then(() => {
+        this.navCtrl.setRoot(CreateTeamPage);
+      });
     });
     refresher.complete();
   }
@@ -104,7 +121,14 @@ export class EventsPage {
           text: 'Löschen',
           handler: () => {
             console.log('Delete Event: ' + event._id);
-            this.apiProvider.deleteEvent(event._id, this.teamId);
+            this.apiProvider.deleteEvent(event._id, this.teamId, this.memberId)
+              .catch(reason => {
+                console.log("Events: Failed to Delete Event");
+                console.dir(reason);
+                this.storage.clear().then(() => {
+                  this.navCtrl.setRoot(CreateTeamPage);
+                });
+              });
             this.allEvents = this.allEvents.filter( el => el._id !== event._id );
 
           }
