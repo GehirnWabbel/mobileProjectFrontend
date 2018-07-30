@@ -8,65 +8,104 @@
 </ion-header>
 
 
-<ion-content>
-
-  <!-- Protokoll -->
+<ion-content padding-right>
   <h3 padding>Protokoll</h3>
+
+  <div *ngIf="allProtocolItems.length < 1" text-center>
+    <p>
+      Noch kein Protokoll vorhanden
+    </p>
+  </div>
+
   <ion-list>
     <ion-item-group>
-      <ion-item *ngFor="let item of allProtocolItems">
-        <ion-avatar item-start>
-          <img src="assets/imgs/rasta.png">
-        </ion-avatar>
+      <ion-item class="ion-item" *ngFor="let item of allProtocolItems" [style.border-color]="colorDefinitions[item.color]">
+
+        <ion-thumbnail item-start>
+          <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png" >
+        </ion-thumbnail>
         <h2>{{ item.name }}</h2>
-        <p>
+        <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
+        <p><span style="display:inline-block; height: 10px;"></span></p>
+        <p style="color: black">
           Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
         </p>
-        <p>
+        <p style="color: black">
           Ende: <span style="display:inline-block; width: 29px;"></span> {{ item.endtime }} Uhr
         </p>
-        <p>
+        <p style="color: black">
           Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min
         </p>
+
+
+        <p>
+          <ion-badge color="dark-grey" item-end (click)="openKartTag(item)">
+            <ion-icon name="car"></ion-icon>
+          </ion-badge>
+          <ion-badge color="dark-grey" item-end (click)="openWeatherTag(item)">
+            <ion-icon name="partly-sunny"></ion-icon>
+          </ion-badge>
+          <ion-badge color="dark-grey" item-end (click)="openFlagTag(item)">
+            <ion-icon name="flag"></ion-icon>
+          </ion-badge>
+        </p>
+
       </ion-item>
     </ion-item-group>
   </ion-list>
 
   <!-- Planung -->
   <h3 padding>Planung</h3>
-  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
-    <ion-item-sliding *ngFor="let item of allPlanningItems">
 
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="assets/imgs/blacky.png">
-          </ion-avatar>
+  <div *ngIf="allPlanningItems.length < 1" text-center>
+    <p>
+      Noch keine Planung vorhanden
+    </p>
+  </div>
+
+  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
+    <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
+
+        <ion-item class="ion-item" [style.border-color]="colorDefinitions[item.color]">
+          <ion-thumbnail item-start>
+            <img src="../../assets/imgs/ava-{{ item.avatarNo }}.png">
+          </ion-thumbnail>
 
           <h2>{{ item.name }}</h2>
-          <p>Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
-          <p>Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
+          <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
+          <p><span style="display:inline-block; height: 10px;"></span></p>
+          <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
+          <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
+          <p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
 
           <p>
-            <ion-badge item-end (click)="openKartTag()">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openKartTag(item)">
               <ion-icon name="car"></ion-icon>
             </ion-badge>
-            <ion-badge item-end (click)="openWeatherTag()">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openWeatherTag(item)">
               <ion-icon name="partly-sunny"></ion-icon>
             </ion-badge>
-            <ion-badge item-end (click)="openFlagTag()">
+            <ion-badge color="dark-grey" class="badge" item-end (click)="openFlagTag(item)">
               <ion-icon name="flag"></ion-icon>
             </ion-badge>
           </p>
         </ion-item>
 
-      <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="setStintToDone(item)">
+      <ion-item-options class="ion-item-options" side="right">
+        <button ion-button color="secondary" (click)="setStintToDone(item, slidingItem)">
           <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
           Fertig
         </button>
-        <button ion-button color="editable" (click)="editStint(item)">
+        <button ion-button color="editable" (click)="editStintModal(item, slidingItem)">
           <ion-icon name="md-create" id="iconEdit"></ion-icon>
           Bearbeiten
+        </button>
+      </ion-item-options>
+
+      <ion-item-options class="ion-item-options-delete" side="left">
+        <button ion-button color="red" (click)="deletePlannedStint(item, slidingItem)">
+          <ion-icon name="md-trash" id="iconDelete"></ion-icon>
+          Löschen
         </button>
       </ion-item-options>
     </ion-item-sliding>
@@ -74,9 +113,15 @@
 
   <!-- FAB for adding new driver -->
   <ion-fab bottom right>
-    <button ion-fab color="primary" (click)="openAddStintModal()">
+    <button ion-fab color="primary" (click)="addStintModal()">
       <ion-icon name="add" id="iconAdd"></ion-icon>
     </button>
   </ion-fab>
 
+  <!-- Footer message -->
+  <div *ngIf="allProtocolItems.length > 1" text-center>
+    <p>
+      Keine weiteren Stints geplant
+    </p>
+  </div>
 </ion-content>

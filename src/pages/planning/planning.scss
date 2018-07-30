@@ -1,22 +1,70 @@
-ion-avatar img  {
+.item ion-thumbnail {
+  //min-width: 10rem;
+  //min-height: 10rem;
+  img {
     width:70% !important;
     height : 70% !important;
-    max-width: 100px !important;  //any size
-    max-height: 100px !important; //any size
-    }
+    max-width: 100px !important;
+    max-height: 100px !important;
+  }
+}
+
+.ion-item {
+  width: 98%;
+  margin: 5px;
+  border-left: 8px solid;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #e5e5e5;
+}
+
+.ion-item-options {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 88%;
+  margin-top: 3%;
+  width: 44%;
+}
+
+.ion-item-options-delete {
+  margin-left: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 88%;
+  margin-top: 3%;
+}
+
+.driverColor {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 2px;
+}
 
 .tag {
     font-size: 14px;
 }
 
 #iconCheckmark {
-    font-size: 25px; 
+    font-size: 25px;
 }
 
 #iconEdit {
-    font-size: 25px; 
+    font-size: 25px;
 }
 
 #iconAdd {
-    font-size: 25px; 
+    font-size: 25px;
 }
+
+#iconDelete {
+  font-size: 25px;
+}
+
