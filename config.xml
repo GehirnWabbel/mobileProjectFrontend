@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.needracing.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Need Racing</name>
-    <description>Pure Awseomness</description>
+<widget id="com.racemanager.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Racemanager</name>
+    <description>Karting Racemanager</description>
     <author email="" href="https://github.com/GehirnWabbel/mobileProjectFrontend.git">Philipp Drayß, Benjamin Hilprecht, Henrik Müller, Leon Steiner</author>
     <content src="index.html" />
     <access origin="*" />
@@ -24,6 +24,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreen" value="true" />
+    <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -99,7 +100,7 @@
     <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="^4.2.1">
         <variable name="OKHTTP_VERSION" value="3.+" />
     </plugin>
-    <engine name="android" spec="7.0.0" />
-    <engine name="browser" spec="5.0.3" />
-    <engine name="ios" spec="^4.5.4" />
+    <engine name="browser" spec="~5.0.3" />
+    <engine name="android" spec="~7.0.0" />
+    <engine name="ios" spec="~4.5.5" />
 </widget>
