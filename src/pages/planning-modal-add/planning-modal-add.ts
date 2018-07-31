@@ -58,7 +58,7 @@ export class PlanningModalAddPage {
   ) {
 
     // isBreak Toggle switch
-    this.isBreakToggle = false;
+    this.isBreakToggle = navParams.get("isBreak");
 
     // Initialize with existing data from planning page
     this.allStints = navParams.get("allStints");
@@ -240,11 +240,12 @@ export class PlanningModalAddPage {
        *
        */
 
-      if(this.starttime == undefined ||
+      if((this.starttime == undefined ||
         this.endtime == undefined ||
         this.raceday == undefined ||
         this.selectedDriver == undefined ||
-        this.durationISO == undefined
+        this.durationISO == undefined) &&
+        !this.isBreakToggle == false
       ){
         this.presentToast("Bitte fülle alle Pflichtfelder aus");
       } else {
@@ -320,7 +321,8 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.notified;
 
     // Add new data to existing stint
-    this.existingStintUpdated.driverId = this.selectedDriver._id;
+    if (this.selectedDriver)
+      this.existingStintUpdated.driverId = this.selectedDriver._id;
     this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
     this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
     this.existingStintUpdated.finished = false;
@@ -339,11 +341,12 @@ export class PlanningModalAddPage {
      */
 
     // Check required fields
-    if(this.starttime == undefined ||
+    if((this.starttime == undefined ||
       this.endtime == undefined ||
       this.raceday == undefined ||
       this.selectedDriver == undefined ||
-      this.duration == undefined
+      this.duration == undefined)
+      && !this.isBreakToggle
     ){
       this.presentToast("Bitte fülle alle Pflichtfelder aus");
     } else {

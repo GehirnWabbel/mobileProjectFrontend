@@ -199,7 +199,9 @@ export class PlanningPage{
         breakItem.endtimeISO = endtimeISO;
 
         // Break
-        breakItem.isBreakAttribute = allStints[i].isBreak;
+        breakItem.isBreak = allStints[i].isBreak;
+
+        breakItem.stintId = allStints[i]._id;
 
         // Add to array
         this.allPlanningItems.push(breakItem);
@@ -263,7 +265,9 @@ export class PlanningPage{
           planningItem.flagTag = allStints[i].tags[2];
 
           // Break
-          planningItem.isBreakAttribute = allStints[i].isBreak;
+          planningItem.isBreak = allStints[i].isBreak;
+
+          planningItem.stintId = allStints[i]._id;
 
           console.log("Current Planning Item: " + planningItem);
           // Add to array
@@ -321,7 +325,7 @@ export class PlanningPage{
         breakItem.endtimeISO = endtimeISO;
 
         // Break
-        breakItem.isBreakAttribute = allStints[i].isBreak;
+        breakItem.isBreak = allStints[i].isBreak;
 
         // Add to array
         this.allProtocolItems.push(breakItem);
@@ -429,8 +433,8 @@ export class PlanningPage{
 
   // Open Modal for editing an existing sting
   editStintModal(planningItem: any, slidingItem: ItemSliding) {
-    console.log("STINT TO BE EDITED: " + planningItem);
-    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem._id).then(data => {
+    console.log(planningItem);
+    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem.stintId).then(data => {
       const addModal = this.modal.create(PlanningModalAddPage, {
 
         allStints: this.allStints,
@@ -439,7 +443,8 @@ export class PlanningPage{
         memberId: this.memberId,
         eventId: this.eventId,
         existingStint: data as any,
-        duration: planningItem.duration
+        duration: planningItem.duration,
+        isBreak: planningItem.isBreak
 
       });
       slidingItem.close();
@@ -451,7 +456,7 @@ export class PlanningPage{
   // Update 'finished' attribute of an existing stint or pause --> new protocol item
   setStintToDone(planningItem: any, slidingItem: ItemSliding) {
     // let finishedStint = this.getStintByDriver(planningItem);
-    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem._id).then(data => {
+    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem.stintId).then(data => {
       let stintFromAPI = data as any;
       console.log("STINT TO BE EDITED: " + stintFromAPI);
       let finishedStint = stintFromAPI;
@@ -460,7 +465,7 @@ export class PlanningPage{
       finishedStint.enddate = new Date().toISOString(); // set enddate to current time
       finishedStint.finished = true;
       finishedStint.driverId = planningItem._id;
-      let finishedStintId = finishedStint._id;
+      let finishedStintId = planningItem.stintId;
       delete finishedStint._id;
       delete finishedStint.driver;
 
@@ -493,7 +498,7 @@ export class PlanningPage{
       this.apiProvider.removePlannedStint(
         this.teamId,
         this.eventId,
-        stint._id,
+        stint.stintId,
         this.memberId
       ).then(data => {
         this.ionEvents.publish("stint:deleted");
