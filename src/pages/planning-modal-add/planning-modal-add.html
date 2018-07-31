@@ -1,7 +1,7 @@
 <!-- Header -->
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Stint planen</ion-title>
+    <ion-title>Planen</ion-title>
     <ion-buttons end>
       <button ion-button color="light" (click)="closeAddModal()">Abbrechen</button>
     </ion-buttons>
@@ -9,7 +9,12 @@
 </ion-header>
 
 <!-- Content -->
-<ion-content>
+<ion-content margin-top="10px">
+
+  <ion-item>
+    <ion-label color="primary" stacked>Pause</ion-label>
+    <ion-toggle enabled color="secondary" [(ngModel)]="isBreakToggle" checked="false"></ion-toggle>
+  </ion-item>
 
   <ion-item>
     <ion-label color="primary" stacked>Zeitpunkt</ion-label>
@@ -17,34 +22,35 @@
   </ion-item>
 
   <ion-item>
-    <ion-label color="primary" stacked>Fahrdauer</ion-label>
+    <ion-label color="primary" stacked>Dauer</ion-label>
     <ion-input type="number" placeholder="in Minuten" required="true" [(ngModel)]="duration">Minuten</ion-input>
   </ion-item>
 
-  <ion-item>
-    <ion-label color="primary" stacked>Fahrer</ion-label>
-    <ion-select required="true" placeholder="{{ selectedDriver.name }}" [(ngModel)]="selectedDriver" interface="action-sheet">
-      <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
-    </ion-select>
-  </ion-item>
+  <div *ngIf="!isBreakToggle">
 
-  <!-- Tags -->
+    <ion-item>
+      <ion-label color="primary" stacked>Fahrer</ion-label>
+      <ion-select required="true" placeholder="{{ selectedDriver.name }}" [(ngModel)]="selectedDriver" interface="action-sheet">
+        <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
+      </ion-select>
+    </ion-item>
 
-  <ion-item>
-    <ion-label color="primary" stacked>Kart</ion-label>
-    <ion-input type="text" placeholder="{{ kartTag }}" required="false" [(ngModel)]="kartTag"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label color="primary" stacked>Kart</ion-label>
+      <ion-input type="text" placeholder="{{ kartTag }}" required="false" [(ngModel)]="kartTag"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label color="primary" stacked>Wetter</ion-label>
-    <ion-input type="text" placeholder="{{ weatherTag }}" required="false" [(ngModel)]="weatherTag"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label color="primary" stacked>Wetter</ion-label>
+      <ion-input type="text" placeholder="{{ weatherTag }}" required="false" [(ngModel)]="weatherTag"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label color="primary" stacked>Flaggen</ion-label>
-    <ion-input type="text" placeholder="{{ flagTag }}" required="false" [(ngModel)]="flagTag"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label color="primary" stacked>Flaggen</ion-label>
+      <ion-input type="text" placeholder="{{ flagTag }}" required="false" [(ngModel)]="flagTag"></ion-input>
+    </ion-item>
 
+  </div>
 
   <!-- Save Button -->
   <div>&#160;</div>

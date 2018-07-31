@@ -26,6 +26,7 @@ export class PlanningPage{
   weatherTag: string;
   flagTag: string;
   colorDefinitions;
+  zeroForFormatting: string;
 
   allStints: Array<any>; // All Stints
   allDrivers: Array<any>; // Drivers for modal
@@ -86,14 +87,13 @@ export class PlanningPage{
 
   // Data/page refresh, which will be invoked if different ionEvents are published
   refreshPlanningPage() {
-    // works but is totally dirty
-    // window.location.reload();
 
-    // Initialize arrays
+    // Initialize
     this.allPlanningItems = [];
     this.allProtocolItems = [];
     this.allStints = [];
     this.allDrivers = [];
+    this.zeroForFormatting = "0";
 
     // Get teamId out of local storage
     this.storage.get("teamId").then(val => {
@@ -105,6 +105,7 @@ export class PlanningPage{
       this.eventId = val;
 
       // Get all stints from backend
+      // TODO
       this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
         this.formatStints(backendData);
         this.getDriversFromAPI();
@@ -117,7 +118,7 @@ export class PlanningPage{
     let toast = this.toastCtrl.create({
       message: toastMessage,
       duration: 3000,
-      position: "top"
+      position: "bottom"
     });
     toast.onDidDismiss(() => {
       });
@@ -157,17 +158,31 @@ export class PlanningPage{
           planningItem.duration = Math.abs(parseInt(duration.toString()));
 
           // Startdate of stint
-          planningItem.starttime =
-            starttimeISO.getHours() +
-            ":" +
-            starttimeISO.getMinutes();
+          if(starttimeISO.getMinutes() < 10) {
+            planningItem.starttime =
+              starttimeISO.getHours() +
+              ":" + this.zeroForFormatting +
+              starttimeISO.getMinutes();
+          } else {
+            planningItem.starttime =
+              starttimeISO.getHours() +
+              ":" +
+              starttimeISO.getMinutes();
+          }
           planningItem.starttimeISO = starttimeISO;
 
           // Endtime of stint
-          planningItem.endtime =
-            endtimeISO.getHours() +
-            ":" +
-            endtimeISO.getMinutes();
+          if(endtimeISO.getMinutes() < 10) {
+            planningItem.endtime =
+              endtimeISO.getHours() +
+              ":" + this.zeroForFormatting +
+              endtimeISO.getMinutes();
+          } else {
+            planningItem.endtime =
+              endtimeISO.getHours() +
+              ":" +
+              endtimeISO.getMinutes();
+          }
           planningItem.endtimeISO = endtimeISO;
 
           // Tags
@@ -199,21 +214,39 @@ export class PlanningPage{
           duration = duration / 60000;
           protocolItem.duration = Math.abs(parseInt(duration.toString()));
 
-          // Starttime of stint
-          protocolItem.starttime =
-            this.weekdays[starttimeISO.getDay()] +
-            ", " +
-            starttimeISO.getHours() +
-            ":" +
-            starttimeISO.getMinutes();
+          // Startdate of stint
+          if(starttimeISO.getMinutes() < 10) {
+            protocolItem.starttime =
+              this.weekdays[starttimeISO.getDay()] +
+              ", " +
+              starttimeISO.getHours() +
+              ":" + this.zeroForFormatting +
+              starttimeISO.getMinutes();
+          } else {
+            protocolItem.starttime =
+              this.weekdays[starttimeISO.getDay()] +
+              ", " +
+              starttimeISO.getHours() +
+              ":" +
+              starttimeISO.getMinutes();
+          }
 
           // Endtime of stint
-          protocolItem.endtime =
-            this.weekdays[endtimeISO.getDay()] +
-            ", " +
-            endtimeISO.getHours() +
-            ":" +
-            endtimeISO.getMinutes();
+          if(endtimeISO.getMinutes() < 10) {
+            protocolItem.endtime =
+              this.weekdays[endtimeISO.getDay()] +
+              ", " +
+              endtimeISO.getHours() +
+              ":" + this.zeroForFormatting +
+              endtimeISO.getMinutes();
+          } else {
+            protocolItem.endtime =
+              this.weekdays[endtimeISO.getDay()] +
+              ", " +
+              endtimeISO.getHours() +
+              ":" +
+              endtimeISO.getMinutes();
+          }
 
           // Tags
           protocolItem.kartTag = allStints[i].tags[0];
@@ -228,6 +261,7 @@ export class PlanningPage{
     // console.log(this.allProtocolItems);
   }
 
+  // TODO
   // Driver objects from API
   getDriversFromAPI() {
     this.apiProvider.getDrivers(this.teamId).then(data => {
@@ -281,36 +315,43 @@ export class PlanningPage{
 
     console.log("STINT TO BE EDITED: " + finishedStint);
 
+    // Item preparation
+    finishedStint.enddate = new Date().toISOString(); // set enddate to current time
     finishedStint.finished = true;
     finishedStint.driverId = planningItem._id;
-    delete finishedStint.driver;
     let finishedStintId = finishedStint._id;
     delete finishedStint._id;
+    delete finishedStint.driver;
 
+    console.log("finishednStint.enddate: " + finishedStint.enddate);
+    slidingItem.close();
+    // TODO
     this.apiProvider.setStintToDoneAPI(
       this.teamId,
       this.eventId,
       finishedStint,
       finishedStintId
-    );
-    slidingItem.close();
-    this.ionEvents.publish("stint:setToDone");
-    this.presentToast("Stint abgeschlossen");
+    ).then(data => {
+      this.ionEvents.publish("stint:setToDone");
+      this.presentToast("Stint abgeschlossen");
+    });
   }
 
   // Delete a planned stint
   deletePlannedStint(planningItem: any, slidingItem: ItemSliding) {
     let stint = this.getStintByDriver(planningItem);
-
+    slidingItem.close();
     console.log("TO BE DELETED SINT: " + stint);
+    // TODO
     this.apiProvider.removePlannedStint(
       this.teamId,
       this.eventId,
       stint._id
-    );
-    slidingItem.close();
-    this.ionEvents.publish("stint:deleted");
-    this.presentToast("Stint gelöscht");
+    ).then(data => {
+      this.ionEvents.publish("stint:deleted");
+      this.presentToast("Stint gelöscht");
+    });
+
   }
 
   // Invoked when clicking the kart tag

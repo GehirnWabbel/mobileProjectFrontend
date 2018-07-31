@@ -13,8 +13,9 @@ import { ApiServiceProvider } from "../../providers/api-service/api-service";
 })
 export class PlanningModalAddPage {
 
-  // Numbers
+  // Numbers and Bools
   private raceday: number;
+  public isBreakToggle: boolean;
 
   // Objects
   private selectedDriver: any;
@@ -49,6 +50,9 @@ export class PlanningModalAddPage {
     private ionEvents: Events,
     private toastCtrl: ToastController
   ) {
+
+    // isBreak Toggle switch
+    this.isBreakToggle = false;
 
     // Initialize with existing data from planning page
     this.allStints = navParams.get("allStints");
@@ -85,6 +89,7 @@ export class PlanningModalAddPage {
       this.tagsArray = [];
     }
 
+    // TODO
     // Get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
       this.currentEvent = data as Array<any>;
@@ -101,11 +106,11 @@ export class PlanningModalAddPage {
     let toast = this.toastCtrl.create({
       message: toastMessage,
       duration: 3000,
-      position: "top"
+      position: "bottom"
     });
 
     toast.onDidDismiss(() => {
-      });
+    });
 
     toast.present();
   }
@@ -127,7 +132,6 @@ export class PlanningModalAddPage {
     // message += months + " months "
     // message += years + " years ago \n"
     // console.log(message);
-
     return days;
   }
 
@@ -141,7 +145,6 @@ export class PlanningModalAddPage {
 
     } else {
       // Start adding routine
-
       /*
        *
        * Calculation and data preparation
@@ -199,7 +202,6 @@ export class PlanningModalAddPage {
       console.log("Geplante Dauer in  Minuten: " + this.durationISO.getMinutes()); // 0 bis 59
       console.log("DauerISO Gesamt als String: " + this.durationISO.toISOString()); // "Sun Jul 29 2018 01:00:09 GMT+0200 (Central European Summer Time)" = richtiger String
       console.log("DauerISO Gesamt als Objekt: " + this.durationISO); // Sun Jul 29 2018 01:00:09 GMT+0200 (Central European Summer Time) = Date object
-
       // Endtime
       console.log("Geplante Endzeit: " + this.endtimeISO);
 
@@ -216,25 +218,39 @@ export class PlanningModalAddPage {
 
       /*
        *
+       * CHECK REQUIRED FIELDS
+       * AND
        * VALUE PASSING TO API
        *
        */
 
-      // Call API method
-      this.apiProvider.createStint(
-        this.teamId,
-        this.eventId,
-        this.selectedDriver._id,
-        this.starttimeISO.toISOString(),
-        this.endtimeISO.toISOString(),
-        this.raceday,
-        this.tagsArray
-      );
+      if(this.starttime == undefined ||
+        this.endtime == undefined ||
+        this.raceday == undefined ||
+        this.selectedDriver == undefined ||
+        this.durationISO == undefined
+      ){
+        this.presentToast("Bitte fülle alle Pflichtfelder aus");
+      } else {
 
-      // Publish event for auto-reload of PlanningPage, close Modal and present toast
-      this.ionEvents.publish("stint:created");
-      this.closeAddModal();
-      this.presentToast("Stint angelegt");
+        // TODO
+        // Call API method
+        this.apiProvider.createStint(
+          this.teamId,
+          this.eventId,
+          this.selectedDriver._id,
+          this.starttimeISO.toISOString(),
+          this.endtimeISO.toISOString(),
+          this.raceday,
+          this.isBreakToggle,
+          this.tagsArray
+        ).then(data => {
+          // Publish event for auto-reload of PlanningPage, close Modal and present toast
+          this.ionEvents.publish("stint:created");
+          this.closeAddModal();
+          this.presentToast("Stint angelegt");
+        });
+      }
     }
   }
 
@@ -282,18 +298,14 @@ export class PlanningModalAddPage {
     delete this.existingStintUpdated.starttimeISO;
     delete this.existingStintUpdated.endtimeISO;
     delete this.existingStintUpdated.raceday;
-    delete this.existingStintUpdated.driver.starttimeISO;
-    delete this.existingStintUpdated.driver.endtimeISO;
-    delete this.existingStintUpdated.driver.kartTag;
-    delete this.existingStintUpdated.driver.weatherTag;
-    delete this.existingStintUpdated.driver.flagTag
-    delete this.existingStintUpdated.driver.duration;
+    delete this.existingStintUpdated.driver;
+    delete this.existingStintUpdated.notificationTime;
+    delete this.existingStintUpdated.notified;
 
     // Add new data to existing stint
-    this.existingStintUpdated.driver = this.selectedDriver._id;
+    this.existingStintUpdated.driverId = this.selectedDriver._id;
     this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
     this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
-    this.existingStintUpdated.duration = this.duration;
     this.existingStintUpdated.finished = false;
     this.existingStintUpdated.isBreak = false;
     this.existingStintUpdated.raceDay = this.raceday;
@@ -301,47 +313,36 @@ export class PlanningModalAddPage {
     this.existingStintUpdated.tags[1] = this.weatherTag;
     this.existingStintUpdated.tags[2] = this.flagTag;
 
-    console.log(JSON.stringify(this.existingStintUpdated));
-
     /*
      *
+     * CHECK REQUIRED FIELDS
+     * AND
      * VALUE PASSING TO API
      *
      */
 
-    // Call API method
-    this.apiProvider.updateStintData(
-      this.teamId,
-      this.eventId,
-      this.existingStint._id,
-      this.existingStintUpdated
-    );
+    // Check required fields
+    if(this.starttime == undefined ||
+      this.endtime == undefined ||
+      this.raceday == undefined ||
+      this.selectedDriver == undefined ||
+      this.duration == undefined
+    ){
+      this.presentToast("Bitte fülle alle Pflichtfelder aus");
+    } else {
 
-    this.ionEvents.publish("stint:edited");
-    this.closeAddModal();
-    this.presentToast("Stint geändert");
+      // TODO
+      // Call API method
+      this.apiProvider.updateStintData(
+        this.teamId,
+        this.eventId,
+        this.existingStint._id,
+        this.existingStintUpdated
+      ).then(data => {
+        this.ionEvents.publish("stint:edited");
+        this.closeAddModal();
+        this.presentToast("Stint geändert");
+      });
+    }
   }
-
-
-
-  /*
-   *
-   * eventually obsolete
-   *
-   */
-
-
-  // // Split time, e.g. "12:30" in 12 Hours and 30 minutes and define new date object
-  // setDateTime(date, time) {
-  //   let index = time.indexOf(":");
-  //   let hours = time.substring(0, index);
-  //   let minutes = time.substring(index + 1);
-  //
-  //   date.setHours(hours);
-  //   date.setMinutes(minutes);
-  //   date.setSeconds(0);
-  //
-  //   return date;
-  // }
-
 }
