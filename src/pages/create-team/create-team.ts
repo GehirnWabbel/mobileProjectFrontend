@@ -36,6 +36,7 @@ export class CreateTeamPage {
   jumpDirectlyToEvents(){
     this.teamId = "5b06a79fef9f5500141336d2";
     this.storage.set('teamId', this.teamId );
+    this.storage.set("memberId", "5b5f4e03a2a2d000142da8ba");
     console.log("Team Id mock: " + this.teamId + " saved in local storage." );
     this.navCtrl.setRoot(EventsPage);
   }

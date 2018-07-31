@@ -146,26 +146,81 @@ export class PlanningPage{
     this.allStints = backendData as Array<any>;
     console.log("All stints of event (protocol and planned): ", this.allStints);
     let arrayWithStints = this.allStints;
+
     this.getPlanningItemsOfStint(arrayWithStints);
+    this.getPlanningBreakItems(arrayWithStints);
+
     this.getProtocolItemsOfStint(arrayWithStints);
+    this.getProtocolBreakItems(arrayWithStints);
+  }
+
+  // Get Planning Break Items
+  getPlanningBreakItems(allStints) {
+    console.log("------------------------ START BREAK PLANNING-----------------------------");
+    for (let i = 0; i <= allStints.length - 1; i++) {
+      if (allStints[i].isBreak && allStints[i].finished === false && allStints[i].isBreak === true){
+        // Define breakItem
+        let breakItem = allStints[i];
+
+
+        // Calculate duration
+        let endtimeISO = new Date(allStints[i].enddate);
+        let starttimeISO = new Date(allStints[i].startdate);
+        let duration = endtimeISO.valueOf() - starttimeISO.valueOf();
+        duration = duration / 60000;
+        breakItem.duration = Math.abs(parseInt(duration.toString()));
+
+        // Startdate of stint
+        if(starttimeISO.getMinutes() < 10) {
+          breakItem.starttime =
+            starttimeISO.getHours() +
+            ":" + this.zeroForFormatting +
+            starttimeISO.getMinutes();
+        } else {
+          breakItem.starttime =
+            starttimeISO.getHours() +
+            ":" +
+            starttimeISO.getMinutes();
+        }
+        breakItem.starttimeISO = starttimeISO;
+
+        // Endtime of stint
+        if(endtimeISO.getMinutes() < 10) {
+          breakItem.endtime =
+            endtimeISO.getHours() +
+            ":" + this.zeroForFormatting +
+            endtimeISO.getMinutes();
+        } else {
+          breakItem.endtime =
+            endtimeISO.getHours() +
+            ":" +
+            endtimeISO.getMinutes();
+        }
+        breakItem.endtimeISO = endtimeISO;
+
+        // Break
+        breakItem.isBreakAttribute = allStints[i].isBreak;
+
+        // Add to array
+        this.allPlanningItems.push(breakItem);
+      }
+    }
   }
 
   // Planning Items
   getPlanningItemsOfStint(allStints) {
+    console.log("------------------------ START PLANNING -----------------------------");
     for (let i = 0; i <= allStints.length - 1; i++) {
       console.dir(this.allStints[i]);
       // Add to allDrivers if a member is a driver and Stint is NOT finished
       // Some stints do not even have a driver subArray
 
-      if (allStints[i].driver != null && allStints[i].driver != "undefined") {
-        if (
-          allStints[i].finished == false &&
-          allStints[i].driver.driver == true
-        ) {
+      if (allStints[i].driver != null && allStints[i].driver != "undefined" && allStints[i].isBreak === false) {
+        if (allStints[i].isBreak === false && allStints[i].finished === false) {
           let planningItem = allStints[i].driver;
 
           // Driver
-          planningItem.selectedDriver = allStints[i].driver.driver;
+          //planningItem.selectedDriver = allStints[i].driver.driver;
 
           // Calculate duration
           let endtimeISO = new Date(allStints[i].enddate);
@@ -210,7 +265,7 @@ export class PlanningPage{
           // Break
           planningItem.isBreakAttribute = allStints[i].isBreak;
 
-          console.log("Planning Item: " + planningItem);
+          console.log("Current Planning Item: " + planningItem);
           // Add to array
           this.allPlanningItems.push(planningItem);
         }else
@@ -218,17 +273,71 @@ export class PlanningPage{
       }else
         console.log("Skipped outer");
     }
-    console.log("PLANNING ITEMS: " + this.allPlanningItems);
+    console.log("ALL PLANNING ITEMS: " + this.allPlanningItems);
+  }
+
+  // Get Protocol Break Items
+  getProtocolBreakItems(allStints) {
+    console.log("------------------------ START BREAK PLANNING-----------------------------");
+    for (let i = 0; i <= allStints.length - 1; i++) {
+      if (allStints[i].isBreak && allStints[i].finished === true){
+
+        // Define breakItem
+        let breakItem = allStints[i];
+
+        // Calculate duration
+        let endtimeISO = new Date(allStints[i].enddate);
+        let starttimeISO = new Date(allStints[i].startdate);
+        let duration = endtimeISO.valueOf() - starttimeISO.valueOf();
+        duration = duration / 60000;
+        breakItem.duration = Math.abs(parseInt(duration.toString()));
+
+        // Startdate of stint
+        if(starttimeISO.getMinutes() < 10) {
+          breakItem.starttime =
+            starttimeISO.getHours() +
+            ":" + this.zeroForFormatting +
+            starttimeISO.getMinutes();
+        } else {
+          breakItem.starttime =
+            starttimeISO.getHours() +
+            ":" +
+            starttimeISO.getMinutes();
+        }
+        breakItem.starttimeISO = starttimeISO;
+
+        // Endtime of stint
+        if(endtimeISO.getMinutes() < 10) {
+          breakItem.endtime =
+            endtimeISO.getHours() +
+            ":" + this.zeroForFormatting +
+            endtimeISO.getMinutes();
+        } else {
+          breakItem.endtime =
+            endtimeISO.getHours() +
+            ":" +
+            endtimeISO.getMinutes();
+        }
+        breakItem.endtimeISO = endtimeISO;
+
+        // Break
+        breakItem.isBreakAttribute = allStints[i].isBreak;
+
+        // Add to array
+        this.allProtocolItems.push(breakItem);
+      }
+    }
   }
 
   // Protocol Items
   getProtocolItemsOfStint(allStints) {
+    console.log("------------------------ START PROTOCOL -----------------------------");
     for (let i = 0; i < allStints.length; i++) {
       console.dir(this.allStints[i]);
 
       // Add to allProtocolItems if stint is finished
-      if (allStints[i].driver != null && allStints[i].driver != "undefined") {
-        if (allStints[i].finished == true) {
+      if (allStints[i].driver != null && allStints[i].driver != "undefined" && !allStints[i].isBreak) {
+        if (allStints[i].isBreak === false && allStints[i].finished == true) {
           let protocolItem = allStints[i].driver;
 
           // Calculate duration
@@ -279,13 +388,14 @@ export class PlanningPage{
           protocolItem.flagTag = allStints[i].tags[2];
 
           // Add to array
+          console.log("Current Protocol Item " + protocolItem);
           this.allProtocolItems.push(protocolItem);
         }else
-          console.log("Skipped inner");
+          console.log("Skipped inner " + i);
       }else
-        console.log("Skipped outer");
+        console.log("Skipped outer " + i);
     }
-    console.log("PROTOCOL ITEMS: " + this.allProtocolItems);
+    console.log("ALL PROTOCOL ITEMS: " + this.allProtocolItems);
   }
 
   // Driver objects from API
@@ -296,14 +406,14 @@ export class PlanningPage{
   }
 
   // Get stint by driver and (indirect) current event
-  getStintByDriver(driver: any) {
-      for (let i = 0; i < this.allStints.length; i++) {
-        if (this.allStints[i].driver._id == driver._id) {
-          let stint = this.allStints[i];
-          return stint;
-        }
-      }
-  }
+  // getStintByDriver(driver: any) {
+  //     for (let i = 0; i < this.allStints.length; i++) {
+  //       if (this.allStints[i].driver._id == driver._id) {
+  //         let stint = this.allStints[i];
+  //         return stint;
+  //       }
+  //     }
+  // }
 
   // Open Modal for adding a new stint
   addStintModal() {
@@ -320,68 +430,76 @@ export class PlanningPage{
   // Open Modal for editing an existing sting
   editStintModal(planningItem: any, slidingItem: ItemSliding) {
     console.log("STINT TO BE EDITED: " + planningItem);
+    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem._id).then(data => {
+      const addModal = this.modal.create(PlanningModalAddPage, {
 
-    let existingStint = this.getStintByDriver(planningItem);
-    const addModal = this.modal.create(PlanningModalAddPage, {
+        allStints: this.allStints,
+        allDrivers: this.allDrivers,
+        teamId: this.teamId,
+        memberId: this.memberId,
+        eventId: this.eventId,
+        existingStint: data as any,
+        duration: planningItem.duration
 
-      allStints: this.allStints,
-      allDrivers: this.allDrivers,
-      teamId: this.teamId,
-      memberId: this.memberId,
-      eventId: this.eventId,
-      existingStint: existingStint,
-      duration: planningItem.duration
-
-    });
-    slidingItem.close();
-    addModal.present();
+      });
+      slidingItem.close();
+      addModal.present();
+    }).catch(reason => this.errorHandling(reason));
+     // existingStint = this.getStintByDriver(planningItem);
   }
 
-  // Update 'finished' attribute of an existing stint --> new protocol item
+  // Update 'finished' attribute of an existing stint or pause --> new protocol item
   setStintToDone(planningItem: any, slidingItem: ItemSliding) {
-    let finishedStint = this.getStintByDriver(planningItem);
+    // let finishedStint = this.getStintByDriver(planningItem);
+    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem._id).then(data => {
+      let stintFromAPI = data as any;
+      console.log("STINT TO BE EDITED: " + stintFromAPI);
+      let finishedStint = stintFromAPI;
 
-    console.log("STINT TO BE EDITED: " + finishedStint);
+      // Item preparation
+      finishedStint.enddate = new Date().toISOString(); // set enddate to current time
+      finishedStint.finished = true;
+      finishedStint.driverId = planningItem._id;
+      let finishedStintId = finishedStint._id;
+      delete finishedStint._id;
+      delete finishedStint.driver;
 
-    // Item preparation
-    finishedStint.enddate = new Date().toISOString(); // set enddate to current time
-    finishedStint.finished = true;
-    finishedStint.driverId = planningItem._id;
-    let finishedStintId = finishedStint._id;
-    delete finishedStint._id;
-    delete finishedStint.driver;
-
-    console.log("finishednStint.enddate: " + finishedStint.enddate);
-    slidingItem.close();
-    // TODO
-    this.apiProvider.setStintToDoneAPI(
-      this.teamId,
-      this.eventId,
-      finishedStint,
-      finishedStintId,
-      this.memberId
-    ).then(data => {
+      console.log("finishednStint.enddate: " + finishedStint.enddate);
       slidingItem.close();
-      this.ionEvents.publish("stint:setToDone");
-      this.presentToast("Stint abgeschlossen");
+      // TODO
+      this.apiProvider.setStintToDoneAPI(
+        this.teamId,
+        this.eventId,
+        finishedStint,
+        finishedStintId,
+        this.memberId
+      ).then(data => {
+        slidingItem.close();
+        this.ionEvents.publish("stint:setToDone");
+        this.presentToast("Stint abgeschlossen");
       }).catch(reason => this.errorHandling(reason));
+    }).catch(reason => this.errorHandling(reason));
+
   }
 
   // Delete a planned stint
   deletePlannedStint(planningItem: any, slidingItem: ItemSliding) {
-    let stint = this.getStintByDriver(planningItem);
-    slidingItem.close();
-    console.log("TO BE DELETED SINT: " + stint);
-    this.apiProvider.removePlannedStint(
-      this.teamId,
-      this.eventId,
-      stint._id,
-      this.memberId
-    ).then(data => {
-      this.ionEvents.publish("stint:deleted");
-      this.presentToast("Stint gelöscht");
-    }).catch(reason => this.errorHandling(reason));
+    // let stint = this.getStintByDriver(planningItem);
+    this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, planningItem._id).then(data => {
+      let stint = data as any;
 
+      slidingItem.close();
+      console.log("TO BE DELETED SINT: " + stint);
+      this.apiProvider.removePlannedStint(
+        this.teamId,
+        this.eventId,
+        stint._id,
+        this.memberId
+      ).then(data => {
+        this.ionEvents.publish("stint:deleted");
+        this.presentToast("Stint gelöscht");
+      }).catch(reason => this.errorHandling(reason));
+    }).catch(reason => this.errorHandling(reason));
   }
 
   // Invoked when clicking the kart tag
