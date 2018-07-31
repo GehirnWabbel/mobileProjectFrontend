@@ -152,14 +152,8 @@ export class PlanningPage{
     let arrayWithStints = this.allStints;
 
     this.getPlanningItemsOfStint(arrayWithStints);
-    //this.getPlanningBreakItems(arrayWithStints);
 
     this.getProtocolItemsOfStint(arrayWithStints);
-    //this.getProtocolBreakItems(arrayWithStints);
-
-    //this.allPlanningItems = this.allPlanningItems.sort(function(a,b) {return (a.orderNo > b.orderNo) ? 1 : ((b.orderNo > a.orderNo) ? -1 : 0);} );
-    //this.allProtocolItems = this.allProtocolItems.sort(function(a,b) {return (a.orderNo > b.orderNo) ? 1 : ((b.orderNo > a.orderNo) ? -1 : 0);} );
-
   }
 
   // Planning Items
@@ -490,7 +484,10 @@ export class PlanningPage{
 
   reorderItems(indexes) {
     let elementMoved = this.allPlanningItems[indexes.from];
-    let newPos = this.allProtocolItems.length + indexes.to + 2;
+    let newPos = this.allProtocolItems.length + indexes.to + 1;
+    console.log("-------------------------------")
+    console.log(this.allProtocolItems.length)
+    console.log(indexes.to)
     //put auf elementMoved.stintId mit orderNo newPos
     this.apiProvider.getStintById(this.teamId, this.eventId, this.memberId, elementMoved.stintId).then(data => {
       let stintFromAPI = data as any;
