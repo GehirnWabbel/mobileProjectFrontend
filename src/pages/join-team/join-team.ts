@@ -125,7 +125,7 @@ export class JoinTeamPage {
         console.log("Join Team: Anmeldung als User, nicht als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
+        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"avatarNo\":10, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
 
         console.log(newUser);
 
@@ -147,7 +147,7 @@ export class JoinTeamPage {
         console.log("Anmeldung als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
+        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"avatarNo\":10, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
 
         console.log(newDriver);
 
