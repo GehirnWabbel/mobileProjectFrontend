@@ -19,6 +19,8 @@ Im Falle des App Starts gibt es eine große Bandbreite an verschiedenen Konstell
 
 ## Events
 
+![GitHub Logo](/img/Event_Navi.jpg)
+
 ## Stint Planung
 
 ## Team Verwaltung
