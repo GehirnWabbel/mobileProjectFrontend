@@ -187,6 +187,7 @@ export class MemberMgmtPage {
         if(this.allowCancel) // cancel is permitted if a new member joins the team and if a new team is created; then one wants to land on the event page not the team overview page
           this.viewCrtl.dismiss(); //back to where we came from
         else {
+          console.log("Member Mgmt: setRoot EventsPage");
           this.navCtrl.setRoot(EventsPage);
         }
 
