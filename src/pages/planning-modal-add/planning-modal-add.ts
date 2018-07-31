@@ -19,6 +19,7 @@ export class PlanningModalAddPage {
   // Numbers and Bools
   private raceday: number;
   public isBreakToggle: boolean;
+  public disableToggle: boolean;
 
   // Objects
   private selectedDriver: any;
@@ -36,6 +37,9 @@ export class PlanningModalAddPage {
   private kartTag: string;
   private weatherTag: string;
   private flagTag: string;
+
+  public eventStartdate: string;
+  public eventEnddate: string;
 
   // Arrays
   public allStints: Array<any>;
@@ -64,7 +68,7 @@ export class PlanningModalAddPage {
     this.allStints = navParams.get("allStints");
     this.allDrivers = navParams.get("allDrivers");
     this.teamId = navParams.get("teamId");
-    this.memberId = this.navParams.get("memberId");
+    this.memberId = navParams.get("memberId");
     this.eventId = navParams.get("eventId");
 
     // Get existing stint data
@@ -92,19 +96,50 @@ export class PlanningModalAddPage {
       this.weatherTag = this.existingStint.tags[1];
       this.flagTag = this.existingStint.tags[2];
 
+      if(this.existingStint.isBreak){
+        this.disableToggle = true;
+      } else {
+        this.disableToggle = false;
+      }
+
     } else {
       console.log("Ready to create a new Stint");
       this.selectedDriver = { name: "wähle einen Fahrer" };
       this.tagsArray = [];
     }
 
+    this.initEvent();
+  }
+
+  initEvent() {
     // Get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId, this.memberId).then(data => {
+
       this.currentEvent = data as Array<any>;
+      console.log(this.currentEvent);
+
+      // Set min datepicker
+      let eventStartdateUnformatted = new Date(this.currentEvent.startdate);
+      this.eventStartdate = moment(eventStartdateUnformatted).format();
+
+      // Set max datepicker
+      let eventEnddateUnformatted = moment(eventStartdateUnformatted).add('days', this.currentEvent.noRaceDays);
+      this.eventEnddate = moment(eventEnddateUnformatted).format();
+
     }).catch(reason => {
       this.errorHandling(reason);
     });
   }
+
+  // ionViewWillEnter() {
+  //   // Get current event
+  //   this.apiProvider.getSingleEvent(this.teamId, this.eventId, this.memberId).then(data => {
+  //     this.currentEvent = data as Array<any>;
+  //     console.log(this.currentEvent);
+  //   }).catch(reason => {
+  //     this.errorHandling(reason);
+  //   });
+  // }
 
   errorHandling(reason) {
     console.log("Planning-Modal-Add: error while loading data");

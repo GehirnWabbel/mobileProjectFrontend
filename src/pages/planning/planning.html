@@ -9,6 +9,16 @@
 
 
 <ion-content padding-right>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <h3 padding>Protokoll</h3>
 
   <div *ngIf="allProtocolItems.length < 1" text-center>
@@ -64,7 +74,7 @@
     </p>
   </div>
 
-  <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
+  <ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
     <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
 
         <!-- If our item is a stint *ngIf="item.isBreak === false; else break"-->
@@ -72,10 +82,11 @@
 
             <ion-thumbnail item-start>
               <img *ngIf="item.avatarNo != null" src="assets/imgs/avatar/ava-{{ item.avatarNo }}.png">
-              <ion-icon *ngIf="item.avatarNo == null" name="md-pause"></ion-icon>
+              <ion-icon *ngIf="item.avatarNo == null" name="md-pause" style="zoom:2.0; margin-left: 8px; margin-top: 4px;"></ion-icon>
             </ion-thumbnail>
 
-            <h2>{{ item.name }}</h2>
+            <h2 *ngIf="item.avatarNo != null">{{ item.name }}</h2>
+            <h2 *ngIf="item.avatarNo == null">Pause</h2>
             <p><span style="display:inline-block; height: 10px;"></span></p>
             <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
             <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
@@ -116,7 +127,7 @@
 
 
       <ion-item-options class="ion-item-options" side="right">
-        <button ion-button color="secondary" (click)="setStintToDone(item, slidingItem)">
+        <button *ngIf="item.firstItem == true" ion-button color="secondary" (click)="setStintToDone(item, slidingItem)">
           <ion-icon name="md-checkmark" id="iconCheckmark"></ion-icon>
           Fertig
         </button>
@@ -143,7 +154,7 @@
   </ion-fab>
 
   <!-- Footer message -->
-  <div *ngIf="allProtocolItems.length > 1" text-center>
+  <div *ngIf="allPlanningItems.length > 1" text-center>
     <p>
       Keine weiteren Stints geplant
     </p>

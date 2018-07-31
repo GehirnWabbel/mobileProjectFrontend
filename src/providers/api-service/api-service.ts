@@ -190,7 +190,7 @@ export class ApiServiceProvider {
     teamId: any,
     eventId: any,
     finishedStint: any,
-    finishedStintId: any,
+      finishedStintId: any,
     memberId: string
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);
