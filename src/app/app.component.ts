@@ -55,7 +55,10 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.pushNotificationProvider.init();
+      this.pushNotificationProvider.init(()=> {
+        console.log("sub called");
+        this.nav.setRoot(PlanningPage);
+      });
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
