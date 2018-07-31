@@ -137,6 +137,7 @@ export class PlanningPage{
   // Planning Items
   getPlanningItemsOfStint(allStints) {
     for (let i = 0; i <= allStints.length - 1; i++) {
+      console.dir(this.allStints[i]);
       // Add to allDrivers if a member is a driver and Stint is NOT finished
       // Some stints do not even have a driver subArray
 
@@ -190,16 +191,24 @@ export class PlanningPage{
           planningItem.weatherTag = allStints[i].tags[1];
           planningItem.flagTag = allStints[i].tags[2];
 
+          // Break
+          planningItem.isBreakAttribute = allStints[i].isBreak;
+
+          console.log("Planning Item: " + planningItem);
+          // Add to array
           this.allPlanningItems.push(planningItem);
-        }
-      }
+        }else
+          console.log("Skipped inner");
+      }else
+        console.log("Skipped outer");
     }
-    // console.log(this.allPlanningItems);
+    console.log("PLANNING ITEMS: " + this.allPlanningItems);
   }
 
   // Protocol Items
   getProtocolItemsOfStint(allStints) {
     for (let i = 0; i < allStints.length; i++) {
+      console.dir(this.allStints[i]);
 
       // Add to allProtocolItems if stint is finished
       if (allStints[i].driver != null && allStints[i].driver != "undefined") {
@@ -255,10 +264,12 @@ export class PlanningPage{
 
           // Add to array
           this.allProtocolItems.push(protocolItem);
-        }
-      }
+        }else
+          console.log("Skipped inner");
+      }else
+        console.log("Skipped outer");
     }
-    // console.log(this.allProtocolItems);
+    console.log("PROTOCOL ITEMS: " + this.allProtocolItems);
   }
 
   // TODO

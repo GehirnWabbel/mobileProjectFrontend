@@ -108,10 +108,8 @@ export class PlanningModalAddPage {
       duration: 3000,
       position: "bottom"
     });
-
     toast.onDidDismiss(() => {
     });
-
     toast.present();
   }
 
@@ -307,7 +305,7 @@ export class PlanningModalAddPage {
     this.existingStintUpdated.startdate = this.starttimeISO.toISOString();
     this.existingStintUpdated.enddate = this.endtimeISO.toISOString();
     this.existingStintUpdated.finished = false;
-    this.existingStintUpdated.isBreak = false;
+    this.existingStintUpdated.isBreak = this.isBreakToggle;
     this.existingStintUpdated.raceDay = this.raceday;
     this.existingStintUpdated.tags[0] = this.kartTag;
     this.existingStintUpdated.tags[1] = this.weatherTag;

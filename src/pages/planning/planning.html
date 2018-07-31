@@ -25,7 +25,6 @@
           <img src="assets/imgs/avatar/ava-{{ item.avatarNo }}.png" >
         </ion-thumbnail>
         <h2>{{ item.name }}</h2>
-        <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
         <p><span style="display:inline-block; height: 10px;"></span></p>
         <p style="color: black">
           Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr
@@ -66,30 +65,56 @@
   <ion-list reorder="true" (ionItemReorder)="$event.applyTo(allPlanningItems)">
     <ion-item-sliding *ngFor="let item of allPlanningItems" #slidingItem>
 
+        <!-- If our item is a stint *ngIf="item.isBreak === false; else break"-->
         <ion-item class="ion-item" [style.border-color]="colorDefinitions[item.color]">
-          <ion-thumbnail item-start>
-            <img src="assets/imgs/avatar/ava-{{ item.avatarNo }}.png">
-          </ion-thumbnail>
 
-          <h2>{{ item.name }}</h2>
-          <!--<p class="driverColor" [style.background-color]="colorDefinitions[item.color]">&#160;</p>-->
-          <p><span style="display:inline-block; height: 10px;"></span></p>
-          <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
-          <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
-          <p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/avatar/ava-{{ item.avatarNo }}.png">
+            </ion-thumbnail>
 
-          <p>
-            <ion-badge color="dark-grey" class="badge" item-end (click)="openKartTag(item)">
-              <ion-icon name="car"></ion-icon>
-            </ion-badge>
-            <ion-badge color="dark-grey" class="badge" item-end (click)="openWeatherTag(item)">
-              <ion-icon name="partly-sunny"></ion-icon>
-            </ion-badge>
-            <ion-badge color="dark-grey" class="badge" item-end (click)="openFlagTag(item)">
-              <ion-icon name="flag"></ion-icon>
-            </ion-badge>
-          </p>
+            <h2>{{ item.name }}</h2>
+            <p><span style="display:inline-block; height: 10px;"></span></p>
+            <p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>
+            <p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>
+            <p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>
+          <p style="color: black">Pause: <span style="display:inline-block; width: 24px;"></span> {{ item.isBreakAttribute }}</p>
+
+            <p>
+              <ion-badge color="dark-grey" class="badge" item-end (click)="openKartTag(item)">
+                <ion-icon name="car"></ion-icon>
+              </ion-badge>
+              <ion-badge color="dark-grey" class="badge" item-end (click)="openWeatherTag(item)">
+                <ion-icon name="partly-sunny"></ion-icon>
+              </ion-badge>
+              <ion-badge color="dark-grey" class="badge" item-end (click)="openFlagTag(item)">
+                <ion-icon name="flag"></ion-icon>
+              </ion-badge>
+            </p>
+
+
+          <!-- If out item is a break-->
+          <!--<ng-template #break class="ion-item" style="background-color: #333333">-->
+
+            <!--<p>-->
+              <!--testkdjfölkajfdsa-->
+            <!--</p>-->
+
+            <!--<ion-thumbnail item-start>-->
+              <!--<ion-icon name="md-pause"></ion-icon>-->
+            <!--</ion-thumbnail>-->
+
+            <!--<h2>Pause</h2>-->
+            <!--<p><span style="display:inline-block; height: 10px;"></span></p>-->
+            <!--<p style="color: black">Start: <span style="display:inline-block; width: 30px;"></span> {{ item.starttime }} Uhr</p>-->
+            <!--<p style="color: black">Ende: <span style="display:inline-block; width: 30px;"></span> {{ item.endtime }} Uhr</p>-->
+            <!--<p style="color: black">Dauer: <span style="display:inline-block; width: 24px;"></span> {{ item.duration }} min</p>-->
+
+          <!--</ng-template>-->
+
         </ion-item>
+
+
+
 
       <ion-item-options class="ion-item-options" side="right">
         <button ion-button color="secondary" (click)="setStintToDone(item, slidingItem)">
@@ -101,13 +126,13 @@
           Bearbeiten
         </button>
       </ion-item-options>
-
       <ion-item-options class="ion-item-options-delete" side="left">
         <button ion-button color="red" (click)="deletePlannedStint(item, slidingItem)">
           <ion-icon name="md-trash" id="iconDelete"></ion-icon>
           Löschen
         </button>
       </ion-item-options>
+
     </ion-item-sliding>
   </ion-list>
 
