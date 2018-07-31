@@ -96,8 +96,11 @@ export class ChartPage {
       colorsFinishedLightend[i] = this.shadeColor2(colorsFinished[i], 0.2);
       driverNames[i] = stats['driver'].name;
       totalStintsFinished[i] = stats['totalStints'];
-      totalTimeFinished[i] = stats['totalDrivingTime'] / 60000;
+      totalTimeFinished[i] = stats['totalDrivingTime'] / 60000.0;
       totalTimeFinished[i] = Math.round(totalTimeFinished[i]);
+
+      console.log("TotalTIme" + totalTimeFinished[i]);
+
       ++i;
     }
 
