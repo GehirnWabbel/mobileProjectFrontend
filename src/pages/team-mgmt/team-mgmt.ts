@@ -120,7 +120,7 @@ export class TeamMgmtPage {
   inviteTeamMember() {
     this.sharing.shareWithOptions({
       subject: "Tritt Team " + this.teamName + " bei!",
-      url: "https://racemanager-mobile-project.herokuapp.com/join?teamid=" + this.teamId + "&teamname=" + this.teamName,
+      url: "https://racemanager-mobile-project.herokuapp.com/join?teamid=" + this.teamId + "&teamname=" + encodeURI(this.teamName),
     }).then(result => {
       console.log("Team Management: Sharing completed? " + result.completed);
       console.log("Team Management: Shared to app: " + result.app);
