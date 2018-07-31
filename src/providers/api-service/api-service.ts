@@ -339,29 +339,12 @@ export class ApiServiceProvider {
   }
 
   removeTeamMember(teamId: string, member: any, memberId: string) {
-    return new Promise((resolve, reject) => {
-      this.presentLoading();
-      this.http
-        .delete(this.apiUrl + teamId + "/person/" + member._id, {
-          headers: { "X-Team-Member-Id": memberId }
-        })
-        .subscribe(
-          data => {
-            resolve(data);
-          },
-          err => {
-            console.log(err);
-            this.loading.dismiss();
-            reject(err);
-          },
-        () => this.loading.dismiss()
-        );
-    });
+    member.active = false;
+    return this.updateTeamMember(teamId, member, memberId);
   }
 
   removePlannedStint(teamId: string, eventId: string, stintId: string, memberId: string) {
     return new Promise((resolve, reject) => {
-      this.presentLoading();
       this.http
         .delete(
           this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId

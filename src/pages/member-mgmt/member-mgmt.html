@@ -78,7 +78,7 @@
 
     <ion-item *ngIf="editMember.driver === true && editMember.connectedViaDevice === true">
       <ion-label fixed>Info-Zeitpunkt</ion-label>
-      <ion-select [ngModel]="editMember.minutesBeforeNotification" [disabled]="changeMode === false" interface="action-sheet">
+      <ion-select [(ngModel)]="editMember.minutesBeforeNotification" [disabled]="changeMode === false" interface="action-sheet">
         <ion-option value="30">+ 30 min</ion-option>
         <ion-option value="40">+ 40 min</ion-option>
         <ion-option value="50">+ 50 min</ion-option>
