@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import {Events, IonicPage, ModalController, NavController, NavParams, Platform} from "ionic-angular";
+import {Events, IonicPage, ModalController, NavController, Platform} from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningPage } from "../planning/planning";
@@ -30,7 +30,6 @@ export class EventsPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
     private apiProvider: ApiServiceProvider,
     private storage: Storage,
     private nav: LaunchNavigator,
