@@ -31,6 +31,8 @@ export class JoinTeamPage {
   storageMemberId: string;
   checkAlreadyStoredIdsCalled = 0;
 
+  notificationId: string;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private apiProvider: ApiServiceProvider,
@@ -61,6 +63,10 @@ export class JoinTeamPage {
       console.log("Join Team: Found existing memberId: " + val);
       this.storageMemberId = val;
       this.checkAlreadyStoredIds();
+    });
+
+    this.storage.get("notificationId").then(notificationId => {
+      this.notificationId = notificationId;
     });
 
     console.log('Join Team: TeamId: '+this.teamId);
@@ -111,12 +117,13 @@ export class JoinTeamPage {
   }
 
   joinTeam(){
+
     if(this.isDriver != true){
       if(typeof this.driverName != 'undefined' && typeof this.notification != 'undefined' ){
         console.log("Join Team: Anmeldung als User, nicht als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
+        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": " + this.notificationId + " }";
 
         if(this.teamId != undefined ){
           this.apiProvider.registerNewDriver(this.teamId, newUser).then(data => {
@@ -134,7 +141,7 @@ export class JoinTeamPage {
         console.log("Anmeldung als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + " }";
+        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": " + this.notificationId + " }";
 
         this.apiProvider.registerNewDriver(this.teamId, newDriver).then(data => {
           console.log("Join Team: MemberId: " + data["_id"]);

@@ -6,6 +6,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { OneSignal } from '@ionic-native/onesignal';
 
 import { PlanningPage } from '../pages/planning/planning';
 import { PlanningModalAddPage} from "../pages/planning-modal-add/planning-modal-add";
@@ -22,6 +23,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiServiceProvider } from '../providers/api-service/api-service';
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover";
+import { PushNotificationProvider } from '../providers/push-notification/push-notification';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,9 @@ import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover"
     ApiServiceProvider,
     SocialSharing,
     Deeplinks,
-    LaunchNavigator
+    LaunchNavigator,
+    OneSignal,
+    PushNotificationProvider
   ]
 })
 export class AppModule {}

@@ -30,6 +30,7 @@ export class MemberMgmtPage {
 
   teamId;
   memberId;
+  notificationId;
 
   constructor(
     public navCtrl: NavController,
@@ -58,6 +59,10 @@ export class MemberMgmtPage {
         console.log("Member Mgmt: Found stored memberId: " + this.memberId);
       });
     }
+
+    this.storage.get("notificationId").then(notificationId => {
+      this.notificationId = notificationId;
+    });
 
     this.mode = this.navParams.data.mode;
     if(this.mode === 'new')
@@ -161,6 +166,9 @@ export class MemberMgmtPage {
       this.changeMode = false;
     } else {
       console.log(this.editMember.avatarNo);
+
+      this.editMember['notificationId'] = this.notificationId;
+
       this.apiProvider.registerNewDriver(this.teamId, this.editMember).then(data => {
         console.log(data['avatarNo']);
         if(!this.allowCancel) { //we came from join team or create team and need to know which team member id belongs to this phone
