@@ -94,6 +94,25 @@ export class ApiServiceProvider {
     });
   }
 
+  getStintById(teamId: string, eventId: any, memberId: string, stintId: string) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId, {
+          headers: { "X-Team-Member-Id": memberId }
+        })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+            this.loading.dismiss();
+            reject(err);
+          }
+        );
+    });
+  }
+
   getDrivers(teamId: string, memberId: string) {
     return new Promise((resolve, reject) => {
       this.presentLoading();
@@ -185,7 +204,7 @@ export class ApiServiceProvider {
     teamId: any,
     eventId: any,
     finishedStint: any,
-    finishedStintId: any,
+      finishedStintId: any,
     memberId: string
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);

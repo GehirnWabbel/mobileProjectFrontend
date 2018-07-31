@@ -9,16 +9,16 @@
 </ion-header>
 
 <!-- Content -->
-<ion-content margin-top="10px">
+<ion-content margin-top="10px" padding>
 
-  <ion-item>
+  <ion-item *ngIf="!disableToggle">
     <ion-label color="primary" stacked>Pause</ion-label>
-    <ion-toggle enabled color="secondary" [(ngModel)]="isBreakToggle" checked="false"></ion-toggle>
+    <ion-toggle color="secondary" [(ngModel)]="isBreakToggle" checked="{{isBreak}}"></ion-toggle>
   </ion-item>
 
   <ion-item>
     <ion-label color="primary" stacked>Zeitpunkt</ion-label>
-    <ion-datetime placeholder="{{ starttime }}" doneText="Fertig" cancelText="Abbrechen" displayFormat="DD. MMM, HH:mm" min="2018" required="true" [(ngModel)]="starttime"> </ion-datetime>
+    <ion-datetime doneText="Fertig" cancelText="Abbrechen" min="{{eventStartdate}}" max="{{eventEnddate}}" displayFormat="DD. MMM, HH:mm" min="2018" required="true" [(ngModel)]="starttime"> </ion-datetime>
   </ion-item>
 
   <ion-item>
@@ -28,7 +28,7 @@
 
   <div *ngIf="!isBreakToggle">
 
-    <ion-item>
+    <ion-item *ngIf="selectedDriver">
       <ion-label color="primary" stacked>Fahrer</ion-label>
       <ion-select required="true" placeholder="{{ selectedDriver.name }}" [(ngModel)]="selectedDriver" interface="action-sheet">
         <ion-option *ngFor="let driver of allDrivers" [value]="driver">{{ driver.name }}</ion-option>
