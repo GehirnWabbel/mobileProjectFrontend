@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams, ViewController} from 'ionic-angular';
+import {Events, NavParams, ViewController} from 'ionic-angular';
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
-import { EventsPage } from "../events/events";
 import { ToastController } from 'ionic-angular';
 
 /**
@@ -30,11 +29,24 @@ export class EventModalAddPage {
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
-    public navCtrl: NavController,
     public navParams: NavParams,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private ionEvents: Events
   ) {
-    this.teamId = navParams.get('teamId');
+
+    if(this.navParams.get('edit') == true){
+      this.eventName = this.navParams.get('name');
+      this.raceTime = this.navParams.get('start');
+      this.track = this.navParams.get('track');
+      this.track = this.track.toLowerCase();
+      this.raceDays = this.navParams.get('days');
+      this.kartFull = this.navParams.get('kartWeightWithFuel');
+      this.kartEmpty = this.navParams.get('kartWeightWithoutFuel');
+      this.teamId = navParams.get('teamId');
+    }
+    else{
+      this.teamId = navParams.get('teamId');
+    }
   }
 
   ionViewDidLoad() {
@@ -55,8 +67,9 @@ export class EventModalAddPage {
       //expected to have all values filled
       switch (this.track){
 
+        //no coordinates because json will be broken
         case "ch": {
-          this.address = "Kartarena Cheb, 50°05'1\"N 12°26'E, 58 9, 350 02 Odrava, Tschechien";
+          this.address = "Dřenice 13, 350 02 Cheb, Tschechien";
           this.picture = "cheb.png";
           break;
         }
@@ -66,7 +79,7 @@ export class EventModalAddPage {
           break;
         }
         case "wi": {
-          this.address = "50°17'23.9\"N 9°16'47.1\"E";
+          this.address = "Waldensberger Str. 57, 63607 Wächtersbach";
           this.picture = "wittgenborn.png";
           break;
         }
@@ -96,13 +109,33 @@ export class EventModalAddPage {
       let date = new Date(this.raceTime);
       let convertDate = date.toISOString();
 
-      let newEventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + convertDate +
+      let eventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + convertDate +
         "\",\"location\": \""+ this.address +"\",\"noRaceDays\": "+ this.raceDays +",\"picturePath\": \""+
         this.picture +"\",\"kartWeightWithFuel\": "+ this.kartFull +",\"kartWeightWithoutFuel\": "+
         this.kartEmpty +"}";
 
-      this.apiProvider.createEvent(newEventJson, this.teamId);
-      this.navCtrl.setRoot(EventsPage);
+      if((this.navParams.get('edit')) == true){
+
+        //TODO: Error Handling
+        this.apiProvider.editEvent(eventJson, this.teamId, this.navParams.get('eventId')).then( data =>
+          {
+            this.ionEvents.publish('event:edit');
+            this.closeAddModal();
+            this.presentToast('Event editiert');
+          }
+        );
+      }
+
+      else {
+
+        //TODO: Error Handling
+        this.apiProvider.createEvent(eventJson, this.teamId).then( data => {
+          this.ionEvents.publish('event:create');
+          this.closeAddModal();
+          this.presentToast('Event erstellt');
+        });
+      }
+
     }
   }
 

@@ -373,4 +373,23 @@ export class ApiServiceProvider {
           })
     })
   }
+
+  //TODO: Error Handling
+  editEvent(event: string, teamId: string, eventId: string) {
+    let newEventJson = JSON.parse(JSON.stringify(event));
+    return new Promise(resolve => {
+      this.http
+        .put(this.apiUrl + teamId + "/event/" + eventId, newEventJson, {
+          headers: { "Content-Type": "application/json" }
+        })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    });
+  }
 }
