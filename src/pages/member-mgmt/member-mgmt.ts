@@ -148,6 +148,7 @@ export class MemberMgmtPage {
   }
 
   savePerson(){
+    console.log("Going to save Person: " + JSON.stringify(this.editMember));
     if(this.mode === 'edit') {
       this.apiProvider.updateTeamMember(this.teamId, this.editMember, this.memberId).catch(reason => {
         console.log("Member Management: Update failed!");

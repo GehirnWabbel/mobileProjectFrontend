@@ -13,6 +13,7 @@ import { JoinTeamPage } from '../pages/join-team/join-team';
 import { CreateTeamPage } from "../pages/create-team/create-team";
 import {Deeplinks} from "@ionic-native/deeplinks";
 import {RootPageDeterminer} from "./RootPageDeterminer";
+import {InfoPage} from "../pages/info/info";
 
 
 @Component({
@@ -39,7 +40,8 @@ export class MyApp {
       { title: 'Events', component: EventsPage, icon: 'trophy' },
       { title: 'Protokoll & Planung', component: PlanningPage, icon: 'clipboard' },
       { title: 'Statistiken', component: ChartPage, icon: 'stats' },
-      { title: 'Team verwalten', component: TeamMgmtPage, icon: 'people' }
+      { title: 'Team verwalten', component: TeamMgmtPage, icon: 'people' },
+      { title: 'Info', component: InfoPage, icon: 'information-circle'}
     ];
   }
 

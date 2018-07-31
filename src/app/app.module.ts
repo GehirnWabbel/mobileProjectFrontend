@@ -22,6 +22,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiServiceProvider } from '../providers/api-service/api-service';
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover";
+import {InfoPage} from "../pages/info/info";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover"
     CreateTeamPage,
     PlanningModalAddPage,
     EventModalAddPage,
-    TeamMgmtPopoverPage
+    TeamMgmtPopoverPage,
+    InfoPage
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,8 @@ import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover"
           { component: ChartPage, name: 'chart', segment: 'chart' },
           { component: JoinTeamPage, name: 'join', segment: 'join' },
           { component: MemberMgmtPage, name: 'membermgmt', segment: 'membermgmt' },
-          { component: CreateTeamPage, name: 'create', segment: 'create' }
+          { component: CreateTeamPage, name: 'create', segment: 'create' },
+          { component: InfoPage, name: 'info', segment: 'info'}
           ]}),
     HttpClientModule,
     IonicStorageModule.forRoot()
@@ -68,7 +71,8 @@ import {TeamMgmtPopoverPage} from "../pages/team-mgmt-popover/team-mgmt-popover"
     CreateTeamPage,
     PlanningModalAddPage,
     EventModalAddPage,
-    TeamMgmtPopoverPage
+    TeamMgmtPopoverPage,
+    InfoPage
   ],
   providers: [
     StatusBar,
