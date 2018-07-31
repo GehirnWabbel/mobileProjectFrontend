@@ -89,6 +89,7 @@ export class PlanningModalAddPage {
       this.tagsArray = [];
     }
 
+    // TODO
     // Get current event
     this.apiProvider.getSingleEvent(this.teamId, this.eventId).then(data => {
       this.currentEvent = data as Array<any>;
@@ -232,6 +233,7 @@ export class PlanningModalAddPage {
         this.presentToast("Bitte fülle alle Pflichtfelder aus");
       } else {
 
+        // TODO
         // Call API method
         this.apiProvider.createStint(
           this.teamId,
@@ -329,6 +331,7 @@ export class PlanningModalAddPage {
       this.presentToast("Bitte fülle alle Pflichtfelder aus");
     } else {
 
+      // TODO
       // Call API method
       this.apiProvider.updateStintData(
         this.teamId,

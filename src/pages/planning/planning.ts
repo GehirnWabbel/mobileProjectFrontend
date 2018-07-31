@@ -105,6 +105,7 @@ export class PlanningPage{
       this.eventId = val;
 
       // Get all stints from backend
+      // TODO
       this.apiProvider.getStints(this.teamId, this.eventId).then(backendData => {
         this.formatStints(backendData);
         this.getDriversFromAPI();
@@ -260,6 +261,7 @@ export class PlanningPage{
     // console.log(this.allProtocolItems);
   }
 
+  // TODO
   // Driver objects from API
   getDriversFromAPI() {
     this.apiProvider.getDrivers(this.teamId).then(data => {
@@ -323,6 +325,7 @@ export class PlanningPage{
 
     console.log("finishednStint.enddate: " + finishedStint.enddate);
     slidingItem.close();
+    // TODO
     this.apiProvider.setStintToDoneAPI(
       this.teamId,
       this.eventId,
@@ -339,6 +342,7 @@ export class PlanningPage{
     let stint = this.getStintByDriver(planningItem);
     slidingItem.close();
     console.log("TO BE DELETED SINT: " + stint);
+    // TODO
     this.apiProvider.removePlannedStint(
       this.teamId,
       this.eventId,
