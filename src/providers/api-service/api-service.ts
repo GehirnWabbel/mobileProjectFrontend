@@ -73,6 +73,7 @@ export class ApiServiceProvider {
 
   getStints(teamId: string, eventId: any, memberId: string) {
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .get(this.apiUrl + teamId + "/event/" + eventId + "/stint/", {
           headers: { "X-Team-Member-Id": memberId }
@@ -85,6 +86,9 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
+          },
+          () => {
+            this.loading.dismiss();
           }
         );
     });
@@ -92,6 +96,7 @@ export class ApiServiceProvider {
 
   getDrivers(teamId: string, memberId: string) {
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http.get(this.apiUrl + teamId + "/person?driver=true", {
         headers: { "X-Team-Member-Id": memberId }
       }).subscribe(
@@ -104,6 +109,7 @@ export class ApiServiceProvider {
           reject(err);
         },
         () => {
+          this.loading.dismiss();
         }
       );
     });
@@ -111,6 +117,7 @@ export class ApiServiceProvider {
 
   registerNewDriver(teamId: string, newDriver: any) {
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .post(this.apiUrl + teamId + "/person", newDriver, {
           headers: { "Content-Type": "application/json" }
@@ -123,6 +130,9 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
+          },
+          () => {
+            this.loading.dismiss();
           }
         );
     });
@@ -150,6 +160,7 @@ export class ApiServiceProvider {
     };
     JSON.stringify(newStint);
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {
           headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
@@ -162,6 +173,9 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
+          },
+          () => {
+            this.loading.dismiss();
           }
         );
     });
@@ -176,6 +190,7 @@ export class ApiServiceProvider {
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .put(
           this.apiUrl +
@@ -195,7 +210,8 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
-          }
+          },
+          () => this.loading.dismiss()
         );
     });
   }
@@ -209,6 +225,7 @@ export class ApiServiceProvider {
   ) {
     let toBePuttedStint = JSON.stringify(existingStint);
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .put(
           this.apiUrl +
@@ -228,13 +245,15 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
-          }
+          },
+          () => this.loading.dismiss()
         );
     });
   }
 
   createTeam(newTeamName: string) {
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .post(this.apiUrl, newTeamName, {
           headers: { "Content-Type": "application/json" }
@@ -247,7 +266,8 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
-          }
+          },
+          () => this.loading.dismiss()
         );
     });
   }
@@ -255,6 +275,7 @@ export class ApiServiceProvider {
   createEvent(newEvent: string, teamId: string, memberId: string) {
     let newEventJson = JSON.parse(JSON.stringify(newEvent));
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http
         .post(this.apiUrl + teamId + "/event", newEventJson, {
           headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
@@ -267,8 +288,9 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
-          }
-        );
+          },
+          () => this.loading.dismiss())
+        ;
     });
   }
 
@@ -337,7 +359,8 @@ export class ApiServiceProvider {
             console.log(err);
             this.loading.dismiss();
             reject(err);
-          }
+          },
+          () => this.loading.dismiss()
         );
     });
   }
@@ -375,6 +398,7 @@ export class ApiServiceProvider {
 
   deleteTeam(teamId: string, memberId: string) {
     return new Promise((resolve, reject) => {
+      this.presentLoading();
       this.http.delete(this.apiUrl + teamId, {
         headers: { "X-Team-Member-Id": memberId }
       })
@@ -383,7 +407,7 @@ export class ApiServiceProvider {
           console.log(err);
           this.loading.dismiss();
           reject(err);
-          })
+          }, () => this.loading.dismiss())
     })
   }
 
