@@ -1,4 +1,4 @@
-# Mobile Project Frontend
+# Race Manager Frontend
 
 ## Überblick
 Dieses Repository enthält den Sourecode der mobile App. Diese wurde mit dem Ionic Framework entwickelt.
@@ -43,3 +43,9 @@ Install Navigation Plugin
 ```ionic cordova plugin add uk.co.workingedge.phonegap.plugin.launchnavigator```
 
 ```npm install --save @ionic-native/launch-navigator```
+
+## Lizenz
+
+Copyright 2018 by Philipp Drayß, Benjamin Hilprecht, Henrik Müller, Leon Steiner
+
+Der Sourcecode ist Lizensiert unter [Apache License 2.0](./LICENSE)
