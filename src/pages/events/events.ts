@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import {Events, IonicPage, ModalController, NavController, NavParams} from "ionic-angular";
+import {Events, IonicPage, ModalController, NavController, NavParams, Platform} from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningPage } from "../planning/planning";
@@ -37,7 +37,8 @@ export class EventsPage {
     private modal: ModalController,
     private alert: AlertController,
     public menu: MenuController,
-    private ionEvents: Events
+    private ionEvents: Events,
+    private platform: Platform
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
@@ -56,6 +57,12 @@ export class EventsPage {
     });
     this.activeMenu = 'menu1';
     this.menu.swipeEnable(false, this.activeMenu);
+
+    this.platform.registerBackButtonAction(() => {
+      //sometimes the best thing you can do is not think, not wonder, not imagine, not obsess.
+      //just breathe, and have faith that everything will work out for the best.
+    },1);
+
   }
 
   private convertData(data: any) {
@@ -81,7 +88,7 @@ export class EventsPage {
     this.menu.swipeEnable(true, this.activeMenu);
     this.storage.set("eventId", event._id);
     console.log("Event Id: " + event._id + " saved in local storage.");
-    this.navCtrl.setRoot(PlanningPage);
+    this.navCtrl.push(PlanningPage);
   }
 
   openAddEventModal(){
