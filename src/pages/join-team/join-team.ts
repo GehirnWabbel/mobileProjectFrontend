@@ -122,6 +122,8 @@ export class JoinTeamPage {
           this.apiProvider.registerNewDriver(this.teamId, newUser).then(data => {
             console.log("Join Team: MemeberId: " + data["_id"]);
             this.storage.set("memberId", data["_id"]);
+          }).catch(reason => {
+            this.errorHandling(reason);
           });
         }
       }
@@ -137,6 +139,8 @@ export class JoinTeamPage {
         this.apiProvider.registerNewDriver(this.teamId, newDriver).then(data => {
           console.log("Join Team: MemberId: " + data["_id"]);
           this.storage.set("memberId", data["_id"]);
+        }).catch(reason => {
+          this.errorHandling(reason);
         });
       }
     }
@@ -182,10 +186,10 @@ export class JoinTeamPage {
     //2. delete on old team
     //3. register on new team with same data
     console.log("Join Team: Transfere to start ...");
-    this.api.getSingleTeamMember(this.storageTeamId, this.storageMemberId).then(data => {
+    this.api.getSingleTeamMember(this.storageTeamId, this.storageMemberId, this.storageMemberId).then(data => {
       console.log("Join Team: Transfere: Recieved member data");
       console.log(JSON.stringify(data));
-      this.api.removeTeamMember(this.storageTeamId, data).then(removeData => {
+      this.api.removeTeamMember(this.storageTeamId, data, this.storageMemberId).then(removeData => {
         console.log('Join Team: Transfere: Deactivated Member in old team.');
         delete data['_id'];
         this.api.registerNewDriver(this.teamId, data).then(result => {
@@ -199,8 +203,16 @@ export class JoinTeamPage {
               this.navCtrl.setRoot(EventsPage);
             })
           })
-        })
-      });
+        }).catch(reason => this.errorHandling(reason));
+      }).catch(reason => this.errorHandling(reason));
+    }).catch(reason => this.errorHandling(reason));
+  }
+
+  errorHandling(reason) {
+    console.log("Join Team: Failed to create team Member");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
     })
   }
 

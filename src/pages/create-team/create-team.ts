@@ -49,7 +49,13 @@ export class CreateTeamPage {
           console.log("Team Id: " + this.teamId + " saved in local storage." );
           this.registerTeamMember();
         }
-      );
+      ).catch(reason => {
+        console.log("Create Team: Failed to create Team");
+        console.dir(reason);
+        this.storage.clear().then(() => {
+          this.navCtrl.setRoot(CreateTeamPage);
+        });
+      });
 
     }
 

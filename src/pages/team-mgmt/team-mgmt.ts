@@ -12,6 +12,7 @@ import { Storage } from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import {MemberMgmtPage} from "../member-mgmt/member-mgmt";
 import {TeamMgmtPopoverPage} from "../team-mgmt-popover/team-mgmt-popover";
+import {CreateTeamPage} from "../create-team/create-team";
 
 /**
  * Generated class for the TeamMgmtPage page.
@@ -28,12 +29,14 @@ import {TeamMgmtPopoverPage} from "../team-mgmt-popover/team-mgmt-popover";
 export class TeamMgmtPage {
 
   teamId;
+  memberId;
   teamName;
 
   allDrivers = [];
   allManagements = [];
 
   finishedStorageLoading = false;
+  isLoading = false;
 
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
@@ -46,8 +49,11 @@ export class TeamMgmtPage {
     this.storage.get("teamId").then(val => {
       console.log("Team Management: Found TeamId in storage: " + val);
       this.teamId = val;
-      this.finishedStorageLoading = true;
-      this.reloadTeamData();
+      this.storage.get("memberId").then(memberVal => {
+        this.memberId = memberVal;
+        this.finishedStorageLoading = true;
+        this.reloadTeamData();
+      });
     });
   }
 
@@ -100,9 +106,14 @@ export class TeamMgmtPage {
   }
 
   removeTeamMember(person: any) {
-    this.apiProvider.removeTeamMember(this.teamId, person).then(data => {
+    this.apiProvider.removeTeamMember(this.teamId, person, this.memberId).then(data => {
+      console.log("Team Management: Remove Done");
       this.reloadTeamData();
       this.showToast('Teammitglied \"' + person.name + '\" gelöscht.');
+    }).catch(reason => {
+      console.log("Team Management: Error removing team member");
+      console.dir(reason);
+      this.reloadTeamData();
     });
   }
 
@@ -119,13 +130,21 @@ export class TeamMgmtPage {
   }
 
   reloadTeamData() {
-    if(this.finishedStorageLoading) {
+    if(this.finishedStorageLoading && !this.isLoading) {
+      this.isLoading = true;
       this.allDrivers = [];
       this.allManagements = [];
-      this.apiProvider.getTeam(this.teamId).then(data => {
+      this.apiProvider.getTeam(this.teamId, this.memberId).then(data => {
         this.teamName = data["name"];
         console.log("Team Management: Loaded Team: " + this.teamName);
         this.parseTeamMember(data["members"]);
+        this.isLoading = false;
+      }).catch(reason => {
+        console.log("Team Management: run to error while refrehing team data; assuming user has been remove from team");
+        this.storage.clear().then(() => {
+          this.isLoading = false;
+          this.navCtrl.setRoot(CreateTeamPage);
+        });
       });
     }
   }
@@ -146,7 +165,8 @@ export class TeamMgmtPage {
   showPopoverMenu(event){
     const popover = this.popoverCtrl.create(TeamMgmtPopoverPage, {
       teamId: this.teamId,
-      teamName: this.teamName
+      teamName: this.teamName,
+      memberId: this.memberId
     },{
       cssClass: 'popover-resize'
     });

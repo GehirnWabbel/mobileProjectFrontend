@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import {Events, NavParams, ViewController} from 'ionic-angular';
+import {Events, NavParams, ViewController, NavController} from 'ionic-angular';
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { ToastController } from 'ionic-angular';
+import {Storage} from "@ionic/storage";
+import {CreateTeamPage} from "../create-team/create-team";
+import moment from 'moment';
 
 /**
  * Generated class for the EventModalAddPage page.
@@ -25,28 +28,35 @@ export class EventModalAddPage {
   address: string;
   picture: string;
   teamId: string;
+  memberId: string;
 
   constructor(
     public view: ViewController,
     public apiProvider: ApiServiceProvider,
+    public navCtrl: NavController,
     public navParams: NavParams,
     private toastCtrl: ToastController,
-    private ionEvents: Events
+    private ionEvents: Events,
+    private storage: Storage
   ) {
-
     if(this.navParams.get('edit') == true){
       this.eventName = this.navParams.get('name');
-      this.raceTime = this.navParams.get('start');
+      this.raceTime = moment(this.navParams.get('start')).format();
       this.track = this.navParams.get('track');
       this.track = this.track.toLowerCase();
       this.raceDays = this.navParams.get('days');
       this.kartFull = this.navParams.get('kartWeightWithFuel');
       this.kartEmpty = this.navParams.get('kartWeightWithoutFuel');
       this.teamId = navParams.get('teamId');
+      this.memberId = this.navParams.get("memberId");
     }
     else{
+      this.raceTime = moment().format();
       this.teamId = navParams.get('teamId');
+      this.memberId = this.navParams.get("memberId");
     }
+
+    console.log("Soll locale sein Datum: " + this.raceTime);
   }
 
   ionViewDidLoad() {
@@ -106,37 +116,43 @@ export class EventModalAddPage {
       }
 
       //format date
-      let date = new Date(this.raceTime);
-      let convertDate = date.toISOString();
+      let date = moment.utc(this.raceTime).format();
+      console.log("Soll UTC sein Datum: " + date);
 
-      let eventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + convertDate +
+      let eventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + date +
         "\",\"location\": \""+ this.address +"\",\"noRaceDays\": "+ this.raceDays +",\"picturePath\": \""+
         this.picture +"\",\"kartWeightWithFuel\": "+ this.kartFull +",\"kartWeightWithoutFuel\": "+
         this.kartEmpty +"}";
 
       if((this.navParams.get('edit')) == true){
 
-        //TODO: Error Handling
-        this.apiProvider.editEvent(eventJson, this.teamId, this.navParams.get('eventId')).then( data =>
+        this.apiProvider.editEvent(eventJson, this.teamId, this.navParams.get('eventId'), this.memberId).then( data =>
           {
             this.ionEvents.publish('event:edit');
             this.closeAddModal();
             this.presentToast('Event editiert');
           }
-        );
+        ).catch(reason => this.errorHandling(reason));
       }
 
       else {
 
-        //TODO: Error Handling
-        this.apiProvider.createEvent(eventJson, this.teamId).then( data => {
+        this.apiProvider.createEvent(eventJson, this.teamId, this.memberId).then( data => {
           this.ionEvents.publish('event:create');
           this.closeAddModal();
           this.presentToast('Event erstellt');
-        });
+        }).catch(reason => this.errorHandling(reason));
       }
 
     }
+  }
+
+  errorHandling(reason) {
+    console.log("Events Add: Failed to create Event!");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
+    })
   }
 
   closeAddModal() {
