@@ -130,7 +130,7 @@ export class MemberMgmtPage {
 
   avatarBackward() {
     this.editMember.avatarNo--;
-    if(this.editMember.avatarNo < 11)
+    if(this.editMember.avatarNo < 1)
       this.editMember.avatarNo += 11;
   }
 

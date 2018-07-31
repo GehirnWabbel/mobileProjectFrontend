@@ -444,7 +444,7 @@ export class ApiServiceProvider {
     return new Promise((resolve, reject) => {
       this.http
         .put(this.apiUrl + teamId + "/event/" + eventId, newEventJson, {
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
         })
         .subscribe(
           data => {
