@@ -155,7 +155,7 @@ export class MemberMgmtPage {
   savePerson(){
 
     console.log("----------------------------")
-    console.log(this.editMember);
+    console.dir(this.editMember);
 
     if(this.mode === 'edit') {
       this.apiProvider.updateTeamMember(this.teamId, this.editMember, this.memberId).catch(reason => {

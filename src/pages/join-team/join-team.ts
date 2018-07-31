@@ -42,8 +42,8 @@ export class JoinTeamPage {
               private api: ApiServiceProvider) {
 
     console.log("Join Team: " + navParams);
-    this.teamNameUI = "Team: " + navParams.get("teamName");
-    this.teamName = navParams.get("teamName");
+    this.teamNameUI = "Team: " + decodeURI(navParams.get("teamName"));
+    this.teamName = decodeURI(navParams.get("teamName"));
     this.teamId = navParams.get("teamId");
 
     if(this.teamId === undefined || this.teamId === null) {
