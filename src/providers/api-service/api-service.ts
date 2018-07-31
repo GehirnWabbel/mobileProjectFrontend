@@ -29,7 +29,6 @@ export class ApiServiceProvider {
     this.loading.present();
   }
 
-  // get events from API
   getEvents(teamId: string, memberId: string) {
     return new Promise((resolve, reject) => {
       this.presentLoading();
@@ -51,7 +50,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get single event from API
   getSingleEvent(teamId: string, eventId: string, memberId: string) {
     return new Promise((resolve, reject) => {
       this.presentLoading();
@@ -73,7 +71,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get stints from API
   getStints(teamId: string, eventId: any, memberId: string) {
     return new Promise((resolve, reject) => {
       this.http
@@ -93,7 +90,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // get drivers from API
   getDrivers(teamId: string, memberId: string) {
     return new Promise((resolve, reject) => {
       this.http.get(this.apiUrl + teamId + "/person?driver=true", {
@@ -136,9 +132,10 @@ export class ApiServiceProvider {
     teamId: string,
     eventId: string,
     idOfSelectedDriver: string,
-    startdate: string, //ISO string
-    enddate: string, //ISO string
+    startdate: string,
+    enddate: string,
     raceday: number,
+    isBreakToogle: boolean,
     tagsArray: Array<string>,
     memberId: string
   ) {
@@ -148,12 +145,10 @@ export class ApiServiceProvider {
       enddate: enddate,
       raceday: raceday,
       finished: false,
-      isBreak: false,
+      isBreak: isBreakToogle,
       tags: tagsArray
     };
-
     JSON.stringify(newStint);
-
     return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {
@@ -172,7 +167,6 @@ export class ApiServiceProvider {
     });
   }
 
-  // update Stint to API -> stint will be finished -> protocol item
   setStintToDoneAPI(
     teamId: any,
     eventId: any,
@@ -181,7 +175,6 @@ export class ApiServiceProvider {
     memberId: string
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);
-
     return new Promise((resolve, reject) => {
       this.http
         .put(
@@ -444,5 +437,25 @@ export class ApiServiceProvider {
             this.loading.dismiss();
           })
     })
+  }
+
+  editEvent(event: string, teamId: string, eventId: string, memberId: string) {
+    let newEventJson = JSON.parse(JSON.stringify(event));
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(this.apiUrl + teamId + "/event/" + eventId, newEventJson, {
+          headers: { "Content-Type": "application/json" }
+        })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+            this.loading.dismiss();
+            reject(err);
+          }
+        );
+    });
   }
 }
