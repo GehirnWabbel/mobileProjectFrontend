@@ -118,17 +118,23 @@ export class JoinTeamPage {
 
   joinTeam(){
 
+
+
     if(this.isDriver != true){
       if(typeof this.driverName != 'undefined' && typeof this.notification != 'undefined' ){
         console.log("Join Team: Anmeldung als User, nicht als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": " + this.notificationId + " }";
+        let newUser = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": false, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
+
+        console.log(newUser);
 
         if(this.teamId != undefined ){
           this.apiProvider.registerNewDriver(this.teamId, newUser).then(data => {
             console.log("Join Team: MemeberId: " + data["_id"]);
-            this.storage.set("memberId", data["_id"]);
+            this.storage.set("memberId", data["_id"]).then(data => {
+              this.navCtrl.setRoot(EventsPage);
+            });
           }).catch(reason => {
             this.errorHandling(reason);
           });
@@ -141,11 +147,15 @@ export class JoinTeamPage {
         console.log("Anmeldung als Fahrer!");
         let color = Math.floor(Math.random() * 17) + 1;
         let colorNumber = Math.round(color);
-        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": " + this.notificationId + " }";
+        let newDriver = "{ \"name\":\"" + this.driverName + "\", \"connectedViaDevice\": true, \"driver\": true, \"color\": " + colorNumber + ", \"minutesBeforeNotification\": " + this.notification + ", \"notificationId\": \"" + this.notificationId + "\" }";
+
+        console.log(newDriver);
 
         this.apiProvider.registerNewDriver(this.teamId, newDriver).then(data => {
           console.log("Join Team: MemberId: " + data["_id"]);
-          this.storage.set("memberId", data["_id"]);
+          this.storage.set("memberId", data["_id"]).then(data => {
+            this.navCtrl.setRoot(EventsPage);
+          });
         }).catch(reason => {
           this.errorHandling(reason);
         });
@@ -153,7 +163,7 @@ export class JoinTeamPage {
     }
 
     this.storage.set('teamId', this.teamId ).then(() => {
-      this.navCtrl.setRoot(EventsPage);
+
       console.log("Join Team: Team Id: " + this.teamId + " saved in local storage." );
     });
   }
