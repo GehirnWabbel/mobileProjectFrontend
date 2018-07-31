@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import {IonicPage, ModalController, NavController, NavParams} from "ionic-angular";
+import {Events, IonicPage, ModalController, NavController, NavParams} from "ionic-angular";
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import { Storage } from "@ionic/storage";
 import { PlanningPage } from "../planning/planning";
@@ -7,6 +7,7 @@ import { EventModalAddPage } from "../event-modal-add/event-modal-add";
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { AlertController } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
+import {CreateTeamPage} from "../create-team/create-team";
 
 /**
  * Generated class for the EventsPage page.
@@ -23,7 +24,9 @@ import { MenuController } from 'ionic-angular';
 export class EventsPage {
   private allEvents: Array<any>;
   teamId: string;
+  memberId: string;
   activeMenu: string;
+  trackList: string;
 
   constructor(
     public navCtrl: NavController,
@@ -33,12 +36,22 @@ export class EventsPage {
     private nav: LaunchNavigator,
     private modal: ModalController,
     private alert: AlertController,
-    public menu: MenuController
+    public menu: MenuController,
+    private ionEvents: Events
   ) {
     this.storage.get("teamId").then(val => {
       this.teamId = val;
-      this.apiProvider.getEvents(this.teamId).then(data => {
-        this.allEvents = this.convertData(data);
+      this.storage.get("memberId").then(memberVal => {
+        this.memberId = memberVal;
+        this.apiProvider.getEvents(this.teamId, this.memberId).then(data => {
+          this.allEvents = this.convertData(data);
+        }).catch(reason => {
+          console.log("Events: Failed to load Events");
+          console.dir(reason);
+          this.storage.clear().then(() => {
+            this.navCtrl.setRoot(CreateTeamPage);
+          })
+        });
       });
     });
     this.activeMenu = 'menu1';
@@ -72,20 +85,13 @@ export class EventsPage {
   }
 
   openAddEventModal(){
-    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId});
-    // addModal.onDidDismiss(() => {
-    //   this.apiProvider.getEvents(this.teamId).then( data => {
-    //     this.allEvents = this.convertData(data)
-    //   });
-    // });
+    const addModal = this.modal.create(EventModalAddPage, {'teamId': this.teamId, "memberId": this.memberId});
     addModal.present();
   }
 
   // Pull to refresh
   doRefresh(refresher) {
-    this.apiProvider.getEvents(this.teamId).then(data => {
-      this.allEvents = this.convertData(data);
-    });
+    this.refreshEventPage();
     refresher.complete();
   }
 
@@ -104,7 +110,14 @@ export class EventsPage {
           text: 'Löschen',
           handler: () => {
             console.log('Delete Event: ' + event._id);
-            this.apiProvider.deleteEvent(event._id, this.teamId);
+            this.apiProvider.deleteEvent(event._id, this.teamId, this.memberId)
+              .catch(reason => {
+                console.log("Events: Failed to Delete Event");
+                console.dir(reason);
+                this.storage.clear().then(() => {
+                  this.navCtrl.setRoot(CreateTeamPage);
+                });
+              });
             this.allEvents = this.allEvents.filter( el => el._id !== event._id );
 
           }
@@ -117,5 +130,48 @@ export class EventsPage {
   navigateToEvent(event: any){
     this.menu.swipeEnable(true, this.activeMenu);
     this.nav.navigate(event.location);
+  }
+
+  editEvent(event: any) {
+    this.trackList = event.picturePath.substring(0, 2);
+    this.openEditEventModal(event);
+  }
+
+  openEditEventModal(event: any) {
+    const editModal = this.modal.create(EventModalAddPage, {
+      'edit': true,
+      'name' : event.name,
+      'start' : event.startdate,
+      'track' : this.trackList,
+      'days' : event.noRaceDays,
+      'kartWeightWithFuel' : event.kartWeightWithFuel,
+      'kartWeightWithoutFuel' : event.kartWeightWithoutFuel,
+      'eventId': event._id,
+      'teamId' : this.teamId
+    });
+    editModal.present();
+  }
+
+  ionViewWillEnter(){
+    this.ionEvents.subscribe('event:edit', eventData => {
+      console.log("Event:edit");
+      this.refreshEventPage();
+    });
+    this.ionEvents.subscribe('event:create', eventData => {
+      console.log('Event:crate');
+      this.refreshEventPage();
+    })
+  }
+
+  private refreshEventPage() {
+    this.apiProvider.getEvents(this.teamId, this.memberId).then(data => {
+      this.allEvents = this.convertData(data);
+    }).catch(reason => {
+      console.log("Events: failed to load the events");
+      console.dir(reason);
+      this.storage.clear().then(() => {
+        this.navCtrl.setRoot(CreateTeamPage);
+      });
+    });
   }
 }

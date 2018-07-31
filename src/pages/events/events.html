@@ -24,13 +24,19 @@
     <ion-row>
       <ion-col>
         <button (click)="navigateToEvent(event)" ion-button icon-start clear small>
-          <ion-icon name="navigate"></ion-icon>
-          <div>Navigation</div>
+          <ion-icon name="md-navigate"></ion-icon>
+          <div>Route</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button (click)="editEvent(event)" ion-button icon-start clear small>
+          <ion-icon name="md-create"></ion-icon>
+          <div>Bearbeiten</div>
         </button>
       </ion-col>
       <ion-col>
         <button (click)="deleteEvent(event)" ion-button icon-start clear small>
-          <ion-icon name="trash"></ion-icon>
+          <ion-icon name="md-trash"></ion-icon>
           <div>Löschen</div>
         </button>
       </ion-col>

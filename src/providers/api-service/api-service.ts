@@ -15,7 +15,8 @@ export interface Stint {
 @Injectable()
 export class ApiServiceProvider {
   private loading;
-  private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
+   private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
+  //private apiUrl: string = "https://mobile-project-for-leon.herokuapp.com/team/";
 
   constructor(public http: HttpClient, public loadingCtrl: LoadingController) {}
 
@@ -28,15 +29,19 @@ export class ApiServiceProvider {
     this.loading.present();
   }
 
-  getEvents(teamId: string) {
-    return new Promise(resolve => {
+  getEvents(teamId: string, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.http.get(this.apiUrl + teamId + "/event").subscribe(
+      this.http.get(this.apiUrl + teamId + "/event", {
+        headers: { "X-Team-Member-Id": memberId }
+      }).subscribe(
         data => {
           resolve(data);
         },
         err => {
-          console.log(err);
+          console.log("API Provider: " + err);
+          this.loading.dismiss();
+          reject(err);
         },
         () => {
           this.loading.dismiss();
@@ -45,15 +50,19 @@ export class ApiServiceProvider {
     });
   }
 
-  getSingleEvent(teamId: string, eventId: string) {
-    return new Promise(resolve => {
+  getSingleEvent(teamId: string, eventId: string, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.http.get(this.apiUrl + teamId + "/event/" + eventId).subscribe(
+      this.http.get(this.apiUrl + teamId + "/event/" + eventId, {
+        headers: { "X-Team-Member-Id": memberId }
+      }).subscribe(
         data => {
           resolve(data);
         },
         err => {
           console.log(err);
+          this.loading.dismiss();
+          reject(err);
         },
         () => {
           this.loading.dismiss();
@@ -62,29 +71,37 @@ export class ApiServiceProvider {
     });
   }
 
-  getStints(teamId: string, eventId: any) {
-    return new Promise(resolve => {
+  getStints(teamId: string, eventId: any, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.http
-        .get(this.apiUrl + teamId + "/event/" + eventId + "/stint/")
+        .get(this.apiUrl + teamId + "/event/" + eventId + "/stint/", {
+          headers: { "X-Team-Member-Id": memberId }
+        })
         .subscribe(
           data => {
             resolve(data);
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
-  getDrivers(teamId: string) {
-    return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId + "/person?driver=true").subscribe(
+  getDrivers(teamId: string, memberId: string) {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.apiUrl + teamId + "/person?driver=true", {
+        headers: { "X-Team-Member-Id": memberId }
+      }).subscribe(
         data => {
           resolve(data);
         },
         err => {
           console.log(err);
+          this.loading.dismiss();
+          reject(err);
         },
         () => {
         }
@@ -93,7 +110,7 @@ export class ApiServiceProvider {
   }
 
   registerNewDriver(teamId: string, newDriver: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl + teamId + "/person", newDriver, {
           headers: { "Content-Type": "application/json" }
@@ -104,6 +121,8 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
@@ -117,7 +136,8 @@ export class ApiServiceProvider {
     enddate: string,
     raceday: number,
     isBreakToogle: boolean,
-    tagsArray: Array<string>
+    tagsArray: Array<string>,
+    memberId: string
   ) {
     const newStint: Stint = {
       driverId: idOfSelectedDriver,
@@ -129,10 +149,10 @@ export class ApiServiceProvider {
       tags: tagsArray
     };
     JSON.stringify(newStint);
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl + teamId + "/event/" + eventId + "/stint", newStint, {
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
         })
         .subscribe(
           data => {
@@ -140,6 +160,8 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
@@ -149,10 +171,11 @@ export class ApiServiceProvider {
     teamId: any,
     eventId: any,
     finishedStint: any,
-    finishedStintId: any
+    finishedStintId: any,
+    memberId: string
   ) {
     let toBePuttedStint = JSON.stringify(finishedStint);
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .put(
           this.apiUrl +
@@ -162,7 +185,7 @@ export class ApiServiceProvider {
           "/stint/" +
           finishedStintId,
           toBePuttedStint,
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId } }
         )
         .subscribe(
           data => {
@@ -170,6 +193,8 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
@@ -179,10 +204,11 @@ export class ApiServiceProvider {
     teamId: string,
     eventId: string,
     existingStintId: string,
-    existingStint: any
+    existingStint: any,
+    memberId: string
   ) {
     let toBePuttedStint = JSON.stringify(existingStint);
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .put(
           this.apiUrl +
@@ -192,7 +218,7 @@ export class ApiServiceProvider {
             "/stint/" +
             existingStintId,
           toBePuttedStint,
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId} }
         )
         .subscribe(
           data => {
@@ -200,13 +226,15 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
   createTeam(newTeamName: string) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl, newTeamName, {
           headers: { "Content-Type": "application/json" }
@@ -217,17 +245,19 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
-  createEvent(newEvent: string, teamId: string) {
+  createEvent(newEvent: string, teamId: string, memberId: string) {
     let newEventJson = JSON.parse(JSON.stringify(newEvent));
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .post(this.apiUrl + teamId + "/event", newEventJson, {
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
         })
         .subscribe(
           data => {
@@ -235,20 +265,26 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
-  getAllTeamMember(teamId: string) {
+  getAllTeamMember(teamId: string, memberId: string) {
     this.presentLoading();
-    return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId + "/person").subscribe(
+    return new Promise((resolve, reject) => {
+      this.http.get(this.apiUrl + teamId + "/person", {
+        headers: { "X-Team-Member-Id": memberId }
+      }).subscribe(
         data => {
           resolve(data);
         },
         err => {
           console.log(err);
+          this.loading.dismiss();
+          reject(err);
         },
         () => {
           this.loading.dismiss();
@@ -257,12 +293,12 @@ export class ApiServiceProvider {
     });
   }
 
-  updateTeamMember(teamId: string, member: any) {
+  updateTeamMember(teamId: string, member: any, memberId: string) {
     this.presentLoading();
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http
         .put(this.apiUrl + teamId + "/person/" + member._id, member, {
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
         })
         .subscribe(
           data => {
@@ -270,6 +306,8 @@ export class ApiServiceProvider {
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           },
           () => {
             this.loading.dismiss();
@@ -278,44 +316,56 @@ export class ApiServiceProvider {
     });
   }
 
-  removeTeamMember(teamId: string, member: any) {
-    return new Promise(resolve => {
+  removeTeamMember(teamId: string, member: any, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.http
-        .delete(this.apiUrl + teamId + "/person/" + member._id)
+        .delete(this.apiUrl + teamId + "/person/" + member._id, {
+          headers: { "X-Team-Member-Id": memberId }
+        })
         .subscribe(
           data => {
             resolve(data);
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
-  removePlannedStint(teamId: string, eventId: string, stintId: string) {
-    return new Promise(resolve => {
+  removePlannedStint(teamId: string, eventId: string, stintId: string, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.http
         .delete(
           this.apiUrl + teamId + "/event/" + eventId + "/stint/" + stintId
-        )
+        , {
+            headers: { "X-Team-Member-Id": memberId }
+          })
         .subscribe(
           data => {
             resolve(data);
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
-  getSingleTeamMember(teamId: string, memberId: string) {
+  getSingleTeamMember(teamId: string, memberId: string, userId: string) {
     this.presentLoading();
-    return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId + '/person/' + memberId).subscribe(data => {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.apiUrl + teamId + '/person/' + memberId, {
+        headers: { "X-Team-Member-Id": userId }
+      }).subscribe(data => {
           resolve(data);
         }, err => {
           console.log(err);
+          this.loading.dismiss();
+          reject(err);
         },
         () => {
           this.loading.dismiss();
@@ -323,54 +373,89 @@ export class ApiServiceProvider {
     })
   }
 
-  getTeam(teamId : string) {
+  getTeam(teamId : string, memberId: string) {
     this.presentLoading();
-    return new Promise(resolve => {
-      this.http.get(this.apiUrl + teamId)
-        .subscribe(data => {resolve(data);}, err => {console.log(err);}, () => {this.loading.dismiss();});
+    return new Promise((resolve, reject) => {
+      this.http.get(this.apiUrl + teamId, {
+        headers: { "X-Team-Member-Id": memberId }
+      })
+        .subscribe(
+          data => {resolve(data);},
+            err => {console.log(err); this.loading.dismiss(); reject(err);},
+          () => {this.loading.dismiss();});
     })
   }
 
 
-  deleteTeam(teamId: string) {
-    return new Promise(resolve => {
-      this.http.delete(this.apiUrl + teamId)
+  deleteTeam(teamId: string, memberId: string) {
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.apiUrl + teamId, {
+        headers: { "X-Team-Member-Id": memberId }
+      })
         .subscribe(data => resolve(data),
-          err => console.log(err))
+          err => {
+          console.log(err);
+          this.loading.dismiss();
+          reject(err);
+          })
     })
   }
 
 
 
 
-  deleteEvent(eventId: string, teamId: string){
-    return new Promise(resolve => {
-      this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json" }})
+  deleteEvent(eventId: string, teamId: string, memberId: string){
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.apiUrl + teamId + "/event/" + eventId, { headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }})
         .subscribe(data => {
             resolve(data);
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           }
         );
     });
   }
 
 
-  getStatistics(eventId: string, teamId: string, finished: boolean) {
-    return new Promise(resolve => {
+  getStatistics(eventId: string, teamId: string, finished: boolean, memberId: string) {
+    return new Promise((resolve, reject) => {
       this.presentLoading();
       this.http.get(this.apiUrl + teamId + "/event/" + eventId + "/driver_stats?finished=" + finished,
-        { headers: { "Content-Type" : "application/json"}})
+        { headers: { "Content-Type" : "application/json", "X-Team-Member-Id": memberId}})
         .subscribe(data => {
             resolve(data);
           },
           err => {
             console.log(err);
+            this.loading.dismiss();
+            reject(err);
           },
           () => {
             this.loading.dismiss();
           })
     })
+  }
+
+  editEvent(event: string, teamId: string, eventId: string, memberId: string) {
+    let newEventJson = JSON.parse(JSON.stringify(event));
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(this.apiUrl + teamId + "/event/" + eventId, newEventJson, {
+          headers: { "Content-Type": "application/json", "X-Team-Member-Id": memberId }
+        })
+        .subscribe(
+          data => {
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+            this.loading.dismiss();
+            reject(err);
+          }
+        );
+    });
   }
 }

@@ -4,6 +4,7 @@ import {colorDefinitions} from "../../app/colordefinitions";
 import {Chart} from 'chart.js';
 import {Storage} from "@ionic/storage";
 import {ApiServiceProvider} from "../../providers/api-service/api-service";
+import {CreateTeamPage} from "../create-team/create-team";
 
 @IonicPage()
 @Component({
@@ -23,6 +24,7 @@ export class ChartPage {
   driverStatsPlanned;
 
   teamId: string;
+  memberId: string;
   eventId: string;
 
   constructor(
@@ -30,6 +32,7 @@ export class ChartPage {
     private storage: Storage,
     private api: ApiServiceProvider
   ) {
+
   }
 
   ionViewDidLoad() {
@@ -37,18 +40,31 @@ export class ChartPage {
       this.teamId = teamIdVal;
       this.storage.get("eventId").then(eventIdVal => {
         this.eventId = eventIdVal;
-        this.loadData();
-      })
-    })
+        this.storage.get("memberId").then(memberId => {
+          this.memberId = memberId;
+          this.loadData();
+        });
+      });
+    });
   }
 
   loadData() {
-    this.api.getStatistics(this.eventId, this.teamId, true).then(finishedData => {
+    this.api.getStatistics(this.eventId, this.teamId, true, this.memberId).then(finishedData => {
       this.driverStatsFinished = finishedData;
-      this.api.getStatistics(this.eventId, this.teamId, false).then(plannedData => {
+      this.api.getStatistics(this.eventId, this.teamId, false, this.memberId).then(plannedData => {
         this.driverStatsPlanned = plannedData;
         this.buildCharts();
-      })
+      }).catch(reason => this.errorHandling(reason))
+    }).catch(reason => {
+      this.errorHandling(reason)
+    });
+  }
+
+  errorHandling(reason) {
+    console.log("charts: Failed to load data");
+    console.dir(reason);
+    this.storage.clear().then(() => {
+      this.navCtrl.setRoot(CreateTeamPage);
     })
   }
 
