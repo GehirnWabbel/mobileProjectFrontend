@@ -13,6 +13,7 @@ import { JoinTeamPage } from '../pages/join-team/join-team';
 import { CreateTeamPage } from "../pages/create-team/create-team";
 import {Deeplinks} from "@ionic-native/deeplinks";
 import {RootPageDeterminer} from "./RootPageDeterminer";
+import {PushNotificationProvider} from "../providers/push-notification/push-notification";
 
 
 @Component({
@@ -30,7 +31,8 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public deeplinks: Deeplinks,
-    public storage: Storage) {
+    public storage: Storage,
+    private pushNotificationProvider: PushNotificationProvider) {
 
     this.initializeApp();
 
@@ -53,8 +55,10 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      this.pushNotificationProvider.init();
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
 
       timer(2500).subscribe(() => this.showSplash = false); // <-- hide animation after 3.5s
 
@@ -81,7 +85,6 @@ export class MyApp {
       }, (noMatch) => {
         alert(JSON.stringify(noMatch));
       } )
-
     });
   }
 
