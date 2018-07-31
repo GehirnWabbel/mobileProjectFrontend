@@ -4,6 +4,7 @@ import {ApiServiceProvider} from "../../providers/api-service/api-service";
 import { ToastController } from 'ionic-angular';
 import {Storage} from "@ionic/storage";
 import {CreateTeamPage} from "../create-team/create-team";
+import moment from 'moment';
 
 /**
  * Generated class for the EventModalAddPage page.
@@ -40,7 +41,7 @@ export class EventModalAddPage {
   ) {
     if(this.navParams.get('edit') == true){
       this.eventName = this.navParams.get('name');
-      this.raceTime = this.navParams.get('start');
+      this.raceTime = moment(this.navParams.get('start')).format();
       this.track = this.navParams.get('track');
       this.track = this.track.toLowerCase();
       this.raceDays = this.navParams.get('days');
@@ -50,9 +51,12 @@ export class EventModalAddPage {
       this.memberId = this.navParams.get("memberId");
     }
     else{
+      this.raceTime = moment().format();
       this.teamId = navParams.get('teamId');
       this.memberId = this.navParams.get("memberId");
     }
+
+    console.log("Soll locale sein Datum: " + this.raceTime);
   }
 
   ionViewDidLoad() {
@@ -112,10 +116,10 @@ export class EventModalAddPage {
       }
 
       //format date
-      let date = new Date(this.raceTime);
-      let convertDate = date.toISOString();
+      let date = moment.utc(this.raceTime).format();
+      console.log("Soll UTC sein Datum: " + date);
 
-      let eventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + convertDate +
+      let eventJson = "{\"name\":\"" + this.eventName  +"\",\"startdate\": \"" + date +
         "\",\"location\": \""+ this.address +"\",\"noRaceDays\": "+ this.raceDays +",\"picturePath\": \""+
         this.picture +"\",\"kartWeightWithFuel\": "+ this.kartFull +",\"kartWeightWithoutFuel\": "+
         this.kartEmpty +"}";

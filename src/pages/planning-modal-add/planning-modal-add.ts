@@ -8,6 +8,7 @@ import {
 import { ApiServiceProvider } from "../../providers/api-service/api-service";
 import {Storage} from "@ionic/storage";
 import {CreateTeamPage} from "../create-team/create-team";
+import moment from 'moment'
 
 @Component({
   selector: "page-planning-modal-add",
@@ -71,18 +72,20 @@ export class PlanningModalAddPage {
     let existingStintDuration = this.navParams.get("duration");
 
     // Initialize date objects
-    this.durationISO = new Date();
-    this.endtimeISO = new Date();
-    this.starttime = new Date().toISOString();
-    this.endtime = new Date().toISOString();
+    this.durationISO = moment().toDate();
+    this.endtimeISO = moment().toDate();
+    this.starttime = moment().format();
+    this.endtime = moment().format();
 
     // Check if this modal is for editing or adding a stint and set attributes accordingly
     if (this.existingStint != undefined) {
 
       console.log("Existing stint data received");
       // If we received an existing stint fill UI inputs with existing stint values
-      this.starttime = this.existingStint.startdate;
-      this.endtime = this.existingStint.enddate;
+      this.starttime = moment(this.existingStint.startdate).format();
+      this.endtime = moment(this.existingStint.enddate).format();
+      console.log("Stint Startzeit (Lokal): " + this.starttime);
+      console.log("Sting Endzeit (Lokal)" + this.endtime);
       this.duration = Math.abs(parseInt(existingStintDuration)).toString();
       this.selectedDriver = this.existingStint.driver;
       this.kartTag = this.existingStint.tags[0];
@@ -167,7 +170,7 @@ export class PlanningModalAddPage {
        */
 
       // Starttime
-      this.starttimeISO = new Date(this.starttime);
+      this.starttimeISO = new Date(moment.utc(this.starttime).format());
 
       // Format duration from minutes to hour and minutes in ISO format
       let durationNumber = parseInt(this.duration);
@@ -180,7 +183,7 @@ export class PlanningModalAddPage {
       }
 
       // Set endtimeISO
-      this.endtimeISO = new Date(this.starttime);
+      this.endtimeISO = new Date(moment.utc(this.starttime).format());
       this.endtimeISO.setHours(
         this.starttimeISO.getHours() + this.durationISO.getHours()
       );
@@ -284,7 +287,7 @@ export class PlanningModalAddPage {
     this.existingStintUpdated = this.existingStint;
 
     // Starttime
-    this.starttimeISO = new Date(this.starttime);
+    this.starttimeISO = new Date(moment.utc(this.starttime).format());
 
     // Format duration from minutes to hour and minutes in ISO format
     let durationNumber = parseInt(this.duration);
@@ -297,7 +300,7 @@ export class PlanningModalAddPage {
     }
 
     // Set endtimeISO
-    this.endtimeISO = new Date(this.starttime);
+    this.endtimeISO = new Date(moment.utc(this.starttime).format());
     this.endtimeISO.setHours(
       this.starttimeISO.getHours() + this.durationISO.getHours()
     );
@@ -347,7 +350,6 @@ export class PlanningModalAddPage {
       this.presentToast("Bitte fülle alle Pflichtfelder aus");
     } else {
 
-      // TODO
       // Call API method
       this.apiProvider.updateStintData(
         this.teamId,

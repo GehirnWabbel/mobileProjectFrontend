@@ -15,8 +15,8 @@ export interface Stint {
 @Injectable()
 export class ApiServiceProvider {
   private loading;
-  // private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
-  private apiUrl: string = "https://mobile-project-for-leon.herokuapp.com/team/";
+   private apiUrl: string = "https://racemanager-mobile-project.herokuapp.com/team/";
+  //private apiUrl: string = "https://mobile-project-for-leon.herokuapp.com/team/";
 
   constructor(public http: HttpClient, public loadingCtrl: LoadingController) {}
 
