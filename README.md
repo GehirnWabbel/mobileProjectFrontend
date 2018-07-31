@@ -1,7 +1,7 @@
 # Race Manager Frontend
 
 ## Überblick
-Dieses Repository enthält den Sourecode der mobile App. Diese wurde mit dem Ionic Framework entwickelt.
+Dieses Repository enthält den Sourecode der [Racemanager-App](https://github.com/benni1371/mobileProjectDHBW). Diese wurde mit dem Ionic Framework entwickelt.
 
 ## App Startup
 Im Falle des App Starts gibt es eine große Bandbreite an verschiedenen Konstellationen die behandelt werden:
