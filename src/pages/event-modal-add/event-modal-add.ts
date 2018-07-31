@@ -67,6 +67,7 @@ export class EventModalAddPage {
       //expected to have all values filled
       switch (this.track){
 
+        //no coordinates because json will be broken
         case "ch": {
           this.address = "Dřenice 13, 350 02 Cheb, Tschechien";
           this.picture = "cheb.png";
