@@ -17,14 +17,6 @@ Im Falle des App Starts gibt es eine große Bandbreite an verschiedenen Konstell
 | Lokal ist eine Team und NutzerId gespeichert. Zwischenzeitlich wurde jedoch das Team oder der Nutzer gelöscht                                                 | Beim Start wird der Nutzer automatisch zur Team erstellen Seite umgeleitet                                    |
 | Lokal ist eine Team und NutzerId gespeichert. Der Nutzer erhält eine Benachrichtigung und klickt auf diese                                                    | Beim Start wird die Planungsseite von dem Event geöffnet, für das die Benachrichtigung bestimmt war           |
 
-## Events
-
-## Stint Planung
-
-## Team Verwaltung
-
-## Notifications
-
 ## Plugins
 Install Deeplinks
 
